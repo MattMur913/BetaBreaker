@@ -1,4 +1,4 @@
-package com.example.betabreaker;
+package com.example.betabreaker.Classes;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,7 +7,10 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.example.betabreaker.R;
 
 import java.util.List;
 
@@ -31,7 +34,11 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         // Bind data to views in the ViewHolder
         ClsCentre item = itemList.get(position);
-        holder.textView.setText(item.getDescription());
+        holder.textView.setText(item.getIdCentre());
+        holder.textView.setVisibility(View.VISIBLE);
+        holder.textView1.setText(item.getCentreName());
+        holder.textView1.setVisibility(View.VISIBLE);
+        holder.imageView.setVisibility(View.VISIBLE);
         // Set other views accordingly
     }
 
@@ -42,16 +49,17 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     }
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
-        TextView textView;
+        TextView textView, textView1;
+        CardView cardView;
         ImageView imageView;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             // Initialize views
+            //cardView = CardView.findViewById(R.id.dsCCard);
             textView = itemView.findViewById(R.id.dsCAddressview);
+            textView1 = itemView.findViewById(R.id.dsCNameview);
             imageView = itemView.findViewById(R.id.dsCLogoview);
         }
     }
 }
-
-

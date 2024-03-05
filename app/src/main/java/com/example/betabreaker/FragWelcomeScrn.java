@@ -5,21 +5,26 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.fragment.NavHostFragment;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.example.betabreaker.Classes.GlobalUrl;
+import com.example.betabreaker.Classes.MSAzureClient;
+import com.example.betabreaker.Classes.ResponseCallBack;
+import com.example.betabreaker.Classes.SessionManager;
 import com.example.betabreaker.databinding.FragmentWelcomeScrnBinding;
 
-
-public class FragWelcomeScrn extends Fragment {
+public class FragWelcomeScrn extends Fragment implements ResponseCallBack {
 
     private FragmentWelcomeScrnBinding binding;
-
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -28,7 +33,6 @@ public class FragWelcomeScrn extends Fragment {
         return binding.getRoot();
     }
 
-
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
@@ -36,49 +40,51 @@ public class FragWelcomeScrn extends Fragment {
         final EditText inpPassword = binding.inpPassword;
         final TextView lblUsername = binding.txtUsername;
         final TextView lblPassword = binding.txtPassword;
-        Boolean correctDetails = false;
-
-
+        final ProgressBar vwProgress = binding.loadingProgressBar;
+        final Button btnSign =binding.btnSignup;
+        final Button btnLog =binding.btnLogin;
 
         binding.btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                Boolean correctDetails = false;
+                vwProgress.setVisibility(View.VISIBLE);
+                btnSign.setVisibility(View.GONE);
+                btnLog.setVisibility(View.GONE);
+                Log.d("SHOW DB", "onClick: is running");
 
                 if (inpUsername.getText().toString() != null && inpPassword.getText().toString() != null) {
-
-                   // correctDetails = sendUser(inpUsername,inpPassword);
-
-                    if (correctDetails) {
-                        //ClsUser logUser = getUserDetails(inpUsername, inpPassword);
-                        SessionManager session = new SessionManager(requireContext());
-                        session.setLogin(true);
-                        //session.loadUserDets(logUser);
-                        Intent intent = new Intent(requireActivity(), ActDisplayCentre.class);
-                        startActivity(intent);
-
-                    }else{
-                        lblUsername.setText("Incorrect details provided");
-                        inpUsername.setText("");
-                        lblPassword.setText("Working");
-                        inpPassword.setText("");
-                    }
-                } else {
+                    Log.d("SHOW DB", "Sending to HTTP");
+                    MSAzureClient httpClient = new MSAzureClient(FragWelcomeScrn.this);
+                    String type = "POST";
+                    String url = GlobalUrl.loginURL;
+                    String body = "{ \"username\": \"" + inpUsername.getText().toString() + "\" ," +
+                            " \"password\": \"" + inpPassword.getText().toString() + "\" }";
+                    httpClient.execute(type, url, body);
+                    Log.d("SHOW DB", "BAck from http");
+                }else {
                     lblUsername.setText("Cannot be empty");
-                    inpUsername.setText("");
-                    lblPassword.setText("Working");
-                    inpPassword.setText("");
-
+                    vwProgress.setVisibility(View.GONE);
+                    btnSign.setVisibility(View.VISIBLE);
+                    btnLog.setVisibility(View.VISIBLE);
                 }
 
             }
         });
 
-
         binding.btnSignup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+
+                vwProgress.setVisibility(View.VISIBLE);
+                btnSign.setVisibility(View.GONE);
+                btnLog.setVisibility(View.GONE);
+
                 Intent intent = new Intent(requireActivity(), ActDisplayCentre.class);
                 startActivity(intent);
+                //NavHostFragment.findNavController(FragWelcomeScrn.this)
+                  //      .navigate(R.id.action_SignUpFrag);
             }
         });
     }
@@ -87,5 +93,24 @@ public class FragWelcomeScrn extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
+    }
+
+    @Override
+    public void onResponseReceived(String jsonResponse) {
+        // Handle the response here
+        if (jsonResponse != null && jsonResponse.equals("true")) {
+            Intent intent = new Intent(requireActivity(), ActDisplayCentre.class);
+            startActivity(intent);
+        } else {
+            TextView lblUsername = binding.txtUsername;
+            final ProgressBar vwProgress = binding.loadingProgressBar;
+            final Button btnSign =binding.btnSignup;
+            final Button btnLog =binding.btnLogin;
+            lblUsername.setText("Incorrect details provided");
+            vwProgress.setVisibility(View.GONE);
+            btnSign.setVisibility(View.VISIBLE);
+            btnLog.setVisibility(View.VISIBLE);
+            Log.d("SHOW DB", "onClick: incorrect details");
+        }
     }
 }

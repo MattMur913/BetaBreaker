@@ -1,7 +1,9 @@
-package com.example.betabreaker;
+package com.example.betabreaker.Classes;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+
+import com.example.betabreaker.Classes.ClsUser;
 
 public class SessionManager {
 

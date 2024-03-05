@@ -10,6 +10,18 @@
         android:name="com.example.betabreaker.FragWelcomeScrn"
         android:label="@string/app_name"
         tools:layout="@layout/fragment_welcome_scrn">
+        <action android:id="@+id/action_SignUpFrag"
+            app:destination="@id/FragSignUp"/>
+
     </fragment>
 
+    <fragment
+        android:id="@+id/FragSignUp"
+        android:name="com.example.betabreaker.FragSignUp"
+        android:label="Sign Up Here"
+        tools:layout="@layout/fragment_sign_up">
+        <action
+            android:id="@+id/action_LoginFrag"
+            app:destination="@id/FragWelcomeScrn"/>
+    </fragment>
 </navigation>

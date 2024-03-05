@@ -1,8 +1,6 @@
-package com.example.betabreaker;
+package com.example.betabreaker.Classes;
 
 public class ClsUser {
-
-    private String idUser;
     private String username;
     private String password;
     private String DoB;
