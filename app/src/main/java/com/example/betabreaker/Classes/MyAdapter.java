@@ -26,7 +26,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         // Inflate the item layout and create a new ViewHolder
         View itemView = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.activity_display_centre, parent, false);
+                .inflate(R.layout.reyc_layout_display_centre, parent, false);
         return new ViewHolder(itemView);
     }
 
@@ -35,10 +35,7 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
         // Bind data to views in the ViewHolder
         ClsCentre item = itemList.get(position);
         holder.textView.setText(item.getIdCentre());
-        holder.textView.setVisibility(View.VISIBLE);
         holder.textView1.setText(item.getCentreName());
-        holder.textView1.setVisibility(View.VISIBLE);
-        holder.imageView.setVisibility(View.VISIBLE);
         // Set other views accordingly
     }
 
@@ -50,7 +47,6 @@ public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
 
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView textView, textView1;
-        CardView cardView;
         ImageView imageView;
 
         public ViewHolder(@NonNull View itemView) {
