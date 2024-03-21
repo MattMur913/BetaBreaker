@@ -2,20 +2,17 @@ package com.example.betabreaker;
 
 import android.content.Intent;
 import android.os.Bundle;
-
-import com.example.betabreaker.Classes.SessionManager;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
 
+import com.example.betabreaker.Classes.SessionManager;
 import com.example.betabreaker.databinding.ActivityMainBinding;
-
-import android.view.Menu;
-import android.view.MenuItem;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -39,6 +36,7 @@ public class MainActivity extends AppCompatActivity {
         if(session.isLoggedIn()){
             Intent intent = new Intent(MainActivity.this, ActDisplayCentre.class);
             startActivity(intent);
+            finish();
         }
     }
 

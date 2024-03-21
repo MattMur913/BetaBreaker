@@ -2,11 +2,6 @@ package com.example.betabreaker;
 
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-import androidx.navigation.fragment.NavHostFragment;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,10 +11,12 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
+
 import com.example.betabreaker.Classes.GlobalUrl;
 import com.example.betabreaker.Classes.MSAzureClient;
 import com.example.betabreaker.Classes.ResponseCallBack;
-import com.example.betabreaker.Classes.SessionManager;
 import com.example.betabreaker.databinding.FragmentWelcomeScrnBinding;
 
 public class FragWelcomeScrn extends Fragment implements ResponseCallBack {
@@ -83,8 +80,8 @@ public class FragWelcomeScrn extends Fragment implements ResponseCallBack {
 
                 Intent intent = new Intent(requireActivity(), ActDisplayCentre.class);
                 startActivity(intent);
-                //NavHostFragment.findNavController(FragWelcomeScrn.this)
-                  //      .navigate(R.id.action_SignUpFrag);
+                requireActivity().finish();
+                //NavHostFragment.findNavController(FragWelcomeScrn.this).navigate(R.id.action_SignUpFrag);
             }
         });
     }
@@ -101,6 +98,7 @@ public class FragWelcomeScrn extends Fragment implements ResponseCallBack {
         if (jsonResponse != null && jsonResponse.equals("true")) {
             Intent intent = new Intent(requireActivity(), ActDisplayCentre.class);
             startActivity(intent);
+            requireActivity().finish();
         } else {
             TextView lblUsername = binding.txtUsername;
             final ProgressBar vwProgress = binding.loadingProgressBar;

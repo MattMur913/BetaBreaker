@@ -1,6 +1,8 @@
 package com.example.betabreaker.Classes;
 
-public class ClsCentre {
+import java.io.Serializable;
+
+public class ClsCentre  implements Serializable {
 
     private String idCentre;
     private String CentreName;
@@ -9,10 +11,10 @@ public class ClsCentre {
     private String email;
     private String contactNumber;
     private String website;
-    private int logoid;
+    private String logoid;
 
 
-    public ClsCentre(String idCentre, String centreName, String address, String description, String email, String contactNumber, String website, int logoid) {
+    public ClsCentre(String idCentre, String centreName, String address, String description, String email, String contactNumber, String website, String logoid) {
         this.idCentre = idCentre;
         this.CentreName = centreName;
         this.Address = address;
@@ -30,7 +32,7 @@ public class ClsCentre {
     public String getEmail(){return this.email;}
     public String getNumber(){return this.contactNumber;}
     public String getWebsite(){return this.website;}
-    public int getlogo(){return this.logoid;}
+    public String getlogo(){return this.logoid;}
 
 
     public void setIdCentre(String centreID){
@@ -54,7 +56,7 @@ public class ClsCentre {
     public void setWebsite(String website){
         this.website = website;
     }
-    public void setLogoid(int logoid){
+    public void setLogoid(String logoid){
         this.logoid = logoid;
     }
 
