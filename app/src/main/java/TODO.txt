@@ -1,0 +1,13 @@
+TODO:
+
+Test Displaying of routes from azure instead of just the hardcoded stuff
+Test the log in system when quiting and reopening the app
+
+
+Create navbar at the bottom
+
+GURD Routes using an admin account
+Differentiate between admin accoutns
+
+Update the FragSpecCentre to display all
+Create user constructor with if not admin ability

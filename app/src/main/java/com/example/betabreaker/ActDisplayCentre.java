@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.betabreaker.Classes.ClsCentre;
+import com.example.betabreaker.Classes.ClsRoutes;
 import com.example.betabreaker.Classes.GlobalUrl;
 import com.example.betabreaker.Classes.MyAdapter;
 
@@ -38,8 +39,7 @@ public class ActDisplayCentre extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_centre);
 
-        // Call method to fetch data from Logic App
-        fetchDataFromLogicApp();
+
 
         // Initialize RecyclerView and adapter
         recyclerView = findViewById(R.id.dsCRec);
@@ -48,6 +48,10 @@ public class ActDisplayCentre extends AppCompatActivity {
         // Set layout manager and adapter
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         recyclerView.setAdapter(adapter);
+        //Testing shit
+        addHardcodedCenter();
+        //Actual
+        //fetchDataFromLogicApp();
 
 
     }
@@ -112,10 +116,11 @@ public class ActDisplayCentre extends AppCompatActivity {
                             String address = jsonObject.getString("description");
                             String description = jsonObject.getString("Address");
                             String logoid = jsonObject.getString("logoName");
+                            List<ClsRoutes> routes = (List<ClsRoutes>) jsonObject.getJSONArray("RouteDetails");
                             // Parse other fields similarly
 
                             // Create a ClsCentre object and add it to the list
-                            ClsCentre centre = new ClsCentre(id, name, address, description, "", "", "", logoid);
+                            ClsCentre centre = new ClsCentre(id, name, address, description, "", "", "", logoid, routes);
                             centreList.add(centre);
                         }
 
@@ -135,12 +140,24 @@ public class ActDisplayCentre extends AppCompatActivity {
         });
     }
 
-    public void createInstances(){
-        centreList.add( new ClsCentre("1", "Community Center", "123 Main St", "A hub for community activities", "info@example.com", "555-1234", "example.com", ""));
-        centreList.add( new ClsCentre("2", "Library", "456 Elm St", "", "", "", "", ""));
-        centreList.add(  new ClsCentre("3", "Park", "789 Oak St", "", "", "", "", ""));
-        centreList.add(  new ClsCentre("4", "Fitness Center", "1010 Pine St", "State-of-the-art gym facilities", "fitness@example.com", "555-5678", "fitnesscenter.com", ""));
-        centreList.add(new ClsCentre("5", "Museum", "1313 Maple St", "Preserving history and culture", "museum@example.com", "", "", ""));
+    //Testing purposes
 
+
+    // Method to add a hardcoded center
+    private void addHardcodedCenter() {
+        List<ClsRoutes> routes = new ArrayList<>();
+        ClsRoutes route1 = new ClsRoutes( "Main Area","Red", "5.10, 5.11", "2024-03-24", "John Doe", "10", "638464734522759846");
+        routes.add(route1);
+        ClsCentre hardcodedCentre = new ClsCentre("6", "Test", "1 test drive", "Testing the form", "test@test.com", "0700000000", "www.test.com", "638464734522759846", routes);
+        centreList.add(hardcodedCentre);
+
+        // Notify adapter of data changes on the main thread
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                adapter.notifyDataSetChanged();
+            }
+        });
     }
+
 }

@@ -69,7 +69,7 @@ public class FragWelcomeScrn extends Fragment implements ResponseCallBack {
             }
         });
 
-        binding.btnSignup.setOnClickListener(new View.OnClickListener() {
+        btnSign.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
 
