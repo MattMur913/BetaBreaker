@@ -10,7 +10,20 @@ public class ClsUser {
     private int admin;
     private String adminOf;
 
+    public ClsUser(String username, String password, String DoB, String favouriteShoes, String email, String contactNumber, int admin, String adminOf) {
+        this.username = username;
+        this.password = password;
+        this.DoB = DoB;
+        this.FavouriteShoes = favouriteShoes;
+        this.email = email;
+        this.contactNumber = contactNumber;
+        this.admin = admin;
+        this.adminOf = adminOf;
+    }
+
     public String getUsername(){return this.username;}
+
+    public String getPassword(){return this.password;}
 
     public String getDOB(){return this.DoB;}
 

@@ -23,11 +23,11 @@ import com.example.betabreaker.R;
 
 import java.util.List;
 
-public class MyAdapter extends RecyclerView.Adapter<MyAdapter.ViewHolder> {
+public class AdapterCentres extends RecyclerView.Adapter<AdapterCentres.ViewHolder> {
     private List<ClsCentre> itemList; // List of items to display
     private Context context;
 
-    public MyAdapter(List<ClsCentre> itemList, Context context) {
+    public AdapterCentres(List<ClsCentre> itemList, Context context) {
         this.itemList = itemList;
         this.context = context;
     }

@@ -1,13 +1,16 @@
-TODO:
+TODO:Remove anything with RemoveThis
 
-Test Displaying of routes from azure instead of just the hardcoded stuff
-Test the log in system when quiting and reopening the app
+TODO:Test Displaying of routes from azure instead of just the hardcoded stuff
 
 
-Create navbar at the bottom
+TODO:Create navbar at the bottom - one section for routes - the other for user profile
 
-GURD Routes using an admin account
-Differentiate between admin accoutns
+TODO:GURD Routes using an admin account
 
-Update the FragSpecCentre to display all
+
+TODO:Differentiate between admin accoutns - make them able to edit their centres
+TODO:GET A singular centre from the AZURE
+
+TODO:Update the FragSpecCentre to display all
 Create user constructor with if not admin ability
+

@@ -1,6 +1,8 @@
 package com.example.betabreaker;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -9,10 +11,10 @@ import androidx.fragment.app.FragmentManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.betabreaker.Classes.AdapterCentres;
 import com.example.betabreaker.Classes.ClsCentre;
 import com.example.betabreaker.Classes.ClsRoutes;
 import com.example.betabreaker.Classes.GlobalUrl;
-import com.example.betabreaker.Classes.MyAdapter;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -32,28 +34,50 @@ public class ActDisplayCentre extends AppCompatActivity {
 
     private List<ClsCentre> centreList = new ArrayList<>(); // List to hold ClsCentre objects
     private RecyclerView recyclerView;
-    private MyAdapter adapter;
+    private AdapterCentres adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_centre);
 
+        String fragmentToOpen = getIntent().getStringExtra("fragmentToOpen");
 
+        // Navigate to the specific fragment based on the fragment identifier
+        if (fragmentToOpen != null) {
+            switch (fragmentToOpen) {
+                case "FragSpecCentre":
 
-        // Initialize RecyclerView and adapter
-        recyclerView = findViewById(R.id.dsCRec);
-        adapter = new MyAdapter(centreList, this);
+                    SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+                    String centreID = preferences.getString("adminOf", "");
+                    //fetchSingleCentre(centreID);
+                    addHardcodedCenter();
+                    Bundle bundle = new Bundle();
+                    ClsCentre singCentre = centreList.get(0);
+                    bundle.putSerializable("centre", singCentre);
 
-        // Set layout manager and adapter
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        recyclerView.setAdapter(adapter);
-        //Testing shit
-        addHardcodedCenter();
-        //Actual
-        //fetchDataFromLogicApp();
+                    // Navigate to the specific fragment
+                    getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.dsCLayout, new FragSpecCentre())
+                            .commit();
+                    break;
+                // Add more cases if you have other fragments to navigate to
+            }
+        }else {
 
+            // Initialize RecyclerView and adapter
+            recyclerView = findViewById(R.id.dsCRec);
+            adapter = new AdapterCentres(centreList, this);
 
+            // Set layout manager and adapter
+            recyclerView.setLayoutManager(new LinearLayoutManager(this));
+            recyclerView.setAdapter(adapter);
+            //Testing shit
+            addHardcodedCenter();
+            //Actual
+            //fetchDataFromLogicApp();
+
+        }
     }
 
     @Override
@@ -79,7 +103,55 @@ public class ActDisplayCentre extends AppCompatActivity {
     }
 
 
+    private void fetchSingleCentre(String centreID){
 
+        String logicAppUrl = GlobalUrl.getSinCentreUrl+"/"+centreID;
+
+        // Create an instance of OkHttpClient
+        OkHttpClient client = new OkHttpClient();
+
+        // Create a request
+        Request request = new Request.Builder()
+                .url(logicAppUrl)
+                .build();
+
+        // Execute the request asynchronously
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    // Parse the JSON response and update the RecyclerView
+                    try {
+                        String responseData = response.body().string();
+                        JSONArray jsonArray = new JSONArray(responseData);
+
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            JSONObject jsonObject = jsonArray.getJSONObject(i);
+                            String id = jsonObject.getString("id");
+                            String name = jsonObject.getString("centreName");
+                            String address = jsonObject.getString("description");
+                            String description = jsonObject.getString("Address");
+                            String logoid = jsonObject.getString("logoName");
+                            List<ClsRoutes> routes = (List<ClsRoutes>) jsonObject.getJSONArray("RouteDetails");
+                            // Parse other fields similarly
+
+                            // Create a ClsCentre object and add it to the list
+                            ClsCentre centre = new ClsCentre(id, name, address, description, "", "", "", logoid, routes);
+                            centreList.add(centre);
+                        }
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+    }
 
 
     private void fetchDataFromLogicApp() {
@@ -152,12 +224,15 @@ public class ActDisplayCentre extends AppCompatActivity {
         centreList.add(hardcodedCentre);
 
         // Notify adapter of data changes on the main thread
+        /*
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 adapter.notifyDataSetChanged();
             }
         });
+
+         */
     }
 
 }

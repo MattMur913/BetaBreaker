@@ -23,7 +23,6 @@ public class MSAzureClient extends AsyncTask<String, Void, String> {
         String method = params[0];
         String url = params[1];
         String requestBody = params.length > 2 ? params[2] : null;
-        Log.d("SHOW DB", requestBody);
 
         HttpURLConnection urlConnection = null;
         BufferedReader reader = null;
@@ -36,17 +35,15 @@ public class MSAzureClient extends AsyncTask<String, Void, String> {
             urlConnection.setRequestMethod(method);
             urlConnection.setRequestProperty("Content-Type", "application/json");
             urlConnection.setDoOutput(true);
-            Log.d("SHOW DB", "sending");
 
             // Write request body for POST and PUT requests
             if (requestBody != null) {
-                Log.d("SHOW DB", "sending non empty url");
                 OutputStream outputStream = urlConnection.getOutputStream();
                 outputStream.write(requestBody.getBytes());
                 outputStream.flush();
                 outputStream.close();
             }else{
-                Log.d("SHOW DB", "sedning empty url");
+                Log.d("CODE ERROR", "sedning empty url");
             }
 
             // Read response
@@ -93,10 +90,9 @@ public class MSAzureClient extends AsyncTask<String, Void, String> {
     protected void onPostExecute(String jsonResponse) {
         // Handle response in UI thread
         if (jsonResponse != null) {
-            Log.d("SHOW DB", jsonResponse);
+            Log.d("TurtWig", jsonResponse);
             callback.onResponseReceived(jsonResponse);
         } else {
-            Log.d("SHOW DB", "Null json");
             callback.onResponseReceived(jsonResponse);
         }
     }
