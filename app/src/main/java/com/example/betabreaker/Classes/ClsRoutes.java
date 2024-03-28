@@ -8,10 +8,10 @@ public class ClsRoutes implements Serializable {
     private String grades;
     private String setDate;
     private String setter;
-    private String upvotes;
+    private int upvotes;
     private String ImageUrl;
 
-    public ClsRoutes(String area, String colour, String grades, String setDate, String setter, String upvotes,String ImageUrl) {
+    public ClsRoutes(String area, String colour, String grades, String setDate, String setter, int upvotes,String ImageUrl) {
         this.area = area;
         this.colour = colour;
         this.grades = grades;
@@ -45,7 +45,7 @@ public class ClsRoutes implements Serializable {
         return setter;
     }
 
-    public String getUpvotes() {
+    public int getUpvotes() {
         return upvotes;
     }
 
@@ -70,7 +70,7 @@ public class ClsRoutes implements Serializable {
         this.setter = setter;
     }
 
-    public void setUpvotes(String upvotes) {
+    public void setUpvotes(int upvotes) {
         this.upvotes = upvotes;
     }
     public void setImage(String Image) {

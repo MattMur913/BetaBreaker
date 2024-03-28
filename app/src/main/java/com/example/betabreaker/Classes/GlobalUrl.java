@@ -5,7 +5,7 @@ public class GlobalUrl {
     String getUserURL = null;
     public static String imageUrl = "https://mattmurr913project9240.blob.core.windows.net/project-images/";
     public static String getCentresUrl = "https://prod-25.uksouth.logic.azure.com:443/workflows/7cc297f729d549efbdfc3cae8bb2d7b4/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=QtNdOUVxeqpFG3KQYfW5GuqTvqwAoJOxZFBdb3ohcio";
-    public static String getSinCentreUrl="";
+    public static String getSinCentreUrl="https://prod-24.uksouth.logic.azure.com/workflows/0046204754e749fe9e7339bb2de45370/triggers/manual/paths/invoke/centreid/{id}?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=RzNK9Tsp1Rs1TDzDq4FSGGnfuSJQo_MGdMd9DjTRt48";
 
 
 }

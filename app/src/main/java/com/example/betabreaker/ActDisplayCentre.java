@@ -1,8 +1,6 @@
 package com.example.betabreaker;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.view.View;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -41,30 +39,6 @@ public class ActDisplayCentre extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_display_centre);
 
-        String fragmentToOpen = getIntent().getStringExtra("fragmentToOpen");
-
-        // Navigate to the specific fragment based on the fragment identifier
-        if (fragmentToOpen != null) {
-            switch (fragmentToOpen) {
-                case "FragSpecCentre":
-
-                    SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
-                    String centreID = preferences.getString("adminOf", "");
-                    //fetchSingleCentre(centreID);
-                    addHardcodedCenter();
-                    Bundle bundle = new Bundle();
-                    ClsCentre singCentre = centreList.get(0);
-                    bundle.putSerializable("centre", singCentre);
-
-                    // Navigate to the specific fragment
-                    getSupportFragmentManager().beginTransaction()
-                            .replace(R.id.dsCLayout, new FragSpecCentre())
-                            .commit();
-                    break;
-                // Add more cases if you have other fragments to navigate to
-            }
-        }else {
-
             // Initialize RecyclerView and adapter
             recyclerView = findViewById(R.id.dsCRec);
             adapter = new AdapterCentres(centreList, this);
@@ -77,7 +51,6 @@ public class ActDisplayCentre extends AppCompatActivity {
             //Actual
             //fetchDataFromLogicApp();
 
-        }
     }
 
     @Override
@@ -102,56 +75,6 @@ public class ActDisplayCentre extends AppCompatActivity {
         }
     }
 
-
-    private void fetchSingleCentre(String centreID){
-
-        String logicAppUrl = GlobalUrl.getSinCentreUrl+"/"+centreID;
-
-        // Create an instance of OkHttpClient
-        OkHttpClient client = new OkHttpClient();
-
-        // Create a request
-        Request request = new Request.Builder()
-                .url(logicAppUrl)
-                .build();
-
-        // Execute the request asynchronously
-        client.newCall(request).enqueue(new Callback() {
-            @Override
-            public void onFailure(Call call, IOException e) {
-                e.printStackTrace();
-            }
-
-            @Override
-            public void onResponse(Call call, Response response) throws IOException {
-                if (response.isSuccessful()) {
-                    // Parse the JSON response and update the RecyclerView
-                    try {
-                        String responseData = response.body().string();
-                        JSONArray jsonArray = new JSONArray(responseData);
-
-                        for (int i = 0; i < jsonArray.length(); i++) {
-                            JSONObject jsonObject = jsonArray.getJSONObject(i);
-                            String id = jsonObject.getString("id");
-                            String name = jsonObject.getString("centreName");
-                            String address = jsonObject.getString("description");
-                            String description = jsonObject.getString("Address");
-                            String logoid = jsonObject.getString("logoName");
-                            List<ClsRoutes> routes = (List<ClsRoutes>) jsonObject.getJSONArray("RouteDetails");
-                            // Parse other fields similarly
-
-                            // Create a ClsCentre object and add it to the list
-                            ClsCentre centre = new ClsCentre(id, name, address, description, "", "", "", logoid, routes);
-                            centreList.add(centre);
-                        }
-
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        });
-    }
 
 
     private void fetchDataFromLogicApp() {
@@ -218,7 +141,7 @@ public class ActDisplayCentre extends AppCompatActivity {
     // Method to add a hardcoded center
     private void addHardcodedCenter() {
         List<ClsRoutes> routes = new ArrayList<>();
-        ClsRoutes route1 = new ClsRoutes( "Main Area","Red", "5.10, 5.11", "2024-03-24", "John Doe", "10", "638464734522759846");
+        ClsRoutes route1 = new ClsRoutes( "Main Area","Red", "5.10, 5.11", "2024-03-24", "John Doe", 10, "638464734522759846");
         routes.add(route1);
         ClsCentre hardcodedCentre = new ClsCentre("6", "Test", "1 test drive", "Testing the form", "test@test.com", "0700000000", "www.test.com", "638464734522759846", routes);
         centreList.add(hardcodedCentre);

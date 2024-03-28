@@ -53,12 +53,14 @@ public class FragWelcomeScrn extends Fragment implements ResponseCallBack {
         final Button btnSign =binding.btnSignup;
         final Button btnLog =binding.btnLogin;
 
-       /*SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+    /*   SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
         SharedPreferences.Editor editor = preferences.edit();
         editor.clear(); // Clear all data
         editor.apply(); // Apply changes
 
-        */
+
+     */
+
 
         checkLogged();
 
@@ -150,8 +152,7 @@ public class FragWelcomeScrn extends Fragment implements ResponseCallBack {
                     Log.d("TestingAdmin", "Is Admin ");
                     //GET SINGLUAR CENTRE
                     //Method this seperate
-                    Intent intent = new Intent(requireActivity(), ActDisplayCentre.class);
-                    intent.putExtra("fragmentToOpen", "FragSpecCentre");
+                    Intent intent = new Intent(requireActivity(), ActAdminViews.class);
                     startActivity(intent);
                     requireActivity().finish();
                 }else {
@@ -177,9 +178,16 @@ public class FragWelcomeScrn extends Fragment implements ResponseCallBack {
     private void addingHardUsers(){
         //String hashPass = sha256("password123");
         String hashPass = ("password123");
-        ClsUser hardUser = new ClsUser("john_doe", hashPass,
+        /*ClsUser hardUser = new ClsUser("john_doe", hashPass,
                 "1990-01-01", "Nike",
                 "john@example.com", "1234567890", 1, "6");
+
+         */
+        ClsUser hardUser = new ClsUser("john_doe", hashPass,
+                "1990-01-01", "Nike",
+                "john@example.com", "1234567890", 1, "JTJmcHJvamVjdC1pbWFnZXMlMmY2Mzg0NjQ3MzQ1MjI3NTk4NDY=");
+
+
         userList.add(hardUser);
          hardUser = new ClsUser("matty", hashPass,
                 "1990-01-01", "Nike",
@@ -216,8 +224,7 @@ public class FragWelcomeScrn extends Fragment implements ResponseCallBack {
             if(admin != 0 ){
                 //GET SINGLUAR CENTRE
                 //Method this seperate
-                Intent intent = new Intent(requireActivity(), ActDisplayCentre.class);
-                intent.putExtra("fragmentToOpen", "FragSpecCentre");
+                Intent intent = new Intent(requireActivity(), ActAdminViews.class);
                 startActivity(intent);
                 requireActivity().finish();
             }else{
@@ -247,9 +254,18 @@ public class FragWelcomeScrn extends Fragment implements ResponseCallBack {
                 editor.putString("adminOf", userData.getString("adminOf"));
                 editor.apply();
 //Method this sepeerate
-                Intent intent = new Intent(requireActivity(), ActDisplayCentre.class);
-                startActivity(intent);
-                requireActivity().finish();
+                int admin = preferences.getInt("admin", 0);
+                if(admin != 0 ){
+                    Log.d("TestingAdmin", "Is Admin ");
+                    Intent intent = new Intent(requireActivity(), ActAdminViews.class);
+                    startActivity(intent);
+                    requireActivity().finish();
+                }else {
+                    Log.d("TestingAdmin", "Not Admin ");
+                    Intent intent = new Intent(requireActivity(), ActDisplayCentre.class);
+                    startActivity(intent);
+                    requireActivity().finish();
+                }
             } else {
                 TextView lblUsername = binding.txtUsername;
                 final ProgressBar vwProgress = binding.loadingProgressBar;

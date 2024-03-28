@@ -28,6 +28,7 @@ public class FragSpecCentre extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         //View view = inflater.inflate(R.layout.fragment_spec_centre, container, false);
         binding = FragmentSpecCentreBinding.inflate(inflater, container, false);
+
         return binding.getRoot();
         // Retrieve bundle arguments
     }
