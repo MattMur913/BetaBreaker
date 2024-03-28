@@ -3,7 +3,7 @@ TODO:Remove anything with RemoveThis
 TODO: [CRITICAL]
     [DONE] GET A singular centre from the AZURE
     Differentiate between admin accoutns - make them able to edit their centres - CAn I make another fragment for editing them
-    GURD Routes using an admin account
+    GURD Routes using an admin account - [DONE] On the Azure side - Making an edit centre and edit routes fragments - will need EditRoute and EditCentre Fragments
     Create navbar at the bottom - one section for routes - the other for user profile
 
 TODO:[Improving Key Functions]

@@ -1,4 +1,4 @@
-package com.example.betabreaker;
+package com.example.betabreaker.Frags;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -14,6 +14,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.betabreaker.Classes.ClsRoutes;
 import com.example.betabreaker.Classes.GlobalUrl;
+import com.example.betabreaker.R;
 import com.example.betabreaker.databinding.FragmentSpecRouteBinding;
 
 

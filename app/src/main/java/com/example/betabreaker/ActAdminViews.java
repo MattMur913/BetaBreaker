@@ -4,6 +4,8 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.View;
+import android.widget.Button;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentManager;
@@ -12,6 +14,9 @@ import androidx.fragment.app.FragmentTransaction;
 import com.example.betabreaker.Classes.ClsCentre;
 import com.example.betabreaker.Classes.ClsRoutes;
 import com.example.betabreaker.Classes.GlobalUrl;
+import com.example.betabreaker.Frags.FragEditCentre;
+import com.example.betabreaker.Frags.FragEditRoute;
+import com.example.betabreaker.Frags.FragSpecCentre;
 import com.example.betabreaker.databinding.ActivityAdminViewsBinding;
 
 import org.json.JSONException;
@@ -40,9 +45,44 @@ public class ActAdminViews extends AppCompatActivity {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         String centreID = preferences.getString("adminOf", "");
         fetchSingleCentre(centreID);
+
+        final Button btnEditCentre = binding.editCentre;
+        final Button btnEditRoute = binding.editRoutes;
+
+        btnEditCentre.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                FragEditCentre fragment = new FragEditCentre();
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("centre", centreList.get(0));
+                fragment.setArguments(bundle);
+
+                fragmentTransaction.replace(R.id.fragContent, fragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+            }
+
+        });
+        btnEditRoute.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                FragEditRoute fragment = new FragEditRoute();
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("centre", centreList.get(0));
+                fragment.setArguments(bundle);
+
+                fragmentTransaction.replace(R.id.fragContent, fragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+            }
+
+        });
+
     }
-
-
 
     private void fetchSingleCentre(String centreID){
         Log.d("SingleCentre", "Getting centre");
@@ -111,7 +151,7 @@ public class ActAdminViews extends AppCompatActivity {
                         bundle.putSerializable("centre", centreList.get(0));
                         fragment.setArguments(bundle);
 
-                        fragmentTransaction.replace(R.id.coordinatorLayout, fragment);
+                        fragmentTransaction.replace(R.id.fragContent, fragment);
                         fragmentTransaction.addToBackStack(null);
                         fragmentTransaction.commit();
 

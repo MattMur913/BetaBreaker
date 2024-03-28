@@ -18,7 +18,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.example.betabreaker.FragSpecCentre;
+import com.example.betabreaker.Frags.FragSpecCentre;
 import com.example.betabreaker.R;
 
 import java.util.List;
