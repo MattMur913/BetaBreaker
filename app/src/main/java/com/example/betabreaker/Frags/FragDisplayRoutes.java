@@ -5,6 +5,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -33,9 +34,10 @@ import okhttp3.Response;
 
 public class FragDisplayRoutes extends Fragment {
 
-    private List<ClsRoutes> routesList = new ArrayList<>(); // List to hold ClsCentre objects
+    private List<ClsRoutes> routesList = new ArrayList<>();
     private RecyclerView recyclerView;
     private AdapterRoutes adapter;
+    private ProgressBar progressBar;
 
     @Nullable
     @Override
@@ -47,35 +49,25 @@ public class FragDisplayRoutes extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        recyclerView = view.findViewById(R.id.dsRRec);
+        progressBar = view.findViewById(R.id.progressBar);
+
+        // Initially show the progress bar and hide the RecyclerView
+        progressBar.setVisibility(View.VISIBLE);
+        recyclerView.setVisibility(View.GONE);
+
         Bundle bundle = getArguments();
         if (bundle != null) {
-
             String centreID = (String) bundle.getSerializable("centreID");
             getRoutesFromCentre(centreID);
-            if (routesList != null) {
-                // Log the retrieved routes
-                for (ClsRoutes route : routesList) {
-                    Log.d("SingleCentre1", String.valueOf(route.getImage()));
-                }
-
-                // Initialize RecyclerView and Adapter
-                recyclerView = view.findViewById(R.id.dsRRec);
-                adapter = new AdapterRoutes(routesList,centreID, requireActivity());
-
-                // Set layout manager and adapter
-                recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
-                recyclerView.setAdapter(adapter);
-            } else {
-                Log.e("FragDisplayRoutes", "Routes list is null");
-            }
         } else {
             Log.e("FragDisplayRoutes", "Bundle is null");
         }
     }
 
-    private void getRoutesFromCentre(String centreID){
-        OkHttpClient client =new OkHttpClient();
-        String getRoutes = GlobalUrl.getRoutes.replace("{cID}",centreID );
+    private void getRoutesFromCentre(String centreID) {
+        OkHttpClient client = new OkHttpClient();
+        String getRoutes = GlobalUrl.getRoutes.replace("{cID}", centreID);
         Request request = new Request.Builder()
                 .url(getRoutes)
                 .build();
@@ -108,10 +100,13 @@ public class FragDisplayRoutes extends Fragment {
                         }
 
                         requireActivity().runOnUiThread(() -> {
-                            recyclerView = requireView().findViewById(R.id.dsRRec);
+                            // Update RecyclerView and hide progress bar
                             adapter = new AdapterRoutes(routesList, centreID, requireActivity());
                             recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
                             recyclerView.setAdapter(adapter);
+
+                            progressBar.setVisibility(View.GONE);
+                            recyclerView.setVisibility(View.VISIBLE);
                         });
                     } catch (JSONException e) {
                         Log.e("FragDisplayRoutes", "Error parsing JSON: " + e.getMessage());
@@ -123,4 +118,3 @@ public class FragDisplayRoutes extends Fragment {
         });
     }
 }
-
