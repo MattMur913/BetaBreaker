@@ -27,9 +27,10 @@ public class ActDisplayRoutes extends AppCompatActivity {
         setContentView(R.layout.activity_display_routes);
 
         routesList = (List<ClsRoutes>) getIntent().getSerializableExtra("routes");
+        String centreID = (String) getIntent().getSerializableExtra("centreID");
 
         recyclerView = findViewById(R.id.dsRRec);
-        adapter = new AdapterRoutes(routesList, this);
+        adapter = new AdapterRoutes(routesList,  centreID,this);
 
         // Set layout manager and adapter
         recyclerView.setLayoutManager(new LinearLayoutManager(this));

@@ -7,6 +7,7 @@ TODO: [CRITICAL]
     Create navbar at the bottom - one section for routes - the other for user profile
 
 TODO:[Improving Key Functions]
+    Add some head space to ActAdminViews
     Update the FragSpecCentre to display all
     Test Displaying of routes from azure instead of just the hardcoded stuff
     [Done]Create user constructor with if not admin ability

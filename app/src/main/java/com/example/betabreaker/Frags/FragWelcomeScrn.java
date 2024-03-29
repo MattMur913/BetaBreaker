@@ -187,7 +187,7 @@ public class FragWelcomeScrn extends Fragment implements ResponseCallBack {
          */
         ClsUser hardUser = new ClsUser("john_doe", hashPass,
                 "1990-01-01", "Nike",
-                "john@example.com", "1234567890", 1, "JTJmcHJvamVjdC1pbWFnZXMlMmY2Mzg0NjQ3MzQ1MjI3NTk4NDY=");
+                "john@example.com", "1234567890", 1, "JTJmcHJvamVjdC1pbWFnZXMlMmY2Mzg0NjYzNjMzNzcwNzA1MDg=");
 
 
         userList.add(hardUser);

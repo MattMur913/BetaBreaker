@@ -142,9 +142,9 @@ public class ActDisplayCentre extends AppCompatActivity {
     // Method to add a hardcoded center
     private void addHardcodedCenter() {
         List<ClsRoutes> routes = new ArrayList<>();
-        ClsRoutes route1 = new ClsRoutes( "Main Area","Red", "5.10, 5.11", "2024-03-24", "John Doe", 10, "638464734522759846");
+        ClsRoutes route1 = new ClsRoutes( "Main Area","Red", "5.10, 5.11", "2024-03-24", "John Doe", "10", "638464734522759846");
         routes.add(route1);
-        ClsCentre hardcodedCentre = new ClsCentre("6", "Test", "1 test drive", "Testing the form", "test@test.com", "0700000000", "www.test.com", "638464734522759846", routes);
+        ClsCentre hardcodedCentre = new ClsCentre("JTJmcHJvamVjdC1pbWFnZXMlMmY2Mzg0NjQ3MzQ1MjI3NTk4NDY", "Test", "1 test drive", "Testing the form", "test@test.com", "0700000000", "www.test.com", "638464734522759846", routes);
         centreList.add(hardcodedCentre);
 
         // Notify adapter of data changes on the main thread
