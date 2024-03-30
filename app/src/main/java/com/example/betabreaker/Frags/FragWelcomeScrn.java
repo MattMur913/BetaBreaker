@@ -15,12 +15,16 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.example.betabreaker.ActAdminViews;
 import com.example.betabreaker.ActDisplayCentre;
 import com.example.betabreaker.Classes.ClsUser;
 import com.example.betabreaker.Classes.ResponseCallBack;
+import com.example.betabreaker.R;
 import com.example.betabreaker.databinding.FragmentWelcomeScrnBinding;
 
 import org.json.JSONArray;
@@ -55,13 +59,13 @@ public class FragWelcomeScrn extends Fragment implements ResponseCallBack {
         final Button btnSign =binding.btnSignup;
         final Button btnLog =binding.btnLogin;
 
-    /*   SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+       SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
         SharedPreferences.Editor editor = preferences.edit();
         editor.clear(); // Clear all data
         editor.apply(); // Apply changes
 
 
-     */
+
 
 
         checkLogged();
@@ -111,13 +115,16 @@ public class FragWelcomeScrn extends Fragment implements ResponseCallBack {
                 btnSign.setVisibility(View.GONE);
                 btnLog.setVisibility(View.GONE);
 
-                //RemoveThis
-                Intent intent = new Intent(requireActivity(), ActDisplayCentre.class);
-                startActivity(intent);
-                requireActivity().finish();
+                Context context = getContext();
+                FragmentManager fragmentManager = ((AppCompatActivity) context).getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                FragSignUp fragment = new FragSignUp();
 
 
-                //NavHostFragment.findNavController(FragWelcomeScrn.this).navigate(R.id.action_SignUpFrag);
+                fragmentTransaction.replace(R.id.fragment_container, fragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+
             }
         });
     }

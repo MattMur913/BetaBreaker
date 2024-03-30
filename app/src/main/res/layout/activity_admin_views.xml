@@ -13,9 +13,19 @@
         android:id="@+id/editCentre"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="52dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="4dp"
-        android:text="Button"
+        android:text="Edit Centre"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/addRoute"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="148dp"
+        android:layout_marginTop="4dp"
+        android:text="Add Route"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -38,9 +48,9 @@
         android:layout_marginStart="144dp"
         android:layout_marginTop="4dp"
         android:layout_marginEnd="52dp"
-        android:text="Button"
+        android:text="edit Routes"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.947"
+        app:layout_constraintHorizontal_bias="0.076"
         app:layout_constraintStart_toEndOf="@+id/editCentre"
         app:layout_constraintTop_toTopOf="parent" />
 

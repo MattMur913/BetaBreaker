@@ -3,6 +3,7 @@ TODO:Remove anything with RemoveThis
 TODO: [CRITICAL]
     Differentiate between admin accoutns - make them able to edit their centres - CAn I make another fragment for editing them
     GURD Routes using an admin account - Just need add routes - Need to update centre details for admins
+    Get Logout button done before rest of user profile is completed
     Will just need user Profile edits made after this
     Create navbar at the bottom - one section for routes - the other for user profile
 

@@ -14,6 +14,7 @@ import androidx.fragment.app.FragmentTransaction;
 import com.example.betabreaker.Classes.ClsCentre;
 import com.example.betabreaker.Classes.ClsRoutes;
 import com.example.betabreaker.Classes.GlobalUrl;
+import com.example.betabreaker.Frags.FragAddRoute;
 import com.example.betabreaker.Frags.FragDisplayRoutes;
 import com.example.betabreaker.Frags.FragEditCentre;
 import com.example.betabreaker.Frags.FragSpecCentre;
@@ -62,6 +63,7 @@ public class ActAdminViews extends AppCompatActivity {
 
         final Button btnEditCentre = binding.editCentre;
         final Button btnEditRoute = binding.editRoutes;
+        final Button btnAddRoute = binding.addRoute;
 
         btnEditCentre.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -78,6 +80,22 @@ public class ActAdminViews extends AppCompatActivity {
                 fragmentTransaction.commit();
             }
 
+        });
+
+        btnAddRoute.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                FragAddRoute fragment = new FragAddRoute();
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("centre", centreList.get(0));
+                fragment.setArguments(bundle);
+
+                fragmentTransaction.replace(R.id.fragContent, fragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+            }
         });
         btnEditRoute.setOnClickListener(new View.OnClickListener() {
             @Override
