@@ -5,61 +5,132 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.betabreaker.Classes.AdapterCentres;
+import com.example.betabreaker.Classes.ClsCentre;
+import com.example.betabreaker.Classes.ClsRoutes;
+import com.example.betabreaker.Classes.GlobalUrl;
 import com.example.betabreaker.R;
 
-/**
- * A simple {@link Fragment} subclass.
- * Use the {@link FragDisplayCentres#newInstance} factory method to
- * create an instance of this fragment.
- */
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.Response;
+
 public class FragDisplayCentres extends Fragment {
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private List<ClsCentre> centreList = new ArrayList<>();
+    private RecyclerView recyclerView;
+    private AdapterCentres adapter;
 
     public FragDisplayCentres() {
         // Required empty public constructor
     }
 
-    /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
-     *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
-     * @return A new instance of fragment FragDisplayCentres.
-     */
-    // TODO: Rename and change types and number of parameters
-    public static FragDisplayCentres newInstance(String param1, String param2) {
-        FragDisplayCentres fragment = new FragDisplayCentres();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
+    @Nullable
+    @Override
+    public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        View rootView = inflater.inflate(R.layout.fragment_display_centres, container, false);
+
+        // Initialize RecyclerView and adapter
+        recyclerView = rootView.findViewById(R.id.dsCRec);
+        adapter = new AdapterCentres(centreList);
+
+        // Set layout manager and adapter
+        recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
+        recyclerView.setAdapter(adapter);
+
+        // Fetch data from Logic App
+        fetchDataFromLogicApp();
+
+        return rootView;
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+    private void fetchDataFromLogicApp() {
+        // Logic App endpoint URL
+        String logicAppUrl = GlobalUrl.getCentresUrl;
+
+        // Create an instance of OkHttpClient
+        OkHttpClient client = new OkHttpClient();
+
+        // Create a request
+        Request request = new Request.Builder()
+                .url(logicAppUrl)
+                .build();
+
+        // Execute the request asynchronously
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (response.isSuccessful()) {
+                    // Parse the JSON response and update the RecyclerView
+                    try {
+                        String responseData = response.body().string();
+                        JSONArray jsonArray = new JSONArray(responseData);
+
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            JSONObject jsonObject = jsonArray.getJSONObject(i);
+                            String id = jsonObject.getString("id");
+                            String name = jsonObject.getString("centreName");
+                            String address = jsonObject.getString("description");
+                            String description = jsonObject.getString("Address");
+                            String logoid = jsonObject.getString("logoName");
+                            JSONArray routeDetailsArray = jsonObject.getJSONArray("RouteDetails");
+                            List<ClsRoutes> routes = new ArrayList<>();
+                            for (int j = 0; j < routeDetailsArray.length(); j++) {
+                                JSONObject routeObject = routeDetailsArray.getJSONObject(j);
+                                String area = routeObject.optString("Area", "");
+                                String colour = routeObject.optString("Colour", "");
+                                String grades = routeObject.optString("Grades", "");
+                                String setDate = routeObject.optString("SetDate", "");
+                                String setter = routeObject.optString("Setter", "");
+                                String upvotes = routeObject.optString("Upvotes", "");
+                                String imageUrl = routeObject.optString("imageUrl", "");
+
+                                // Create a ClsRoutes object and add it to the list
+                                ClsRoutes route = new ClsRoutes(area, colour, grades, setDate, setter, upvotes, imageUrl);
+                                routes.add(route);
+                            }
+
+                            // Create a ClsCentre object and add it to the list
+                            ClsCentre centre = new ClsCentre(id, name, address, description, "", "", "", logoid, routes);
+                            centreList.add(centre);
+                        }
+
+                        // Notify adapter of data changes on the main thread
+                        requireActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                adapter.notifyDataSetChanged();
+                            }
+                        });
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_display_centres, container, false);
-    }
+
 }

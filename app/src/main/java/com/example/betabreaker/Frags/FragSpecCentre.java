@@ -1,7 +1,7 @@
 package com.example.betabreaker.Frags;
 
-import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,10 +11,12 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
-import com.example.betabreaker.ActDisplayRoutes;
 import com.example.betabreaker.Classes.ClsCentre;
 import com.example.betabreaker.Classes.ClsRoutes;
+import com.example.betabreaker.R;
 import com.example.betabreaker.databinding.FragmentSpecCentreBinding;
 
 import java.io.Serializable;
@@ -42,6 +44,12 @@ public class FragSpecCentre extends Fragment {
         TextView textViewCentreName;
         if (bundle != null) {
             ClsCentre centre = (ClsCentre) bundle.getSerializable("centre");
+            Log.d("SingleCentre1", centre.getCentreName());
+            Log.d("SingleCentre1", centre.getIdCentre());
+            Log.d("SingleCentre1", centre.getAddress());
+            Log.d("SingleCentre1", centre.getEmail());
+            Log.d("SingleCentre1", centre.getlogo());
+            Log.d("SingleCentre1", centre.getDescription());
 
             // Initialize views
             textViewCentreId = binding.spCName;
@@ -58,11 +66,24 @@ public class FragSpecCentre extends Fragment {
 
             @Override
             public void onClick(View v) {
-                Intent intent  = new Intent(requireActivity(), ActDisplayRoutes.class);
-                ClsCentre centre = (ClsCentre) bundle.getSerializable("centre");
+                FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                FragDisplayRoutes fragment = new FragDisplayRoutes();
+                Bundle bundle = new Bundle();
+                ClsCentre centre = (ClsCentre) getArguments().getSerializable("centre");
                 List<ClsRoutes> routes = centre.getRoutes();
-                intent.putExtra("routes", (Serializable) routes);
-                startActivity(intent);
+                bundle.putSerializable("routes", (Serializable) routes);
+                bundle.putSerializable("centreID",centre.getIdCentre());
+                Log.d("SingleCentre5", String.valueOf(centre.getIdCentre()));
+                fragment.setArguments(bundle);
+                Fragment currentFragment = fragmentManager.findFragmentById(R.id.specCentreLayout);
+                if (currentFragment != null) {
+                    fragmentTransaction.remove(currentFragment);
+                }
+
+                fragmentTransaction.replace(R.id.specCentreLayout , fragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
             }
         });
 

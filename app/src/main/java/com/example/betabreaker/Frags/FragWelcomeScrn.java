@@ -21,7 +21,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.example.betabreaker.ActAdminViews;
-import com.example.betabreaker.ActDisplayCentre;
+import com.example.betabreaker.ActDisplayApp;
 import com.example.betabreaker.Classes.ClsUser;
 import com.example.betabreaker.Classes.ResponseCallBack;
 import com.example.betabreaker.R;
@@ -167,7 +167,7 @@ public class FragWelcomeScrn extends Fragment implements ResponseCallBack {
                 }else {
                     Log.d("TestingAdmin", "Not Admin ");
 
-                    Intent intent = new Intent(requireActivity(), ActDisplayCentre.class);
+                    Intent intent = new Intent(requireActivity(), ActDisplayApp.class);
                     startActivity(intent);
                     requireActivity().finish();
                 }
@@ -271,7 +271,7 @@ public class FragWelcomeScrn extends Fragment implements ResponseCallBack {
                     requireActivity().finish();
                 }else {
                     Log.d("TestingAdmin", "Not Admin ");
-                    Intent intent = new Intent(requireActivity(), ActDisplayCentre.class);
+                    Intent intent = new Intent(requireActivity(), ActDisplayApp.class);
                     startActivity(intent);
                     requireActivity().finish();
                 }

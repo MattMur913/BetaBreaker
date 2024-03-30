@@ -1,6 +1,7 @@
 TODO:Remove anything with RemoveThis
 
 TODO: [CRITICAL]
+    Change al the acts to be fragments, adjust the DislayApp Act to check between Admin and not before choosing a fragment to display
     Differentiate between admin accoutns - make them able to edit their centres - CAn I make another fragment for editing them
     GURD Routes using an admin account - Just need add routes - Need to update centre details for admins
     Get Logout button done before rest of user profile is completed
