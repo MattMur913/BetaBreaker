@@ -259,7 +259,7 @@ public class FragWelcomeScrn extends Fragment implements ResponseCallBack {
                 editor.putString("email", userData.getString("Email"));
                 editor.putString("contactNumber", userData.getString("ContactNumebr"));
                 editor.putString("DoB", userData.getString("DoB"));
-                editor.putString("admin", userData.getString("admin"));
+                editor.putInt("admin", userData.getInt("admin"));
                 editor.putString("adminOf", userData.getString("adminOf"));
                 editor.apply();
 //Method this sepeerate

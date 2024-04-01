@@ -88,7 +88,7 @@ public class AdapterCentres extends RecyclerView.Adapter<AdapterCentres.ViewHold
 
                         FragmentManager fragmentManager = ((AppCompatActivity) context).getSupportFragmentManager();
                         FragmentTransaction transaction = fragmentManager.beginTransaction();
-                        transaction.replace(R.id.dsCLayout, fragment);
+                        transaction.replace(R.id.fragmentContainerView, fragment);
                         transaction.addToBackStack(null);
                         transaction.commit();
 

@@ -8,7 +8,6 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -17,7 +16,6 @@ import com.example.betabreaker.Classes.ClsCentre;
 import com.example.betabreaker.Classes.ClsRoutes;
 import com.example.betabreaker.Classes.GlobalUrl;
 import com.example.betabreaker.R;
-import com.example.betabreaker.ViewModels.CentresViewModel;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -43,7 +41,6 @@ public class FragDisplayCentres extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        CentresViewModel centresViewModel = new ViewModelProvider(this).get(CentresViewModel.class);
         View rootView = inflater.inflate(R.layout.fragment_display_centres, container, false);
 
         // Initialize RecyclerView and adapter
@@ -62,6 +59,7 @@ public class FragDisplayCentres extends Fragment {
 
     private void fetchDataFromLogicApp() {
         // Logic App endpoint URL
+        centreList.clear();
         String logicAppUrl = GlobalUrl.getCentresUrl;
 
         // Create an instance of OkHttpClient

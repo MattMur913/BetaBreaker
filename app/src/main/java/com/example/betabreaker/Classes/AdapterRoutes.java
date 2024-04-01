@@ -94,14 +94,14 @@ public class AdapterRoutes extends RecyclerView.Adapter<AdapterRoutes.ViewHolder
                                 bundle.putSerializable("centreID", centreID);
                                 fragment.setArguments(bundle);
 
-                                fragmentTransaction.replace(R.id.dsRLayout, fragment);
+                                fragmentTransaction.replace(R.id.fragmentContainerView, fragment);
                             }else{
                                 FragSpecRoute fragment = new FragSpecRoute();
                                 Bundle bundle = new Bundle();
                                 bundle.putSerializable("viewRoute", route);
                                 fragment.setArguments(bundle);
 
-                                fragmentTransaction.replace(R.id.dsRLayout, fragment);
+                                fragmentTransaction.replace(R.id.fragmentContainerView, fragment);
                             }
                             fragmentTransaction.addToBackStack(null);
                             fragmentTransaction.commit();

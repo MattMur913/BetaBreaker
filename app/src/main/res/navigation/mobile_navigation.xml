@@ -7,19 +7,19 @@
 
     <fragment
         android:id="@+id/nav_home"
-        android:name="com.example.betabreaker.ConvertedActs.FragDisplayCentres"
+        android:name="com.example.betabreaker.BurgerToppings.Cheese"
         android:label="@string/menu_home"
-        tools:layout="@layout/fragment_display_centres" />
+        tools:layout="@layout/fragment_cheese" />
 
     <fragment
         android:id="@+id/nav_gallery"
-        android:name="com.example.betabreaker.Frags.FragSpecCentre"
+        android:name="com.example.betabreaker.BurgerToppings.Lettace"
         android:label="@string/menu_gallery"
-        tools:layout="@layout/fragment_spec_centre" />
+        tools:layout="@layout/fragment_lettace" />
 
     <fragment
         android:id="@+id/nav_slideshow"
-        android:name="com.example.betabreaker.ConvertedActs.FragUserView"
+        android:name="com.example.betabreaker.BurgerToppings.Patty"
         android:label="@string/menu_slideshow"
-        tools:layout="@layout/fragment_user_view" />
+        tools:layout="@layout/fragment_patty" />
 </navigation>
