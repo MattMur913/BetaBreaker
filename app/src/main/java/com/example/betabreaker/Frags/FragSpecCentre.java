@@ -29,6 +29,9 @@ public class FragSpecCentre extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
+
+
         //View view = inflater.inflate(R.layout.fragment_spec_centre, container, false);
         binding = FragmentSpecCentreBinding.inflate(inflater, container, false);
 

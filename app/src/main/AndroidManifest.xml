@@ -27,12 +27,6 @@
             android:name=".ActUserView"
             android:exported="false" />
         <activity
-            android:name=".ActDisplayRoutes"
-            android:exported="false" />
-        <activity
-            android:name=".ActDisplayCentre"
-            android:exported="false" />
-        <activity
             android:name=".MainActivity"
             android:exported="true"
             android:label=""
