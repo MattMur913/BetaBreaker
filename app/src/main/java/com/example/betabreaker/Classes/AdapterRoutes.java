@@ -21,6 +21,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.betabreaker.BurgerToppings.Lettace;
+import com.example.betabreaker.ConvertedActs.FragAdminViews;
 import com.example.betabreaker.Frags.FragSpecRoute;
 import com.example.betabreaker.R;
 
@@ -110,6 +111,9 @@ public class AdapterRoutes extends RecyclerView.Adapter<AdapterRoutes.ViewHolder
                                 ConstraintLayout dlFrag = ((Activity) context).findViewById(R.id.FragLayoutLettuce);
                                 dlFrag.setVisibility(View.GONE);
                                 fragmentTransaction.replace(R.id.FragOnions, newFrag);
+                            }else if(fragment instanceof FragAdminViews) {
+                                fragmentTransaction.replace(R.id.fragContent, newFrag);
+
                             } else {
                                 fragmentTransaction.replace(R.id.fragmentContainerView, newFrag);
                                 RecyclerView recyclerView;

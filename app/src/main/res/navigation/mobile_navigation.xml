@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--mobile_navigation.xml-->
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -22,5 +23,9 @@
         android:name="com.example.betabreaker.BurgerToppings.Patty"
         android:label="@string/menu_slideshow"
         tools:layout="@layout/fragment_patty" />
-
+    <fragment
+        android:id="@+id/nav_admin"
+        android:name="com.example.betabreaker.ConvertedActs.FragAdminViews"
+        android:label="@string/menu_slideshow"
+        tools:layout="@layout/fragment_admin_views" />
 </navigation>

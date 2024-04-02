@@ -19,11 +19,6 @@
             android:name=".ActDisplayApp"
             android:exported="false" />
         <activity
-            android:name=".ActAdminViews"
-            android:exported="false"
-            android:label="@string/title_activity_act_admin_views"
-            android:theme="@style/Theme.BetaBreaker" />
-        <activity
             android:name=".MainActivity"
             android:exported="true"
             android:label=""

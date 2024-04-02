@@ -20,7 +20,6 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.example.betabreaker.ActAdminViews;
 import com.example.betabreaker.ActDisplayApp;
 import com.example.betabreaker.Classes.ClsUser;
 import com.example.betabreaker.Classes.GlobalUrl;
@@ -126,55 +125,6 @@ public class FragWelcomeScrn extends Fragment implements ResponseCallBack {
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
-    }
-
-    //RemoveThis
-    public void testingAdmin(String Username, String Password){
-        addingHardUsers();
-        Log.d("TestingAdmin", "In method ");
-        //String hashPass = sha256(Password);
-        String hashPass = ("password123");
-        for(int i =0; i< userList.size(); i++){
-            if(Username.equals(  userList.get(i).getUsername()) && hashPass.equals( userList.get(i).getPassword())){
-                Log.d("TestingAdmin", "In If ");
-                Context context = getContext();
-                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-                SharedPreferences.Editor editor = preferences.edit();
-                editor.putString("username", userList.get(i).getUsername()) ;
-                editor.putString("shoes", userList.get(i).getShoes()) ;
-                editor.putString("email", userList.get(i).getEmail()) ;
-                editor.putString("contactNumber", userList.get(i).getContactNumber()) ;
-                editor.putString("DoB", userList.get(i).getDOB()) ;
-                editor.putInt("admin", userList.get(i).getAdmin()) ;
-                editor.putString("adminOf", userList.get(i).getAdminOf()) ;
-                editor.apply();
-
-                int admin = preferences.getInt("admin", 0);
-                if(admin != 0 ){
-                    Log.d("TestingAdmin", "Is Admin ");
-                    //GET SINGLUAR CENTRE
-                    //Method this seperate
-                    Intent intent = new Intent(requireActivity(), ActAdminViews.class);
-                    startActivity(intent);
-                    requireActivity().finish();
-                }else {
-                    Log.d("TestingAdmin", "Not Admin ");
-
-                    Intent intent = new Intent(requireActivity(), ActDisplayApp.class);
-                    startActivity(intent);
-                    requireActivity().finish();
-                }
-            }else {
-                TextView lblUsername = binding.txtUsername;
-                final ProgressBar vwProgress = binding.loadingProgressBar;
-                final Button btnSign =binding.btnSignup;
-                final Button btnLog =binding.btnLogin;
-                lblUsername.setText("Incorrect details provided");
-                vwProgress.setVisibility(View.GONE);
-                btnSign.setVisibility(View.VISIBLE);
-                btnLog.setVisibility(View.VISIBLE);
-            }
-        }
     }
 
     private void addingHardUsers(){

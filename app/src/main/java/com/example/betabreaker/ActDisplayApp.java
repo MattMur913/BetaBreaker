@@ -4,6 +4,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.Menu;
+import android.view.MenuItem;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -35,7 +36,7 @@ public class ActDisplayApp extends AppCompatActivity {
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putInt("admin",0);
+        editor.putInt("admin",1);
         editor.apply();
         int adminValue = sharedPreferences.getInt("admin", 0); // Default value 0
 
@@ -44,11 +45,15 @@ public class ActDisplayApp extends AppCompatActivity {
                     R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow)
                     .setOpenableLayout(drawer)
                     .build();
+            Menu menu = navigationView.getMenu();
+            MenuItem adminItem = menu.findItem(R.id.nav_admin);
+            adminItem.setVisible(false);
         } else {
             mAppBarConfiguration = new AppBarConfiguration.Builder(
                     R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow, R.id.nav_admin) // Add nav_admin
                     .setOpenableLayout(drawer)
                     .build();
+
         }
 
 

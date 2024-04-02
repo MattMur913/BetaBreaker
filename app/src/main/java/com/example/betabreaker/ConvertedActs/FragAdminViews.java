@@ -18,9 +18,6 @@ import androidx.fragment.app.FragmentTransaction;
 import com.example.betabreaker.Classes.ClsCentre;
 import com.example.betabreaker.Classes.ClsRoutes;
 import com.example.betabreaker.Frags.FragAddRoute;
-import com.example.betabreaker.Frags.FragDisplayRoutes;
-import com.example.betabreaker.Frags.FragEditCentre;
-import com.example.betabreaker.Frags.FragSpecCentre;
 import com.example.betabreaker.R;
 import com.example.betabreaker.databinding.FragmentAdminViewsBinding;
 
@@ -28,7 +25,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,36 +48,8 @@ public class FragAdminViews extends Fragment {
         String centreID = preferences.getString("adminOf", "");
         //fetchSingleCentre(centreID);
         hardCersion(centreID);
-        FragmentManager fragmentManager = getChildFragmentManager(); // Use getChildFragmentManager() here
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        FragSpecCentre fragment = new FragSpecCentre();
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("centre", centreList.get(0));
-        fragment.setArguments(bundle);
-
-        fragmentTransaction.replace(R.id.fragContent, fragment);
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();
-
-        final Button btnEditCentre = binding.editCentre;
-        final Button btnEditRoute = binding.editRoutes;
         final Button btnAddRoute = binding.addRoute;
 
-        btnEditCentre.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                FragmentManager fragmentManager = getChildFragmentManager(); // Use getChildFragmentManager() here
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                FragEditCentre fragment = new FragEditCentre();
-                Bundle bundle = new Bundle();
-                bundle.putSerializable("centre", centreList.get(0));
-                fragment.setArguments(bundle);
-
-                fragmentTransaction.replace(R.id.fragContent, fragment);
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
-            }
-        });
 
         btnAddRoute.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -97,26 +65,6 @@ public class FragAdminViews extends Fragment {
                 fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
             }
-        });
-        btnEditRoute.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                FragmentManager fragmentManager = getChildFragmentManager(); // Use getChildFragmentManager() here
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                FragDisplayRoutes fragment = new FragDisplayRoutes();
-                Bundle bundle = new Bundle();
-                ClsCentre centre = centreList.get(0);
-                List<ClsRoutes> routes = centre.getRoutes();
-                bundle.putSerializable("routes", (Serializable) routes);
-                bundle.putSerializable("centreID",centre.getIdCentre());
-                Log.d("SingleCentre5", String.valueOf(centre.getIdCentre()));
-                fragment.setArguments(bundle);
-
-                fragmentTransaction.replace(R.id.fragContent, fragment);
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
-            }
-
         });
     }
 
