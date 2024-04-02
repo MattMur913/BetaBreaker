@@ -12,10 +12,14 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentContainerView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.betabreaker.Classes.AdapterRoutes;
 import com.example.betabreaker.Classes.ClsCentre;
 import com.example.betabreaker.Classes.ClsRoutes;
@@ -43,42 +47,61 @@ public class Lettace extends Fragment {
     private List<ClsRoutes> routesList = new ArrayList<>();
     private RecyclerView recyclerView;
     private AdapterRoutes adapter;
+    private FragmentContainerView msFav;
     private ProgressBar progressBar;
+    private CardView cdView;
+    private TextView txtLabel;
+    private ImageView imgLogo;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
-        binding = FragmentLettaceBinding.inflate(inflater, container, false);
-        View root = binding.getRoot();
+        // Inflate the layout based on the fragment's logic
+        if (isFavouriteCentreEmpty()) {
+            return inflater.inflate(R.layout.no_favourite, container, false);
+        } else {
+            binding = FragmentLettaceBinding.inflate(inflater, container, false);
+            return binding.getRoot();
+        }
+    }
 
-        return root;
+    private boolean isFavouriteCentreEmpty() {
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(requireContext());
+        // String favouriteCentre = preferences.getString("adminOf", "");
+        String favouriteCentre = "1";
+        return favouriteCentre.isEmpty();
     }
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(requireContext());
-        String favouriteCentre = preferences.getString("adminOf","");
+        String favouriteCentre = preferences.getString("adminOf", "");
 
-        if(favouriteCentre.isEmpty()){
-            view = LayoutInflater.from(requireContext()).inflate(R.layout.no_favourite, null);
-            ViewGroup parent = (ViewGroup) binding.getRoot().getParent();
-            int index = parent.indexOfChild(binding.getRoot());
-            parent.removeView(binding.getRoot());
-            parent.addView(view, index);
-        }else{
-            fetchSingleCentre(favouriteCentre);
 
-            TextView txtLabel = binding.textView2;
-            ImageView imgLogo = binding.imageView2;
-            recyclerView = view.findViewById(R.id.lettaceRecy);
-            progressBar = view.findViewById(R.id.progressBar1);
-
-            // Initially show the progress bar and hide the RecyclerView
-            progressBar.setVisibility(View.VISIBLE);
-            recyclerView.setVisibility(View.GONE);
-
+        if (isFavouriteCentreEmpty()) {
+            // Handle views in the layMissingFrags layout
+            return; // Return early if the layout is layMissingFrags
         }
+
+
+        // Handle views in the FragmentLettaceBinding layout
+        txtLabel = binding.textView2;
+        imgLogo = binding.imageView2;
+         cdView = binding.cardView;
+         msFav = binding.missingFavourite;
+        recyclerView = binding.lettaceRecy;
+        progressBar = binding.progressBar1;
+
+        txtLabel.setVisibility(View.GONE); // Hide textView2
+        imgLogo.setVisibility(View.GONE); // Hide imageView2
+        msFav.setVisibility(View.GONE); // Hide missingFavourite FragmentContainerView
+        recyclerView.setVisibility(View.GONE); // Hide lettaceRecy RecyclerView
+        cdView.setVisibility(View.GONE); // Hide cardView
+        progressBar.setVisibility(View.VISIBLE); // Show progressBar1
+
+        fetchSingleCentre(favouriteCentre);
     }
+
     private void fetchSingleCentre(String centreID){
         Log.d("SingleCentre", "Getting centre");
         centreID = "JTJmcHJvamVjdC1pbWFnZXMlMmY2Mzg0NjYzNjMzNzcwNzA1MDg=";
@@ -133,15 +156,29 @@ public class Lettace extends Fragment {
                         centreFav = new ClsCentre(id, name, address, description, "", "", "", logoid, routes);
                         Log.d("SingleCentre2", String.valueOf(centreFav.getCentreName()));
 
-
                         requireActivity().runOnUiThread(() -> {
+                            // Update UI components with centreFav data
+                            txtLabel.setText(centreFav.getCentreName());
+                            Log.d("Testing", GlobalUrl.imageUrl+centreFav.getlogo());
+                            Glide.with(imgLogo.getContext()).load(GlobalUrl.imageUrl + centreFav.getlogo()).apply(RequestOptions.placeholderOf(R.drawable.placeholder_image)).into(imgLogo);
+
+                            // Initially show the progress bar and hide the RecyclerView
+                            progressBar.setVisibility(View.VISIBLE);
+                            recyclerView.setVisibility(View.GONE);
+
                             // Update RecyclerView and hide progress bar
                             adapter = new AdapterRoutes(routesList, centreFav.getIdCentre(), requireActivity());
                             recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
                             recyclerView.setAdapter(adapter);
 
-                            progressBar.setVisibility(View.GONE);
-                            recyclerView.setVisibility(View.VISIBLE);
+                            txtLabel.setVisibility(View.VISIBLE); // Show textView2
+                            imgLogo.setVisibility(View.VISIBLE); // Show imageView2
+                            msFav.setVisibility(View.VISIBLE); // Show missingFavourite FragmentContainerView
+                            recyclerView.setVisibility(View.VISIBLE); // Show lettaceRecy RecyclerView
+                            cdView.setVisibility(View.VISIBLE); // Show cardView
+                            progressBar.setVisibility(View.GONE); // Hide progressBar1
+
+
                         });
 
                     } catch (JSONException e) {
@@ -149,9 +186,9 @@ public class Lettace extends Fragment {
                     }
                 }
             }
-
         });
     }
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();

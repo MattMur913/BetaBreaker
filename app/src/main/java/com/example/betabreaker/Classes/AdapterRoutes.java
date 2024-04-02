@@ -1,8 +1,8 @@
 package com.example.betabreaker.Classes;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,14 +12,14 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.example.betabreaker.ActAdminViews;
-import com.example.betabreaker.Frags.FragEditSpecRoute;
+import com.example.betabreaker.BurgerToppings.Lettace;
 import com.example.betabreaker.Frags.FragSpecRoute;
 import com.example.betabreaker.R;
 
@@ -85,34 +85,44 @@ public class AdapterRoutes extends RecyclerView.Adapter<AdapterRoutes.ViewHolder
                         Context context = itemView.getContext();
                         if (context instanceof AppCompatActivity) {
                             FragmentManager fragmentManager = ((AppCompatActivity) context).getSupportFragmentManager();
+                            Fragment fragment = fragmentManager.findFragmentById(R.id.FragLayoutLettuce );
                             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                            //This log says the value is null -- please help fix this
+                            Log.d("Check", String.valueOf(fragment));
+                            if (fragment instanceof Lettace) {
+                                Log.d("Check", "onClick: Check");
+                                FragSpecRoute newFrag = new FragSpecRoute();
+                                Bundle bundle = new Bundle();
+                                bundle.putSerializable("viewRoute", route);
+                                fragment.setArguments(bundle);
 
-                            if (context instanceof ActAdminViews) {
-                                FragEditSpecRoute fragment = new FragEditSpecRoute();
+                                fragmentTransaction.replace(R.id.FragLayoutLettuce, newFrag);
+                                /*TODO MAke admin version of If statment
+                                FragEditSpecRoute newFrag = new FragEditSpecRoute();
+
                                 Bundle bundle = new Bundle();
                                 bundle.putSerializable("viewRoute", route);
                                 bundle.putSerializable("centreID", centreID);
                                 fragment.setArguments(bundle);
 
                                 fragmentTransaction.replace(R.id.fragmentContainerView, fragment);
-                            }else{
-                                FragSpecRoute fragment = new FragSpecRoute();
+
+                                 */
+                            } else {
+                                FragSpecRoute newFrag = new FragSpecRoute();
                                 Bundle bundle = new Bundle();
                                 bundle.putSerializable("viewRoute", route);
                                 fragment.setArguments(bundle);
 
-                                fragmentTransaction.replace(R.id.fragmentContainerView, fragment);
+                                fragmentTransaction.replace(R.id.fragmentContainerView, newFrag);
                             }
                             fragmentTransaction.addToBackStack(null);
                             fragmentTransaction.commit();
-                            RecyclerView recyclerView = ((Activity) context).findViewById(R.id.dsRRec);
-                            recyclerView.setVisibility(View.GONE);
-
-
                         }
                     }
                 }
             });
+
         }
     }
 }
