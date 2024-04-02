@@ -22,4 +22,5 @@
         android:name="com.example.betabreaker.BurgerToppings.Patty"
         android:label="@string/menu_slideshow"
         tools:layout="@layout/fragment_patty" />
+
 </navigation>

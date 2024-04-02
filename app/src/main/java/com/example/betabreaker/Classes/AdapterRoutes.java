@@ -1,5 +1,6 @@
 package com.example.betabreaker.Classes;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
@@ -10,8 +11,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -19,6 +20,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.example.betabreaker.BurgerToppings.Lettace;
 import com.example.betabreaker.Frags.FragSpecRoute;
 import com.example.betabreaker.R;
 
@@ -30,12 +32,22 @@ public class AdapterRoutes extends RecyclerView.Adapter<AdapterRoutes.ViewHolder
     private String centreID;
     private Context context;
     private Fragment fragment;
+    private AdapterCallback callback;
 
     public AdapterRoutes(List<ClsRoutes> itemList, String centreID, Context context, Fragment fragment) {
         this.itemList = itemList;
         this.centreID = centreID;
         this.context = context;
         this.fragment = fragment;
+    }
+
+    public interface AdapterCallback {
+        void onItemClicked(ClsRoutes route);
+    }
+
+    // Method to set the callback
+    public void setAdapterCallback(AdapterCallback callback) {
+        this.callback = callback;
     }
 
     @NonNull
@@ -82,35 +94,28 @@ public class AdapterRoutes extends RecyclerView.Adapter<AdapterRoutes.ViewHolder
                     if (position != RecyclerView.NO_POSITION) {
                         ClsRoutes route = itemList.get(position);
                         Context context = itemView.getContext();
-                        if (context instanceof AppCompatActivity) {
-                            FragmentManager fragmentManager = ((AppCompatActivity) context).getSupportFragmentManager();
+                        Log.d("TAG", String.valueOf(fragment));
+                        if (context != null && fragment != null) {
+                            FragmentManager fragmentManager = fragment.requireActivity().getSupportFragmentManager();
                             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                            Log.d("Check", String.valueOf(fragment));
 
                             FragSpecRoute newFrag = new FragSpecRoute();
                             Bundle bundle = new Bundle();
                             bundle.putSerializable("viewRoute", route);
                             newFrag.setArguments(bundle);
-//This is displaying over the op of nthe other Fragments, It should make a Fragment display ID of FragOnions which is displaying FragLayoutLettuce display the new fragment
-                            fragmentTransaction.replace(R.id.FragOnions, newFrag);
-                            /*
+
                             if (fragment instanceof Lettace) {
-                                Log.d("Check", String.valueOf(fragment));
-                                FragSpecRoute newFrag = new FragSpecRoute();
-                                Bundle bundle = new Bundle();
-                                bundle.putSerializable("viewRoute", route);
-                                newFrag.setArguments(bundle);
-//This is displaying over the op of nthe other Fragments, It should make a Fragment display ID of FragOnions which is displaying FragLayoutLettuce display the new fragment
+                                //This transaction
+                                Log.d("TAG", String.valueOf(fragment));
+                                ConstraintLayout dlFrag = ((Activity) context).findViewById(R.id.FragLayoutLettuce);
+                                dlFrag.setVisibility(View.GONE);
                                 fragmentTransaction.replace(R.id.FragOnions, newFrag);
                             } else {
-                                FragSpecRoute newFrag = new FragSpecRoute();
-                                Bundle bundle = new Bundle();
-                                bundle.putSerializable("viewRoute", route);
-                                newFrag.setArguments(bundle);
                                 fragmentTransaction.replace(R.id.fragmentContainerView, newFrag);
+                                RecyclerView recyclerView;
+                                recyclerView = ((Activity) context).findViewById(R.id.dsRRec);
+                                recyclerView.setVisibility(View.GONE);
                             }
-
-                             */
                             fragmentTransaction.addToBackStack(null);
                             fragmentTransaction.commit();
                         }

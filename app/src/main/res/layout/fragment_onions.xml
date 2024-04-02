@@ -14,13 +14,14 @@
         android:layout_marginStart="48dp"
         android:layout_marginTop="136dp"
         android:text="No Favourite Centres"
+        android:visibility="gone"
         android:textSize="34sp"
         app:layout_constraintStart_toStartOf="@+id/FragOnions"
         app:layout_constraintTop_toTopOf="@+id/FragOnions" />
 
     <androidx.fragment.app.FragmentContainerView
         android:id="@+id/FragOnions"
-        android:name="com.example.betabreaker.BurgerToppings.Onions"
+        android:name="com.example.betabreaker.BurgerToppings.Lettace"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"

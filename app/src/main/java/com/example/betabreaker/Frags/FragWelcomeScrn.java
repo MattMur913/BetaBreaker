@@ -23,6 +23,8 @@ import androidx.fragment.app.FragmentTransaction;
 import com.example.betabreaker.ActAdminViews;
 import com.example.betabreaker.ActDisplayApp;
 import com.example.betabreaker.Classes.ClsUser;
+import com.example.betabreaker.Classes.GlobalUrl;
+import com.example.betabreaker.Classes.MSAzureClient;
 import com.example.betabreaker.Classes.ResponseCallBack;
 import com.example.betabreaker.R;
 import com.example.betabreaker.databinding.FragmentWelcomeScrnBinding;
@@ -66,8 +68,6 @@ public class FragWelcomeScrn extends Fragment implements ResponseCallBack {
 
 
 
-
-
         checkLogged();
 
 
@@ -81,20 +81,13 @@ public class FragWelcomeScrn extends Fragment implements ResponseCallBack {
 
                 if (inpUsername.getText().toString() != null && inpPassword.getText().toString() != null) {
 
-
-                    testingAdmin(inpUsername.getText().toString(),inpPassword.getText().toString());
-
-                    /*
-                    //String hashPass = sha256(String.valueOf(inpPassword.getText()));
-                    String hashPass = String.valueOf(inpPassword.getText());
+                    String hashPass = sha256(String.valueOf(inpPassword.getText()));
                     MSAzureClient httpClient = new MSAzureClient(FragWelcomeScrn.this);
                     String type = "POST";
                     String url = GlobalUrl.loginURL;
                     String body = "{ \"username\": \"" + inpUsername.getText().toString() + "\" ," +
                             " \"password\": \"" + hashPass.toString() + "\" }";
                     httpClient.execute(type, url, body);
-
-                     */
 
                 }else {
                     lblUsername.setText("Cannot be empty");
@@ -225,21 +218,11 @@ public class FragWelcomeScrn extends Fragment implements ResponseCallBack {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(requireContext());
         String username = preferences.getString("username", "");
 
-        if(username.equals("") || username.equals(null)){
-
-        }else{
-            //MAKE THROBBER APPEAR
-            int admin = preferences.getInt("admin", 0);
-            if(admin != 0 ){
-                //GET SINGLUAR CENTRE
-                //Method this seperate
-                Intent intent = new Intent(requireActivity(), ActAdminViews.class);
-                startActivity(intent);
-                requireActivity().finish();
-            }else{
-
-            }
-
+        if(username.equals("") || username == null){
+            Log.d("FlowChecks", "User is logged in: "+ username);
+            Intent intent = new Intent(requireActivity(), ActDisplayApp.class);
+            startActivity(intent);
+            requireActivity().finish();
         }
     }
     @Override
@@ -252,6 +235,7 @@ public class FragWelcomeScrn extends Fragment implements ResponseCallBack {
 
                 JSONObject userData = userTable.getJSONObject(0);
                 Context context = getContext();
+                //TODO Adjust this so it isnt depreciated
                 SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.putString("username", userData.getString("Username"));
@@ -262,19 +246,12 @@ public class FragWelcomeScrn extends Fragment implements ResponseCallBack {
                 editor.putInt("admin", userData.getInt("admin"));
                 editor.putString("adminOf", userData.getString("adminOf"));
                 editor.apply();
-//Method this sepeerate
-                int admin = preferences.getInt("admin", 0);
-                if(admin != 0 ){
-                    Log.d("TestingAdmin", "Is Admin ");
-                    Intent intent = new Intent(requireActivity(), ActAdminViews.class);
-                    startActivity(intent);
-                    requireActivity().finish();
-                }else {
-                    Log.d("TestingAdmin", "Not Admin ");
-                    Intent intent = new Intent(requireActivity(), ActDisplayApp.class);
-                    startActivity(intent);
-                    requireActivity().finish();
-                }
+
+                Log.d("TestingAdmin", "Not Admin ");
+                Intent intent = new Intent(requireActivity(), ActDisplayApp.class);
+                startActivity(intent);
+                requireActivity().finish();
+
             } else {
                 TextView lblUsername = binding.txtUsername;
                 final ProgressBar vwProgress = binding.loadingProgressBar;

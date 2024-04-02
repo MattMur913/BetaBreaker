@@ -35,7 +35,7 @@ public class Onions extends Fragment {
         if (isFavouriteCentreEmpty()) {
            fragDisplay.setVisibility(View.GONE);
            txtFav.setVisibility(View.VISIBLE);
-            // Now you can work with views in newLayout
+
         }
     }
 
