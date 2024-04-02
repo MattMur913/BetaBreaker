@@ -38,13 +38,7 @@ public class ActDisplayApp extends AppCompatActivity {
         editor.putInt("admin",0);
         editor.apply();
         int adminValue = sharedPreferences.getInt("admin", 0); // Default value 0
-        mAppBarConfiguration = new AppBarConfiguration.Builder(
-                R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow)
-                .setOpenableLayout(drawer)
-                .build();
 
-        // Build the AppBarConfiguration based on the 'admin' value
-        /*
         if (adminValue < 1) {
             mAppBarConfiguration = new AppBarConfiguration.Builder(
                     R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow)
@@ -56,8 +50,6 @@ public class ActDisplayApp extends AppCompatActivity {
                     .setOpenableLayout(drawer)
                     .build();
         }
-
-         */
 
 
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
