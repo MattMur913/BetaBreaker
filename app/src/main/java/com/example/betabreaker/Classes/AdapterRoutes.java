@@ -19,7 +19,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
-import com.example.betabreaker.BurgerToppings.Lettace;
 import com.example.betabreaker.Frags.FragSpecRoute;
 import com.example.betabreaker.R;
 
@@ -30,11 +29,13 @@ public class AdapterRoutes extends RecyclerView.Adapter<AdapterRoutes.ViewHolder
     private List<ClsRoutes> itemList;
     private String centreID;
     private Context context;
+    private Fragment fragment;
 
-    public AdapterRoutes(List<ClsRoutes> itemList, String centreID, Context context) {
+    public AdapterRoutes(List<ClsRoutes> itemList, String centreID, Context context, Fragment fragment) {
         this.itemList = itemList;
         this.centreID = centreID;
         this.context = context;
+        this.fragment = fragment;
     }
 
     @NonNull
@@ -42,7 +43,7 @@ public class AdapterRoutes extends RecyclerView.Adapter<AdapterRoutes.ViewHolder
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemview = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.reyc_layout_display_routes, parent, false);
-        return new ViewHolder(itemview, itemList, centreID);
+        return new ViewHolder(itemview);
     }
 
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
@@ -60,12 +61,12 @@ public class AdapterRoutes extends RecyclerView.Adapter<AdapterRoutes.ViewHolder
         return itemList.size();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder {
         TextView tvColour, tvArea, tvGrade;
         CardView cardView;
         ImageView ivClimb;
 
-        public ViewHolder(@NonNull View itemView, List<ClsRoutes> itemList, String centreID) {
+        public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
             cardView = itemView.findViewById(R.id.dsRRecCar);
@@ -73,8 +74,6 @@ public class AdapterRoutes extends RecyclerView.Adapter<AdapterRoutes.ViewHolder
             tvGrade = itemView.findViewById(R.id.dscRGrade);
             tvArea = itemView.findViewById(R.id.dsRArea);
             ivClimb = itemView.findViewById(R.id.dsRClimbImage);
-
-
 
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -85,44 +84,39 @@ public class AdapterRoutes extends RecyclerView.Adapter<AdapterRoutes.ViewHolder
                         Context context = itemView.getContext();
                         if (context instanceof AppCompatActivity) {
                             FragmentManager fragmentManager = ((AppCompatActivity) context).getSupportFragmentManager();
-                            Fragment fragment = fragmentManager.findFragmentById(R.id.FragLayoutLettuce );
                             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                            //This log says the value is null -- please help fix this
                             Log.d("Check", String.valueOf(fragment));
+
+                            FragSpecRoute newFrag = new FragSpecRoute();
+                            Bundle bundle = new Bundle();
+                            bundle.putSerializable("viewRoute", route);
+                            newFrag.setArguments(bundle);
+//This is displaying over the op of nthe other Fragments, It should make a Fragment display ID of FragOnions which is displaying FragLayoutLettuce display the new fragment
+                            fragmentTransaction.replace(R.id.FragOnions, newFrag);
+                            /*
                             if (fragment instanceof Lettace) {
-                                Log.d("Check", "onClick: Check");
+                                Log.d("Check", String.valueOf(fragment));
                                 FragSpecRoute newFrag = new FragSpecRoute();
                                 Bundle bundle = new Bundle();
                                 bundle.putSerializable("viewRoute", route);
-                                fragment.setArguments(bundle);
-
-                                fragmentTransaction.replace(R.id.FragLayoutLettuce, newFrag);
-                                /*TODO MAke admin version of If statment
-                                FragEditSpecRoute newFrag = new FragEditSpecRoute();
-
-                                Bundle bundle = new Bundle();
-                                bundle.putSerializable("viewRoute", route);
-                                bundle.putSerializable("centreID", centreID);
-                                fragment.setArguments(bundle);
-
-                                fragmentTransaction.replace(R.id.fragmentContainerView, fragment);
-
-                                 */
+                                newFrag.setArguments(bundle);
+//This is displaying over the op of nthe other Fragments, It should make a Fragment display ID of FragOnions which is displaying FragLayoutLettuce display the new fragment
+                                fragmentTransaction.replace(R.id.FragOnions, newFrag);
                             } else {
                                 FragSpecRoute newFrag = new FragSpecRoute();
                                 Bundle bundle = new Bundle();
                                 bundle.putSerializable("viewRoute", route);
-                                fragment.setArguments(bundle);
-
+                                newFrag.setArguments(bundle);
                                 fragmentTransaction.replace(R.id.fragmentContainerView, newFrag);
                             }
+
+                             */
                             fragmentTransaction.addToBackStack(null);
                             fragmentTransaction.commit();
                         }
                     }
                 }
             });
-
         }
     }
 }

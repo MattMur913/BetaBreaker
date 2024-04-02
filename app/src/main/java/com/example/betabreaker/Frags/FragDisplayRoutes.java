@@ -104,7 +104,7 @@ public class FragDisplayRoutes extends Fragment {
 
                         requireActivity().runOnUiThread(() -> {
                             // Update RecyclerView and hide progress bar
-                            adapter = new AdapterRoutes(routesList, centreID, requireActivity());
+                            adapter = new AdapterRoutes(routesList, centreID, requireContext(), FragDisplayRoutes.this);
                             recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
                             recyclerView.setAdapter(adapter);
 

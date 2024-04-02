@@ -13,9 +13,9 @@
 
     <fragment
         android:id="@+id/nav_gallery"
-        android:name="com.example.betabreaker.BurgerToppings.Lettace"
+        android:name="com.example.betabreaker.BurgerToppings.Onions"
         android:label="@string/menu_gallery"
-        tools:layout="@layout/fragment_lettace" />
+        tools:layout="@layout/fragment_onions" />
 
     <fragment
         android:id="@+id/nav_slideshow"
