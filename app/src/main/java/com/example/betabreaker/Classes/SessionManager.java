@@ -3,8 +3,6 @@ package com.example.betabreaker.Classes;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-import com.example.betabreaker.Classes.ClsUser;
-
 public class SessionManager {
 
     private SharedPreferences sharedPreferences;
@@ -28,7 +26,6 @@ public class SessionManager {
     public void loadUserDets(ClsUser user){
 
         editor.putString("Username", user.getUsername());
-        editor.putString("ConNumber", user.getContactNumber());
         editor.putString("DOB", user.getDOB());
         editor.putString("Email", user.getEmail());
         editor.putString("Shoes", user.getShoes());

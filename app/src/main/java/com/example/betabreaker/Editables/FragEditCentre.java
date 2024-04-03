@@ -1,17 +1,23 @@
 package com.example.betabreaker.Editables;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -20,6 +26,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.betabreaker.Classes.ClsCentre;
 import com.example.betabreaker.Classes.ClsRoutes;
+import com.example.betabreaker.Classes.ConfirmationDialog;
 import com.example.betabreaker.Classes.GlobalUrl;
 import com.example.betabreaker.Frags.FragDisplayRoutes;
 import com.example.betabreaker.R;
@@ -29,6 +36,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -36,18 +44,27 @@ import java.util.List;
 
 import okhttp3.Call;
 import okhttp3.Callback;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
+import okhttp3.RequestBody;
 import okhttp3.Response;
 
 
 public class FragEditCentre extends Fragment {
 
     private FragmentEditCentreBinding binding;
-
+    private Uri imageURI;
+    private static final int PICK_IMAGE_REQUEST = 1;
     private ClsCentre edtCentre;
-
     private List<ClsRoutes> routesList = new ArrayList<>();
+    private ImageView imgLogo;
+    private EditText txtName;
+    private EditText txtEmail;
+    private EditText txtAddress;
+    private EditText txtContct;
+    private EditText txtWebsite;
 
 
     @Override
@@ -63,20 +80,20 @@ public class FragEditCentre extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         Bundle bundle = getArguments();
         final Button btnRoutes = binding.vewRoutes;
-        TextView textViewCentreId = binding.spCName;
-        TextView textViewCentreName = binding.spCAddress;
+        txtName = binding.edName;
+        txtAddress = binding.edAddress;
+        txtEmail = binding.edEmail;
+        txtContct = binding.edNumber;
+        txtWebsite = binding.edWebsite;
+        imgLogo = binding.spCLogoview;
+        Button btnReset = binding.rotReset;
+        Button btnUpdate = binding.rotUpdate;
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(requireContext());
         String centreID = preferences.getString("centreID", "");
 
         fetchSingleCentre(centreID);
-
-        if (bundle != null) {
-            ClsCentre centre = (ClsCentre) bundle.getSerializable("centre");
-            if (centre != null) {
-                textViewCentreId.setText(centre.getIdCentre());
-                textViewCentreName.setText(centre.getCentreName());
-            }
+        if(edtCentre.getIdCentre() == null){
 
             btnRoutes.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -85,11 +102,11 @@ public class FragEditCentre extends Fragment {
                     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                     FragDisplayRoutes fragment = new FragDisplayRoutes();
                     Bundle bundle = new Bundle();
-                    if (centre != null) {
-                        List<ClsRoutes> routes = centre.getRoutes();
+                    if (edtCentre != null) {
+                        List<ClsRoutes> routes = edtCentre.getRoutes();
 
                         bundle.putSerializable("routes", (Serializable) routes);
-                        bundle.putSerializable("centreID", centre.getIdCentre());
+                        bundle.putSerializable("centreID", edtCentre.getIdCentre());
                         fragment.setArguments(bundle);
                         fragmentTransaction.replace(R.id.fragContent, fragment);
                         fragmentTransaction.addToBackStack(null);
@@ -97,6 +114,93 @@ public class FragEditCentre extends Fragment {
                     }
                 }
             });
+            btnReset.setOnClickListener(new View.OnClickListener(){
+                @Override
+                public void onClick(View v){
+                    Glide.with(imgLogo.getContext()).load(GlobalUrl.imageUrl + edtCentre.getlogo()).apply(RequestOptions.placeholderOf(R.drawable.placeholder_image)).into(imgLogo);
+                    txtName.setText(edtCentre.getCentreName());
+                    txtAddress.setText(edtCentre.getAddress());
+                    txtContct.setText(edtCentre.getNumber());
+                    txtEmail.setText(edtCentre.getEmail());
+                    txtWebsite.setText(edtCentre.getWebsite());
+                }
+            });
+
+            btnUpdate.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    ConfirmationDialog.showConfirmationDialog(getContext(), "Are you sure you want update this route?", new ConfirmationDialog.ConfirmationListener() {
+                        @Override
+                        public void onConfirm() {
+                            String updURL = GlobalUrl.updCentreUrl.replace("{id}", centreID);
+                            // Get values from EditText fields
+                            String Name = txtName.getText().toString();
+                            String Address = txtAddress.getText().toString();
+                            String Email = txtEmail.getText().toString();
+                            String Contact = txtContct.getText().toString();
+                            String Website = txtWebsite.getText().toString();
+
+                            // Create a MultipartBody.Builder to construct the request body
+                            MultipartBody.Builder requestBodyBuilder = new MultipartBody.Builder()
+                                    .setType(MultipartBody.FORM)
+                                    .addFormDataPart("centreName", Name)
+                                    .addFormDataPart("address", Address)
+                                    .addFormDataPart("email", Email)
+                                    .addFormDataPart("contactNumber", Contact)
+                                    .addFormDataPart("website", Website);
+
+                            // Add image file if selected
+                            if (imageURI != null) {
+                                File logoPath = new File(getRealPathFromURI(imageURI));
+                                requestBodyBuilder.addFormDataPart("file", "logo.jpg",
+                                        RequestBody.create(MediaType.parse("image/*"), logoPath));
+                                requestBodyBuilder.addFormDataPart("newImage","0");
+                            }else{
+                                requestBodyBuilder.addFormDataPart("newImage","1");
+                            }
+
+                            // Build the request body
+                            RequestBody requestBody = requestBodyBuilder.build();
+
+                            // Create a request
+                            Request request = new Request.Builder()
+                                    .url(updURL)
+                                    .post(requestBody)
+                                    .build();
+
+                            // Execute the request asynchronously
+                            OkHttpClient client = new OkHttpClient();
+                            client.newCall(request).enqueue(new Callback() {
+                                @Override
+                                public void onFailure(Call call, IOException e) {
+                                    Log.d("SingleCentre", "Not updated");
+                                    e.printStackTrace();
+                                }
+
+                                @Override
+                                public void onResponse(Call call, Response response) throws IOException {
+                                    Log.d("SingleCentre", "Updated");
+                                    FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+                                    fragmentManager.popBackStack();
+                                }
+                            });
+                        }
+
+                        @Override
+                        public void onCancel() {
+                            // Handle cancellation action
+                        }
+                    });
+                }
+            });
+
+            imgLogo.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    openFileChooser();
+                }
+            });
+
         }
 
     }
@@ -155,10 +259,15 @@ public class FragEditCentre extends Fragment {
                         Log.d("SingleCentre2", String.valueOf(edtCentre.getCentreName()));
 
                         requireActivity().runOnUiThread(() -> {
-                            ImageView spCLogoview = binding.spCLogoview;
                             // Update UI components with centreFav data
                             Log.d("Testing", GlobalUrl.imageUrl+edtCentre.getlogo());
-                            Glide.with(spCLogoview.getContext()).load(GlobalUrl.imageUrl + edtCentre.getlogo()).apply(RequestOptions.placeholderOf(R.drawable.placeholder_image)).into(spCLogoview);
+                            Glide.with(imgLogo.getContext()).load(GlobalUrl.imageUrl + edtCentre.getlogo()).apply(RequestOptions.placeholderOf(R.drawable.placeholder_image)).into(imgLogo);
+                            txtName.setText(edtCentre.getCentreName());
+                            txtAddress.setText(edtCentre.getAddress());
+                            txtContct.setText(edtCentre.getNumber());
+                            txtEmail.setText(edtCentre.getEmail());
+                            txtWebsite.setText(edtCentre.getWebsite());
+
 
 
                         });
@@ -169,5 +278,35 @@ public class FragEditCentre extends Fragment {
                 }
             }
         });
+    }
+    private String getRealPathFromURI(Uri uri) {
+        String[] projection = {MediaStore.Images.Media.DATA};
+        Cursor cursor = getActivity().getContentResolver().query(uri, projection, null, null, null);
+        if (cursor == null) return null;
+        int columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+        cursor.moveToFirst();
+        String filePath = cursor.getString(columnIndex);
+        cursor.close();
+        return filePath;
+    }
+
+    private void openFileChooser() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(intent, PICK_IMAGE_REQUEST);
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == Activity.RESULT_OK
+                && data != null && data.getData() != null) {
+            Uri imageUri = data.getData();
+            // Display the selected image
+            imageURI = imageUri;
+            imgLogo.setImageURI(imageUri);
+        }
     }
 }

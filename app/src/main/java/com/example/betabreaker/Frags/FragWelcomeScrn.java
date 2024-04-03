@@ -51,7 +51,7 @@ public class FragWelcomeScrn extends Fragment implements ResponseCallBack {
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        Log.d("SingleCentre", "WelcomeScrn");
         final EditText inpUsername = binding.inpUsername;
         final EditText inpPassword = binding.inpPassword;
         final TextView lblUsername = binding.txtUsername;
@@ -64,8 +64,6 @@ public class FragWelcomeScrn extends Fragment implements ResponseCallBack {
         SharedPreferences.Editor editor = preferences.edit();
         editor.clear(); // Clear all data
         editor.apply(); // Apply changes
-
-
 
         checkLogged();
 
@@ -127,26 +125,6 @@ public class FragWelcomeScrn extends Fragment implements ResponseCallBack {
         binding = null;
     }
 
-    private void addingHardUsers(){
-        //String hashPass = sha256("password123");
-        String hashPass = ("password123");
-        /*ClsUser hardUser = new ClsUser("john_doe", hashPass,
-                "1990-01-01", "Nike",
-                "john@example.com", "1234567890", 1, "6");
-
-         */
-        ClsUser hardUser = new ClsUser("john_doe", hashPass,
-                "1990-01-01", "Nike",
-                "john@example.com", "1234567890", 1, "JTJmcHJvamVjdC1pbWFnZXMlMmY2Mzg0NjYzNjMzNzcwNzA1MDg=");
-
-
-        userList.add(hardUser);
-         hardUser = new ClsUser("matty", hashPass,
-                "1990-01-01", "Nike",
-                "john@example.com", "1234567890", 0, "");
-        userList.add(hardUser);
-    }
-
     public static String sha256(final String base) {
         try{
             final MessageDigest digest = MessageDigest.getInstance("SHA-256");
@@ -165,10 +143,11 @@ public class FragWelcomeScrn extends Fragment implements ResponseCallBack {
     }
 
     public void checkLogged(){
+        Log.d("SingleCentre", "Check");
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(requireContext());
         String username = preferences.getString("username", "");
 
-        if(username.equals("") || username == null){
+        if(!username.equals("") && username != null){
             Log.d("FlowChecks", "User is logged in: "+ username);
             Intent intent = new Intent(requireActivity(), ActDisplayApp.class);
             startActivity(intent);
