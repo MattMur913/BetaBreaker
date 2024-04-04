@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -74,8 +75,13 @@ public class FragSignUp extends Fragment {
                String Name = edtUsername.getText().toString();
                String tempPass = edtPass.getText().toString();
                String Email = edtEmail.getText().toString();
-               String dob = edtDob.getText().toString();
+               //need this to be a date in the format dd/mm/yyyy
+               String dob = formatDob(edtDob.getText().toString());
 
+               if (dob == null || dob.isEmpty()) {
+                   Toast.makeText(getContext(), "Please enter a valid Date of Birth", Toast.LENGTH_SHORT).show();
+                   return;
+               }
                String pass = sha256(tempPass);
 
 
@@ -111,33 +117,38 @@ public class FragSignUp extends Fragment {
                            String responseBody = response.body().string();
                            if (responseBody.equals("Already Exists")) {
                                Log.d("SingleCentre", "User already exists");
-                           } else if (responseBody.equals("New user added")) {
-                               Log.d("SingleCentre", "New user added");
-                               SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-                               SharedPreferences.Editor editor = sharedPreferences.edit();
+                           } else {
                                try {
                                    JSONObject jsonResponse = new JSONObject(responseBody);
                                    String username = jsonResponse.getString("Username").trim(); // Extracting username from JSON
+                                   String email = jsonResponse.getString("Email").trim(); // Extracting email from JSON
+                                   String dob = jsonResponse.getString("DoB").trim(); // Extracting date of birth from JSON
+
                                    Log.d("SingleCentre", "Username: " + username); // Log the username
+                                   Log.d("SingleCentre", "Email: " + email); // Log the email
+                                   Log.d("SingleCentre", "Date of Birth: " + dob); // Log the date of birth
+
+                                   // Add the extracted values to SharedPreferences
+                                   SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+                                   SharedPreferences.Editor editor = sharedPreferences.edit();
                                    editor.putString("username", username);
-                                   editor.putInt("admin", 0);
+                                   editor.putString("email", email);
+                                   editor.putString("dob", dob);
+                                   editor.putInt("admin", 0); // Assuming the admin value is always 0
                                    editor.apply();
+
                                    Intent intent = new Intent(getActivity(), ActDisplayApp.class);
                                    startActivity(intent);
                                } catch (JSONException e) {
                                    e.printStackTrace();
                                    Log.d("SingleCentre", "Failed to parse JSON response");
                                }
-
-                           } else {
-                               // Handle unexpected response
-                               Log.d("SingleCentre", "Unexpected response: " + responseBody);
                            }
                        } else {
                            Log.d("SingleCentre", "Response unsuccessful");
                        }
-
                    }
+
                });
            }
         });
@@ -171,6 +182,22 @@ public class FragSignUp extends Fragment {
             return hexString.toString();
         } catch(Exception ex){
             throw new RuntimeException(ex);
+        }
+    }
+
+    // Method to format date of birth to "dd/mm/yyyy" format
+    private String formatDob(String dob) {
+        // Check if dob matches the format "yyyy-mm-dd"
+        if (dob.matches("\\d{4}-\\d{2}-\\d{2}")) {
+            // Split the date by "-"
+            String[] parts = dob.split("-");
+            // Reconstruct the date in "dd/mm/yyyy" format
+            return parts[2] + "/" + parts[1] + "/" + parts[0];
+        } else {
+            // Show toast indicating incorrect DOB format
+            Toast.makeText(getContext(), "Date of Birth should be in yyyy-mm-dd format", Toast.LENGTH_SHORT).show();
+            // Return null to indicate incorrect format
+            return null;
         }
     }
 

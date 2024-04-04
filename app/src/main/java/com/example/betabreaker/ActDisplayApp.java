@@ -36,7 +36,7 @@ public class ActDisplayApp extends AppCompatActivity {
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putInt("admin",1);
+        editor.putInt("admin",0);
         editor.apply();
         int adminValue = sharedPreferences.getInt("admin", 0); // Default value 0
 

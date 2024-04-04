@@ -60,10 +60,13 @@ public class FragWelcomeScrn extends Fragment implements ResponseCallBack {
         final Button btnSign =binding.btnSignup;
         final Button btnLog =binding.btnLogin;
 
+        /*
        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
         SharedPreferences.Editor editor = preferences.edit();
         editor.clear(); // Clear all data
         editor.apply(); // Apply changes
+
+         */
 
         checkLogged();
 
@@ -168,9 +171,7 @@ public class FragWelcomeScrn extends Fragment implements ResponseCallBack {
                 SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
                 SharedPreferences.Editor editor = preferences.edit();
                 editor.putString("username", userData.getString("Username"));
-                editor.putString("shoes", userData.getString("Shoes"));
                 editor.putString("email", userData.getString("Email"));
-                editor.putString("contactNumber", userData.getString("ContactNumebr"));
                 editor.putString("DoB", userData.getString("DoB"));
                 editor.putInt("admin", userData.getInt("admin"));
                 editor.putString("adminOf", userData.getString("adminOf"));
