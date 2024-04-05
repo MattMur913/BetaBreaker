@@ -90,7 +90,7 @@ public class FragEditCentre extends Fragment {
         Button btnUpdate = binding.rotUpdate;
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(requireContext());
-        String centreID = preferences.getString("centreID", "");
+        String centreID = preferences.getString("adminOf", "");
 
         fetchSingleCentre(centreID);
         if(edtCentre.getIdCentre() == null){
