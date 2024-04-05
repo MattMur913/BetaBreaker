@@ -60,16 +60,7 @@ public class FragWelcomeScrn extends Fragment implements ResponseCallBack {
         final Button btnSign =binding.btnSignup;
         final Button btnLog =binding.btnLogin;
 
-
-       SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.clear(); // Clear all data
-        editor.apply(); // Apply changes
-
-
-
         checkLogged();
-
 
         btnLog.setOnClickListener(new View.OnClickListener() {
             @Override

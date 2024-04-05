@@ -135,8 +135,8 @@ public class FragSignUp extends Fragment {
                                    editor.putString("email", email);
                                    editor.putString("dob", dob);
                                    //TODO Cheange thisd
-                                   editor.putInt("admin", 1); // Assuming the admin value is always 0
-                                   editor.putString("adminOf","JTJmcHJvamVjdC1pbWFnZXMlMmY2Mzg0NzkzMzgwNDc1NTYzMDQ=" );
+                                   editor.putInt("admin", 0); // Assuming the admin value is always 0
+                                   editor.putString("adminOf","" );
                                    editor.apply();
 
                                    Intent intent = new Intent(getActivity(), ActDisplayApp.class);

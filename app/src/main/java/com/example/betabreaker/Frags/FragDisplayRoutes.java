@@ -1,6 +1,8 @@
 package com.example.betabreaker.Frags;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -57,13 +59,10 @@ public class FragDisplayRoutes extends Fragment {
         progressBar.setVisibility(View.VISIBLE);
         recyclerView.setVisibility(View.GONE);
         Log.d("SingleCentre4", "onCreateView: 2");
-        Bundle bundle = getArguments();
-        if (bundle != null) {
-            String centreID = (String) bundle.getSerializable("centreID");
-            getRoutesFromCentre(centreID);
-        } else {
-            Log.e("FragDisplayRoutes", "Bundle is null");
-        }
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(requireContext());
+        String centreID = preferences.getString("adminOf", "");
+        getRoutesFromCentre(centreID);
+
     }
 
     private void getRoutesFromCentre(String centreID) {

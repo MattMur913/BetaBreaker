@@ -138,7 +138,7 @@ public class Lettace extends Fragment  implements AdapterRoutes.AdapterCallback 
                         }
 
                         // Create a ClsCentre object and add it to the list
-                        centreFav = new ClsCentre(id, name, address, description, email, contact, website, logoid, routes);
+                        centreFav = new ClsCentre(id, name, address, description, email, contact, website, logoid, routesList);
                         Log.d("SingleCentre2", String.valueOf(centreFav.getCentreName()));
 
                         requireActivity().runOnUiThread(() -> {
