@@ -234,7 +234,10 @@ public class FragEditCentre extends Fragment {
                         JSONObject jsonResponse = new JSONObject(responseData);
                         String id = jsonResponse.getString("id");
                         String name = jsonResponse.getString("centreName");
+                        String contact = jsonResponse.getString("contactNumber");
+                        String email = jsonResponse.getString("email");
                         String address = jsonResponse.getString("description");
+                        String website = jsonResponse.getString("website");
                         String description = jsonResponse.getString("Address");
                         String logoid = jsonResponse.getString("logoName");
 
@@ -255,7 +258,7 @@ public class FragEditCentre extends Fragment {
                         }
 
                         // Create a ClsCentre object and add it to the list
-                        edtCentre = new ClsCentre(id, name, address, description, "", "", "", logoid, routes);
+                        edtCentre = new ClsCentre(id, name, address, description, email, contact, website, logoid, routes);
                         Log.d("SingleCentre2", String.valueOf(edtCentre.getCentreName()));
 
                         requireActivity().runOnUiThread(() -> {

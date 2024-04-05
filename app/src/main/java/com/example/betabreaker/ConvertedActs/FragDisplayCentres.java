@@ -89,7 +89,10 @@ public class FragDisplayCentres extends Fragment {
                             JSONObject jsonObject = jsonArray.getJSONObject(i);
                             String id = jsonObject.getString("id");
                             String name = jsonObject.getString("centreName");
+                            String contact = jsonObject.getString("contactNumber");
+                            String email = jsonObject.getString("email");
                             String address = jsonObject.getString("description");
+                            String website = jsonObject.getString("website");
                             String description = jsonObject.getString("Address");
                             String logoid = jsonObject.getString("logoName");
                             JSONArray routeDetailsArray = jsonObject.getJSONArray("RouteDetails");
@@ -110,7 +113,7 @@ public class FragDisplayCentres extends Fragment {
                             }
 
                             // Create a ClsCentre object and add it to the list
-                            ClsCentre centre = new ClsCentre(id, name, address, description, "", "", "", logoid, routes);
+                            ClsCentre centre = new ClsCentre(id, name, address, description, email, contact, website, logoid, routes);
                             centreList.add(centre);
                         }
 

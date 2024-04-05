@@ -84,7 +84,10 @@ public class FragAdminViews extends Fragment {
             JSONObject jsonResponse = new JSONObject(hardcodedResponse);
             String id = jsonResponse.getString("id");
             String name = jsonResponse.getString("centreName");
+            String contact = jsonResponse.getString("contactNumber");
+            String email = jsonResponse.getString("email");
             String address = jsonResponse.getString("description");
+            String website = jsonResponse.getString("website");
             String description = jsonResponse.getString("Address");
             String logoid = jsonResponse.getString("logoName");
 
@@ -107,7 +110,7 @@ public class FragAdminViews extends Fragment {
             }
 
             // Create a ClsCentre object
-            ClsCentre centre = new ClsCentre(id, name, address, description, "", "", "", logoid, routes);
+            ClsCentre centre= new ClsCentre(id, name, address, description, email, contact, website, logoid, routes);
 
             // Add the centre to the list
             centreList.add(centre);

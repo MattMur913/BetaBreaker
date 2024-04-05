@@ -78,6 +78,7 @@ public class AdapterCentres extends RecyclerView.Adapter<AdapterCentres.ViewHold
                         Log.d("SingleCentre", centre.getAddress());
                         Log.d("SingleCentre", centre.getEmail());
                         Log.d("SingleCentre", centre.getlogo());
+                        //TODO ADD THE REST OF THE CENTRE DETAILS TO  BE DISPLAYED
                         Log.d("SingleCentre", centre.getDescription());
                         Context context = itemView.getContext();
                         // Start the Fragment transaction

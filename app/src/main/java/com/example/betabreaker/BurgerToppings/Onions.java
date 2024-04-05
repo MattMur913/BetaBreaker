@@ -41,8 +41,7 @@ public class Onions extends Fragment {
 
     private boolean isFavouriteCentreEmpty() {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(requireContext());
-        // String favouriteCentre = preferences.getString("adminOf", "");
-        String favouriteCentre = "1";
+        String favouriteCentre = preferences.getString("adminOf", "");
         return favouriteCentre.isEmpty();
     }
 
