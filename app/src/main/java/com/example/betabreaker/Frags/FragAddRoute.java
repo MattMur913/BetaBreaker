@@ -3,11 +3,9 @@ package com.example.betabreaker.Frags;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -148,21 +146,6 @@ public class FragAddRoute extends Fragment {
             }
         });
 
-    }
-    private String getRealPathFromURI(Uri uri) {
-        Log.d("FragAddRoute", "URI: " + uri);
-        String[] projection = {MediaStore.Images.Media.DATA};
-        Cursor cursor = getActivity().getContentResolver().query(uri, projection, null, null, null);
-        if (cursor == null) {
-            Log.e("FragAddRoute", "Cursor is null");
-            return null;
-        }
-        int columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-        cursor.moveToFirst();
-        String filePath = cursor.getString(columnIndex);
-        cursor.close();
-        Log.d("FragAddRoute", "Real path: " + filePath);
-        return filePath;
     }
     private File createTemporaryFileFromUri(Uri uri) throws IOException {
         InputStream inputStream = getActivity().getContentResolver().openInputStream(uri);

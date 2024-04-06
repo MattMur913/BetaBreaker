@@ -1,6 +1,8 @@
 package com.example.betabreaker.Frags;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,15 +39,28 @@ public class FragSpecCentre extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         Bundle bundle = getArguments();
         final Button btnRoutes = binding.vewRoutes;
-        TextView textViewCentreId = binding.spCName;
-        TextView textViewCentreName = binding.spCAddress;
+        Button btnFav = binding.btnFav;
+        TextView txtName = binding.spCName;
+        TextView txtAddress = binding.spCAddress;
 
         if (bundle != null) {
             ClsCentre centre = (ClsCentre) bundle.getSerializable("centre");
             if (centre != null) {
-                textViewCentreId.setText(centre.getIdCentre());
-                textViewCentreName.setText(centre.getCentreName());
+                txtAddress.setText(centre.getAddress());
+                txtName.setText(centre.getCentreName());
             }
+
+            btnFav.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+                    SharedPreferences.Editor editor = preferences.edit();
+                    editor.putString("favCent", centre.getIdCentre());
+                    editor.apply();
+                    //TODO Add a toast here
+                }
+            });
+
 
             btnRoutes.setOnClickListener(new View.OnClickListener() {
                 @Override

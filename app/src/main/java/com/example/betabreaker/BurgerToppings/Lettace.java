@@ -68,10 +68,9 @@ public class Lettace extends Fragment  implements AdapterRoutes.AdapterCallback 
         super.onViewCreated(view, savedInstanceState);
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(requireContext());
         String favouriteCentre = preferences.getString("adminOf", "");
-        // Handle views in the FragmentLettaceBinding layout
         txtLabel = binding.textView2;
         imgLogo = binding.imageView2;
-         cdView = binding.cardView;
+        cdView = binding.cardView;
 
         recyclerView = binding.lettaceRecy;
         progressBar = binding.progressBar1;

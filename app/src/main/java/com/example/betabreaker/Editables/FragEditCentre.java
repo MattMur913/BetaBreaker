@@ -3,11 +3,9 @@ package com.example.betabreaker.Editables;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,7 +35,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -65,7 +65,9 @@ public class FragEditCentre extends Fragment {
     private EditText txtAddress;
     private EditText txtContct;
     private EditText txtWebsite;
-
+    private Button btnRoutes;
+    private Button btnReset;
+    private Button btnUpdate;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -78,14 +80,14 @@ public class FragEditCentre extends Fragment {
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        final Button btnRoutes = binding.vewRoutes;
+        btnRoutes = binding.vewRoutes;
         txtName = binding.edName;
         txtAddress = binding.edAddress;
         txtEmail = binding.edEmail;
         txtContct = binding.edNumber;
         txtWebsite = binding.edWebsite;
-        Button btnReset = binding.rotReset;
-        Button btnUpdate = binding.rotUpdate;
+         btnReset = binding.rotReset;
+         btnUpdate = binding.rotUpdate;
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(requireContext());
         String centreID = preferences.getString("adminOf", "");
@@ -95,24 +97,30 @@ public class FragEditCentre extends Fragment {
         btnRoutes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (edtCentre != null) {
+                    Log.d("CHECKING EDITCENTRE", "onClick: CHECKER");
 
-                Log.d("CHECKING EDITCENTRE", "onClick: CHECKER");
+                    FragmentManager fragmentManager = getParentFragmentManager();
+                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                    FragDisplayRoutes fragment = new FragDisplayRoutes();
+                    Bundle bundle = new Bundle();
+                    List<ClsRoutes> routes = edtCentre.getRoutes();
 
-                FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                FragDisplayRoutes fragment = new FragDisplayRoutes();
-                Bundle bundle = new Bundle();
-                List<ClsRoutes> routes = edtCentre.getRoutes();
-                fragmentTransaction.remove(FragEditCentre.this);
-                bundle.putSerializable("routes", (Serializable) routes);
-                bundle.putSerializable("centreID", edtCentre.getIdCentre());
-                fragment.setArguments(bundle);
-                fragmentTransaction.replace(R.id.fragContent, fragment);
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
-
+                    fragmentTransaction.remove(FragEditCentre.this);
+                    bundle.putSerializable("routes", (Serializable) routes);
+                    bundle.putSerializable("centreID", edtCentre.getIdCentre());
+                    fragment.setArguments(bundle);
+                    fragmentTransaction.replace(R.id.fragContent, fragment);
+                    fragmentTransaction.addToBackStack(null);
+                    fragmentTransaction.commit();
+                } else {
+                    // Handle the case when edtCentre is null or not initialized yet
+                    Log.e("FragEditCentre", "edtCentre is null or not initialized yet");
+                }
             }
         });
+
+
         btnReset.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
@@ -150,7 +158,12 @@ public class FragEditCentre extends Fragment {
 
                         // Add image file if selected
                         if (imageURI != null) {
-                            File logoPath = new File(getRealPathFromURI(imageURI));
+                            File logoPath = null;
+                            try {
+                                logoPath = createTemporaryFileFromUri(imageURI);
+                            } catch (IOException e) {
+                                throw new RuntimeException(e);
+                            }
                             requestBodyBuilder.addFormDataPart("file", "logo.jpg",
                                     RequestBody.create(MediaType.parse("image/*"), logoPath));
                             requestBodyBuilder.addFormDataPart("newImage","0");
@@ -257,7 +270,7 @@ public class FragEditCentre extends Fragment {
 
                         // Create a ClsCentre object and add it to the list
                         edtCentre = new ClsCentre(id, name, address, description, email, contact, website, logoid, routesList);
-                        Log.d("SingleCentre2", String.valueOf(edtCentre.getCentreName()));
+                        Log.d("SingleCentre2", String.valueOf(edtCentre.getRoutes()));
 
                         requireActivity().runOnUiThread(() -> {
                             // Update UI components with centreFav data
@@ -268,7 +281,9 @@ public class FragEditCentre extends Fragment {
                             txtContct.setText(edtCentre.getNumber());
                             txtEmail.setText(edtCentre.getEmail());
                             txtWebsite.setText(edtCentre.getWebsite());
-
+                            btnRoutes.setVisibility(View.VISIBLE);
+                            btnUpdate.setVisibility(View.VISIBLE);
+                            btnReset.setVisibility(View.VISIBLE);
 
 
                         });
@@ -280,15 +295,24 @@ public class FragEditCentre extends Fragment {
             }
         });
     }
-    private String getRealPathFromURI(Uri uri) {
-        String[] projection = {MediaStore.Images.Media.DATA};
-        Cursor cursor = getActivity().getContentResolver().query(uri, projection, null, null, null);
-        if (cursor == null) return null;
-        int columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-        cursor.moveToFirst();
-        String filePath = cursor.getString(columnIndex);
-        cursor.close();
-        return filePath;
+    private File createTemporaryFileFromUri(Uri uri) throws IOException {
+        InputStream inputStream = getActivity().getContentResolver().openInputStream(uri);
+        if (inputStream == null) {
+            // Handle error
+            return null;
+        }
+
+        File tempFile = File.createTempFile("temp", null, getActivity().getCacheDir());
+        FileOutputStream outputStream = new FileOutputStream(tempFile);
+        byte[] buffer = new byte[4 * 1024]; // Adjust buffer size as needed
+        int read;
+        while ((read = inputStream.read(buffer)) != -1) {
+            outputStream.write(buffer, 0, read);
+        }
+        outputStream.flush();
+        outputStream.close();
+        inputStream.close();
+        return tempFile;
     }
 
     private void openFileChooser() {
