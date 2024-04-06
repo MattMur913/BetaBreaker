@@ -134,9 +134,9 @@ public class FragSignUp extends Fragment {
                                    editor.putString("username", username);
                                    editor.putString("email", email);
                                    editor.putString("dob", dob);
-                                   //TODO Cheange thisd
                                    editor.putInt("admin", 0); // Assuming the admin value is always 0
                                    editor.putString("adminOf","" );
+                                   editor.putString("favCent","");
                                    editor.apply();
 
                                    Intent intent = new Intent(getActivity(), ActDisplayApp.class);

@@ -1,17 +1,10 @@
 TODO:Remove anything with RemoveThis
-
-TODO: [CRITICAL]
-    Change al the acts to be fragments, adjust the DislayApp Act to check between Admin and not before choosing a fragment to display
-    Differentiate between admin accoutns - make them able to edit their centres - CAn I make another fragment for editing them
-    GURD Routes using an admin account - Just need add routes - Need to update centre details for admins
-    Get Logout button done before rest of user profile is completed
-    Will just need user Profile edits made after this
-    Create navbar at the bottom - one section for routes - the other for user profile
-
-TODO:[Improving Key Functions]
-    Add some head space to ActAdminViews
-    Update the FragSpecCentre to display all
-    Test Displaying of routes from azure instead of just the hardcoded stuff
-    [Done]Create user constructor with if not admin ability
+TODO: REMOVE ALL UNUSED CODE FILE BY FILE
+TODO: ENSURE ANYTHING THAT NEEDS TO BE DISPLAYED IS DISPLAYED IN FULL
+TODO: COMMENT ALL CODE APPROPRIATELY
+TODO: SEE IF ANY RENAMING NEEDS TO BE DONE
+TODO: REMOVE INAPPROPRIATE LOGS
+TODO: GO THROUGH ALL WARNINGS
+TODO: TEST ANY THING IN THE ADMIN VIEW
 
 
