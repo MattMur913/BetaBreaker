@@ -20,6 +20,7 @@ import com.bumptech.glide.request.RequestOptions;
 import com.example.betabreaker.Frags.FragSpecCentre;
 import com.example.betabreaker.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class AdapterCentres extends RecyclerView.Adapter<AdapterCentres.ViewHolder> {
@@ -101,4 +102,15 @@ public class AdapterCentres extends RecyclerView.Adapter<AdapterCentres.ViewHold
             });
         }
     }
+    public void filter(String searchText) {
+        List<ClsCentre> filteredList = new ArrayList<>();
+        for (ClsCentre centre : itemList) {
+            if (centre.getCentreName().toLowerCase().contains(searchText.toLowerCase())) {
+                filteredList.add(centre);
+            }
+        }
+        itemList = filteredList;
+        notifyDataSetChanged();
+    }
+
 }

@@ -23,7 +23,6 @@ import androidx.fragment.app.FragmentTransaction;
 import com.example.betabreaker.ActDisplayApp;
 import com.example.betabreaker.Classes.ClsUser;
 import com.example.betabreaker.Classes.GlobalUrl;
-import com.example.betabreaker.Classes.MSAzureClient;
 import com.example.betabreaker.Classes.ResponseCallBack;
 import com.example.betabreaker.R;
 import com.example.betabreaker.databinding.FragmentWelcomeScrnBinding;
@@ -32,9 +31,18 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.List;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class FragWelcomeScrn extends Fragment implements ResponseCallBack {
 
@@ -71,15 +79,75 @@ public class FragWelcomeScrn extends Fragment implements ResponseCallBack {
                 btnLog.setVisibility(View.GONE);
 
                 if (inpUsername.getText().toString() != null && inpPassword.getText().toString() != null) {
-
                     String hashPass = sha256(String.valueOf(inpPassword.getText()));
-                    MSAzureClient httpClient = new MSAzureClient(FragWelcomeScrn.this);
-                    String type = "POST";
-                    String url = GlobalUrl.loginURL;
-                    String body = "{ \"username\": \"" + inpUsername.getText().toString() + "\" ," +
-                            " \"password\": \"" + hashPass.toString() + "\" }";
-                    httpClient.execute(type, url, body);
 
+// Create an instance of OkHttpClient
+                    OkHttpClient client = new OkHttpClient();
+
+// Prepare the request body
+                    MediaType mediaType = MediaType.parse("application/json; charset=utf-8");
+                    String jsonBody = "{\"username\":\"" + inpUsername.getText().toString() + "\",\"password\":\"" + hashPass + "\"}";
+                    RequestBody requestBody = RequestBody.create(jsonBody, mediaType);
+
+// Create a request
+                    Request request = new Request.Builder()
+                            .url(GlobalUrl.loginURL)
+                            .post(requestBody)
+                            .build();
+
+                    client.newCall(request).enqueue(new Callback() {
+                        @Override
+                        public void onFailure(Call call, IOException e) {
+                            e.printStackTrace();
+                            // Handle failure
+                        }
+
+                        @Override
+                        public void onResponse(Call call, Response response) throws IOException {
+                            if (response.isSuccessful()) {
+                                try {
+                                    JSONObject jsonObject = new JSONObject(response.body().string());
+                                    JSONObject resultSets = jsonObject.getJSONObject("ResultSets");
+                                    JSONArray userTable = resultSets.getJSONArray("Table1");
+                                    if (userTable.length()==1){
+
+                                        JSONObject userData = userTable.getJSONObject(0);
+                                        Context context = getContext();
+                                        //TODO MAke it check just like in the signup fragment
+                                        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+                                        SharedPreferences.Editor editor = preferences.edit();
+                                        editor.putString("username", userData.getString("Username"));
+                                        editor.putString("email", userData.getString("Email"));
+                                        editor.putString("DoB", userData.getString("DoB"));
+                                        editor.putInt("admin", userData.getInt("admin"));
+                                        editor.putString("adminOf", userData.getString("adminOf"));
+                                        editor.apply();
+
+                                        Log.d("TestingAdmin", "Not Admin ");
+                                        Intent intent = new Intent(requireActivity(), ActDisplayApp.class);
+                                        startActivity(intent);
+                                        requireActivity().finish();
+
+                                    } else {
+                                        TextView lblUsername = binding.txtUsername;
+                                        final ProgressBar vwProgress = binding.loadingProgressBar;
+                                        final Button btnSign = binding.btnSignup;
+                                        final Button btnLog = binding.btnLogin;
+                                        lblUsername.setText("Incorrect details provided");
+                                        vwProgress.setVisibility(View.GONE);
+                                        btnSign.setVisibility(View.VISIBLE);
+                                        btnLog.setVisibility(View.VISIBLE);
+                                    }
+                                } catch (JSONException e) {
+
+                                    e.printStackTrace();
+
+                                }
+                            } else {
+                                // Handle unsuccessful response
+                            }
+                        }
+                    });
                 }else {
                     lblUsername.setText("Cannot be empty");
                     vwProgress.setVisibility(View.GONE);
@@ -150,43 +218,6 @@ public class FragWelcomeScrn extends Fragment implements ResponseCallBack {
     }
     @Override
     public void onResponseReceived(String jsonResponse) {
-        try {
-            JSONObject jsonObject = new JSONObject(jsonResponse);
-            JSONObject resultSets = jsonObject.getJSONObject("ResultSets");
-            JSONArray userTable = resultSets.getJSONArray("Table1");
-            if (userTable.length()==1){
 
-                JSONObject userData = userTable.getJSONObject(0);
-                Context context = getContext();
-                //TODO MAke it check just like in the signup fragment
-                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-                SharedPreferences.Editor editor = preferences.edit();
-                editor.putString("username", userData.getString("Username"));
-                editor.putString("email", userData.getString("Email"));
-                editor.putString("DoB", userData.getString("DoB"));
-                editor.putInt("admin", userData.getInt("admin"));
-                editor.putString("adminOf", userData.getString("adminOf"));
-                editor.apply();
-
-                Log.d("TestingAdmin", "Not Admin ");
-                Intent intent = new Intent(requireActivity(), ActDisplayApp.class);
-                startActivity(intent);
-                requireActivity().finish();
-
-            } else {
-                TextView lblUsername = binding.txtUsername;
-                final ProgressBar vwProgress = binding.loadingProgressBar;
-                final Button btnSign = binding.btnSignup;
-                final Button btnLog = binding.btnLogin;
-                lblUsername.setText("Incorrect details provided");
-                vwProgress.setVisibility(View.GONE);
-                btnSign.setVisibility(View.VISIBLE);
-                btnLog.setVisibility(View.VISIBLE);
-            }
-        } catch (JSONException e) {
-
-            e.printStackTrace();
-
-        }
     }
 }
