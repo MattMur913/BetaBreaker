@@ -20,9 +20,9 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.example.betabreaker.ActAdminViews;
-import com.example.betabreaker.ActDisplayCentre;
+import com.example.betabreaker.ActDisplayApp;
 import com.example.betabreaker.Classes.ClsUser;
+import com.example.betabreaker.Classes.GlobalUrl;
 import com.example.betabreaker.Classes.ResponseCallBack;
 import com.example.betabreaker.R;
 import com.example.betabreaker.databinding.FragmentWelcomeScrnBinding;
@@ -31,9 +31,18 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.security.MessageDigest;
 import java.util.ArrayList;
 import java.util.List;
+
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
 
 public class FragWelcomeScrn extends Fragment implements ResponseCallBack {
 
@@ -50,7 +59,7 @@ public class FragWelcomeScrn extends Fragment implements ResponseCallBack {
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        Log.d("SingleCentre", "WelcomeScrn");
         final EditText inpUsername = binding.inpUsername;
         final EditText inpPassword = binding.inpPassword;
         final TextView lblUsername = binding.txtUsername;
@@ -59,17 +68,7 @@ public class FragWelcomeScrn extends Fragment implements ResponseCallBack {
         final Button btnSign =binding.btnSignup;
         final Button btnLog =binding.btnLogin;
 
-       SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.clear(); // Clear all data
-        editor.apply(); // Apply changes
-
-
-
-
-
         checkLogged();
-
 
         btnLog.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -80,22 +79,75 @@ public class FragWelcomeScrn extends Fragment implements ResponseCallBack {
                 btnLog.setVisibility(View.GONE);
 
                 if (inpUsername.getText().toString() != null && inpPassword.getText().toString() != null) {
+                    String hashPass = sha256(String.valueOf(inpPassword.getText()));
 
+// Create an instance of OkHttpClient
+                    OkHttpClient client = new OkHttpClient();
 
-                    testingAdmin(inpUsername.getText().toString(),inpPassword.getText().toString());
+// Prepare the request body
+                    MediaType mediaType = MediaType.parse("application/json; charset=utf-8");
+                    String jsonBody = "{\"username\":\"" + inpUsername.getText().toString() + "\",\"password\":\"" + hashPass + "\"}";
+                    RequestBody requestBody = RequestBody.create(jsonBody, mediaType);
 
-                    /*
-                    //String hashPass = sha256(String.valueOf(inpPassword.getText()));
-                    String hashPass = String.valueOf(inpPassword.getText());
-                    MSAzureClient httpClient = new MSAzureClient(FragWelcomeScrn.this);
-                    String type = "POST";
-                    String url = GlobalUrl.loginURL;
-                    String body = "{ \"username\": \"" + inpUsername.getText().toString() + "\" ," +
-                            " \"password\": \"" + hashPass.toString() + "\" }";
-                    httpClient.execute(type, url, body);
+// Create a request
+                    Request request = new Request.Builder()
+                            .url(GlobalUrl.loginURL)
+                            .post(requestBody)
+                            .build();
 
-                     */
+                    client.newCall(request).enqueue(new Callback() {
+                        @Override
+                        public void onFailure(Call call, IOException e) {
+                            e.printStackTrace();
+                            // Handle failure
+                        }
 
+                        @Override
+                        public void onResponse(Call call, Response response) throws IOException {
+                            if (response.isSuccessful()) {
+                                try {
+                                    JSONObject jsonObject = new JSONObject(response.body().string());
+                                    JSONObject resultSets = jsonObject.getJSONObject("ResultSets");
+                                    JSONArray userTable = resultSets.getJSONArray("Table1");
+                                    if (userTable.length()==1){
+
+                                        JSONObject userData = userTable.getJSONObject(0);
+                                        Context context = getContext();
+                                        //TODO MAke it check just like in the signup fragment
+                                        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
+                                        SharedPreferences.Editor editor = preferences.edit();
+                                        editor.putString("username", userData.getString("Username"));
+                                        editor.putString("email", userData.getString("Email"));
+                                        editor.putString("DoB", userData.getString("DoB"));
+                                        editor.putInt("admin", userData.getInt("admin"));
+                                        editor.putString("adminOf", userData.getString("adminOf"));
+                                        editor.apply();
+
+                                        Log.d("TestingAdmin", "Not Admin ");
+                                        Intent intent = new Intent(requireActivity(), ActDisplayApp.class);
+                                        startActivity(intent);
+                                        requireActivity().finish();
+
+                                    } else {
+                                        TextView lblUsername = binding.txtUsername;
+                                        final ProgressBar vwProgress = binding.loadingProgressBar;
+                                        final Button btnSign = binding.btnSignup;
+                                        final Button btnLog = binding.btnLogin;
+                                        lblUsername.setText("Incorrect details provided");
+                                        vwProgress.setVisibility(View.GONE);
+                                        btnSign.setVisibility(View.VISIBLE);
+                                        btnLog.setVisibility(View.VISIBLE);
+                                    }
+                                } catch (JSONException e) {
+
+                                    e.printStackTrace();
+
+                                }
+                            } else {
+                                // Handle unsuccessful response
+                            }
+                        }
+                    });
                 }else {
                     lblUsername.setText("Cannot be empty");
                     vwProgress.setVisibility(View.GONE);
@@ -135,75 +187,6 @@ public class FragWelcomeScrn extends Fragment implements ResponseCallBack {
         binding = null;
     }
 
-    //RemoveThis
-    public void testingAdmin(String Username, String Password){
-        addingHardUsers();
-        Log.d("TestingAdmin", "In method ");
-        //String hashPass = sha256(Password);
-        String hashPass = ("password123");
-        for(int i =0; i< userList.size(); i++){
-            if(Username.equals(  userList.get(i).getUsername()) && hashPass.equals( userList.get(i).getPassword())){
-                Log.d("TestingAdmin", "In If ");
-                Context context = getContext();
-                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-                SharedPreferences.Editor editor = preferences.edit();
-                editor.putString("username", userList.get(i).getUsername()) ;
-                editor.putString("shoes", userList.get(i).getShoes()) ;
-                editor.putString("email", userList.get(i).getEmail()) ;
-                editor.putString("contactNumber", userList.get(i).getContactNumber()) ;
-                editor.putString("DoB", userList.get(i).getDOB()) ;
-                editor.putInt("admin", userList.get(i).getAdmin()) ;
-                editor.putString("adminOf", userList.get(i).getAdminOf()) ;
-                editor.apply();
-
-                int admin = preferences.getInt("admin", 0);
-                if(admin != 0 ){
-                    Log.d("TestingAdmin", "Is Admin ");
-                    //GET SINGLUAR CENTRE
-                    //Method this seperate
-                    Intent intent = new Intent(requireActivity(), ActAdminViews.class);
-                    startActivity(intent);
-                    requireActivity().finish();
-                }else {
-                    Log.d("TestingAdmin", "Not Admin ");
-
-                    Intent intent = new Intent(requireActivity(), ActDisplayCentre.class);
-                    startActivity(intent);
-                    requireActivity().finish();
-                }
-            }else {
-                TextView lblUsername = binding.txtUsername;
-                final ProgressBar vwProgress = binding.loadingProgressBar;
-                final Button btnSign =binding.btnSignup;
-                final Button btnLog =binding.btnLogin;
-                lblUsername.setText("Incorrect details provided");
-                vwProgress.setVisibility(View.GONE);
-                btnSign.setVisibility(View.VISIBLE);
-                btnLog.setVisibility(View.VISIBLE);
-            }
-        }
-    }
-
-    private void addingHardUsers(){
-        //String hashPass = sha256("password123");
-        String hashPass = ("password123");
-        /*ClsUser hardUser = new ClsUser("john_doe", hashPass,
-                "1990-01-01", "Nike",
-                "john@example.com", "1234567890", 1, "6");
-
-         */
-        ClsUser hardUser = new ClsUser("john_doe", hashPass,
-                "1990-01-01", "Nike",
-                "john@example.com", "1234567890", 1, "JTJmcHJvamVjdC1pbWFnZXMlMmY2Mzg0NjYzNjMzNzcwNzA1MDg=");
-
-
-        userList.add(hardUser);
-         hardUser = new ClsUser("matty", hashPass,
-                "1990-01-01", "Nike",
-                "john@example.com", "1234567890", 0, "");
-        userList.add(hardUser);
-    }
-
     public static String sha256(final String base) {
         try{
             final MessageDigest digest = MessageDigest.getInstance("SHA-256");
@@ -222,73 +205,19 @@ public class FragWelcomeScrn extends Fragment implements ResponseCallBack {
     }
 
     public void checkLogged(){
+        Log.d("SingleCentre", "Check");
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(requireContext());
         String username = preferences.getString("username", "");
 
-        if(username.equals("") || username.equals(null)){
-
-        }else{
-            //MAKE THROBBER APPEAR
-            int admin = preferences.getInt("admin", 0);
-            if(admin != 0 ){
-                //GET SINGLUAR CENTRE
-                //Method this seperate
-                Intent intent = new Intent(requireActivity(), ActAdminViews.class);
-                startActivity(intent);
-                requireActivity().finish();
-            }else{
-
-            }
-
+        if(!username.equals("") && username != null){
+            Log.d("FlowChecks", "User is logged in: "+ username);
+            Intent intent = new Intent(requireActivity(), ActDisplayApp.class);
+            startActivity(intent);
+            requireActivity().finish();
         }
     }
     @Override
     public void onResponseReceived(String jsonResponse) {
-        try {
-            JSONObject jsonObject = new JSONObject(jsonResponse);
-            JSONObject resultSets = jsonObject.getJSONObject("ResultSets");
-            JSONArray userTable = resultSets.getJSONArray("Table1");
-            if (userTable.length()==1){
 
-                JSONObject userData = userTable.getJSONObject(0);
-                Context context = getContext();
-                SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
-                SharedPreferences.Editor editor = preferences.edit();
-                editor.putString("username", userData.getString("Username"));
-                editor.putString("shoes", userData.getString("Shoes"));
-                editor.putString("email", userData.getString("Email"));
-                editor.putString("contactNumber", userData.getString("ContactNumebr"));
-                editor.putString("DoB", userData.getString("DoB"));
-                editor.putString("admin", userData.getString("admin"));
-                editor.putString("adminOf", userData.getString("adminOf"));
-                editor.apply();
-//Method this sepeerate
-                int admin = preferences.getInt("admin", 0);
-                if(admin != 0 ){
-                    Log.d("TestingAdmin", "Is Admin ");
-                    Intent intent = new Intent(requireActivity(), ActAdminViews.class);
-                    startActivity(intent);
-                    requireActivity().finish();
-                }else {
-                    Log.d("TestingAdmin", "Not Admin ");
-                    Intent intent = new Intent(requireActivity(), ActDisplayCentre.class);
-                    startActivity(intent);
-                    requireActivity().finish();
-                }
-            } else {
-                TextView lblUsername = binding.txtUsername;
-                final ProgressBar vwProgress = binding.loadingProgressBar;
-                final Button btnSign = binding.btnSignup;
-                final Button btnLog = binding.btnLogin;
-                lblUsername.setText("Incorrect details provided");
-                vwProgress.setVisibility(View.GONE);
-                btnSign.setVisibility(View.VISIBLE);
-                btnLog.setVisibility(View.VISIBLE);
-            }
-        } catch (JSONException e) {
-
-            e.printStackTrace();
-
-        }
     }
 }

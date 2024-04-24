@@ -1,7 +1,8 @@
 package com.example.betabreaker.Frags;
 
-import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,10 +12,12 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
-import com.example.betabreaker.ActDisplayRoutes;
 import com.example.betabreaker.Classes.ClsCentre;
 import com.example.betabreaker.Classes.ClsRoutes;
+import com.example.betabreaker.R;
 import com.example.betabreaker.databinding.FragmentSpecCentreBinding;
 
 import java.io.Serializable;
@@ -22,49 +25,62 @@ import java.util.List;
 
 public class FragSpecCentre extends Fragment {
 
-    private  FragmentSpecCentreBinding binding;
+    private FragmentSpecCentreBinding binding;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        //View view = inflater.inflate(R.layout.fragment_spec_centre, container, false);
         binding = FragmentSpecCentreBinding.inflate(inflater, container, false);
 
         return binding.getRoot();
-        // Retrieve bundle arguments
     }
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         Bundle bundle = getArguments();
         final Button btnRoutes = binding.vewRoutes;
-        TextView textViewCentreId;
-        TextView textViewCentreName;
+        Button btnFav = binding.btnFav;
+        TextView txtName = binding.spCName;
+        TextView txtAddress = binding.spCAddress;
+
         if (bundle != null) {
             ClsCentre centre = (ClsCentre) bundle.getSerializable("centre");
-
-            // Initialize views
-            textViewCentreId = binding.spCName;
-            textViewCentreName = binding.spCAddress;
-
-            // Display the data in the TextViews
             if (centre != null) {
-                textViewCentreId.setText(centre.getIdCentre());
-                textViewCentreName.setText(centre.getCentreName());
-                // Set other TextViews accordingly
+                txtAddress.setText(centre.getAddress());
+                txtName.setText(centre.getCentreName());
             }
+
+            btnFav.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
+                    SharedPreferences.Editor editor = preferences.edit();
+                    editor.putString("favCent", centre.getIdCentre());
+                    editor.apply();
+                    //TODO Add a toast here
+                }
+            });
+
+
+            btnRoutes.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
+                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                    FragDisplayRoutes fragment = new FragDisplayRoutes();
+                    Bundle bundle = new Bundle();
+                    if (centre != null) {
+                        List<ClsRoutes> routes = centre.getRoutes();
+                        fragmentTransaction.remove(FragSpecCentre.this);
+                        bundle.putSerializable("routes", (Serializable) routes);
+                        bundle.putSerializable("centreID", centre.getIdCentre());
+                        fragment.setArguments(bundle);
+                        fragmentTransaction.replace(R.id.fragmentContainerView, fragment);
+                        fragmentTransaction.addToBackStack(null);
+                        fragmentTransaction.commit();
+                    }
+                }
+            });
         }
-        btnRoutes.setOnClickListener(new View.OnClickListener(){
 
-            @Override
-            public void onClick(View v) {
-                Intent intent  = new Intent(requireActivity(), ActDisplayRoutes.class);
-                ClsCentre centre = (ClsCentre) bundle.getSerializable("centre");
-                List<ClsRoutes> routes = centre.getRoutes();
-                intent.putExtra("routes", (Serializable) routes);
-                startActivity(intent);
-            }
-        });
-
-    }
-}
+    }}

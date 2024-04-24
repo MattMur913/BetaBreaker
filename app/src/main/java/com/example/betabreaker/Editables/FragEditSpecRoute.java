@@ -1,4 +1,4 @@
-package com.example.betabreaker.Frags;
+package com.example.betabreaker.Editables;
 
 import android.os.Bundle;
 import android.util.Log;

@@ -2,10 +2,11 @@ package com.example.betabreaker.Frags;
 
 import android.app.Activity;
 import android.content.Intent;
-import android.database.Cursor;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
+import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
@@ -21,7 +23,9 @@ import com.example.betabreaker.Classes.GlobalUrl;
 import com.example.betabreaker.databinding.FragmentAddRouteBinding;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
 import okhttp3.Call;
 import okhttp3.MediaType;
@@ -43,6 +47,14 @@ public class FragAddRoute extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentAddRouteBinding.inflate(inflater, container, false);
+
+
+        imageView = binding.spRClimb;
+        return binding.getRoot();
+    }
+
+    public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
+
         Bundle bundle = getArguments();
         TextView tvArea;
         TextView tvColour;
@@ -51,9 +63,8 @@ public class FragAddRoute extends Fragment {
         TextView tvSetter;
         TextView tvVotes;
         ImageView ivRoute;
-        if(bundle != null) {
-             centreID = (String) bundle.getSerializable("centreID");
-        }else{ centreID = "1";}
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(requireContext());
+        String centreID = preferences.getString("adminOf", "");
 
         tvArea = binding.edArea;
         tvColour = binding.edColour;
@@ -78,8 +89,13 @@ public class FragAddRoute extends Fragment {
                 String date = binding.edDate.getText().toString();
                 String grade = binding.edGrade.getText().toString();
                 String setter = binding.edSetter.getText().toString();
-
-                File routeFile = new File(getRealPathFromURI(imageURI));
+                Log.d("FragAddRoute", "Image URI: " + imageURI);
+                File routeFile = null;
+                try {
+                    routeFile = createTemporaryFileFromUri(imageURI);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
 
                 if (area.isEmpty() || colour.isEmpty() || date.isEmpty() || grade.isEmpty() || setter.isEmpty()) {
                     // Show a message indicating that all fields are required
@@ -112,10 +128,9 @@ public class FragAddRoute extends Fragment {
                         if (response.isSuccessful()) {
                             // Request successful
                             String responseData = response.body().string();
-                            // Process responseData as needed
+                            Log.d("FragAddRoutes", "onResponse: " + responseData);
                         } else {
-                            // Request failed
-                            // Log error or show appropriate message
+                            Log.d("FragAddRoutes", "onResponse: Failed");
                         }
                     }
 
@@ -131,19 +146,27 @@ public class FragAddRoute extends Fragment {
             }
         });
 
+    }
+    private File createTemporaryFileFromUri(Uri uri) throws IOException {
+        InputStream inputStream = getActivity().getContentResolver().openInputStream(uri);
+        if (inputStream == null) {
+            // Handle error
+            return null;
+        }
 
-        return binding.getRoot();
+        File tempFile = File.createTempFile("temp", null, getActivity().getCacheDir());
+        FileOutputStream outputStream = new FileOutputStream(tempFile);
+        byte[] buffer = new byte[4 * 1024]; // Adjust buffer size as needed
+        int read;
+        while ((read = inputStream.read(buffer)) != -1) {
+            outputStream.write(buffer, 0, read);
+        }
+        outputStream.flush();
+        outputStream.close();
+        inputStream.close();
+        return tempFile;
     }
-    private String getRealPathFromURI(Uri uri) {
-        String[] projection = {MediaStore.Images.Media.DATA};
-        Cursor cursor = getActivity().getContentResolver().query(uri, projection, null, null, null);
-        if (cursor == null) return null;
-        int columnIndex = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
-        cursor.moveToFirst();
-        String filePath = cursor.getString(columnIndex);
-        cursor.close();
-        return filePath;
-    }
+
 
     private void openFileChooser() {
         Intent intent = new Intent();
@@ -161,6 +184,7 @@ public class FragAddRoute extends Fragment {
             Uri imageUri = data.getData();
             // Display the selected image
             imageURI = imageUri;
+            Log.d("FragAddRoute", "Image URI: " + imageURI);
             imageView.setImageURI(imageUri);
         }
     }

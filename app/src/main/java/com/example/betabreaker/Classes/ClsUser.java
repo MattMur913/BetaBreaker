@@ -6,7 +6,7 @@ public class ClsUser {
     private String DoB;
     private String FavouriteShoes;
     private String email;
-    private String contactNumber;
+
     private int admin;
     private String adminOf;
 
@@ -16,7 +16,7 @@ public class ClsUser {
         this.DoB = DoB;
         this.FavouriteShoes = favouriteShoes;
         this.email = email;
-        this.contactNumber = contactNumber;
+
         this.admin = admin;
         this.adminOf = adminOf;
     }
@@ -31,7 +31,6 @@ public class ClsUser {
 
     public String getEmail(){return this.email;}
 
-    public String getContactNumber(){return this.contactNumber;}
 
     public int getAdmin(){return this.admin;}
     public String getAdminOf(){return this.adminOf;}
@@ -41,7 +40,6 @@ public class ClsUser {
     public void setEmail(String email){this.email = email;}
     public void setShoes(String FavouriteShoes){this.FavouriteShoes = FavouriteShoes;}
     public void setDOB(String DoB){ this.DoB = DoB;}
-    public void setNumber(String contactNum){this.contactNumber = contactNum;}
     public void setAdmin(int admin) {this.admin = admin;}
     public void setAdminOf(String adminOf) {this.adminOf = adminOf;}
 

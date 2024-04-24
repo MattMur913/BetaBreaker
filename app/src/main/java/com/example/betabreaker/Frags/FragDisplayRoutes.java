@@ -1,6 +1,8 @@
 package com.example.betabreaker.Frags;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -42,30 +44,29 @@ public class FragDisplayRoutes extends Fragment {
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        Log.d("SingleCentre4", "onCreateView: ");
         return inflater.inflate(R.layout.fragment_display_routes, container, false);
     }
 
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-
+        Log.d("SingleCentre4", "onCreateView: 1 ");
         recyclerView = view.findViewById(R.id.dsRRec);
         progressBar = view.findViewById(R.id.progressBar);
 
         // Initially show the progress bar and hide the RecyclerView
         progressBar.setVisibility(View.VISIBLE);
         recyclerView.setVisibility(View.GONE);
+        Log.d("SingleCentre4", "onCreateView: 2");
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(requireContext());
+        String centreID = preferences.getString("adminOf", "");
+        getRoutesFromCentre(centreID);
 
-        Bundle bundle = getArguments();
-        if (bundle != null) {
-            String centreID = (String) bundle.getSerializable("centreID");
-            getRoutesFromCentre(centreID);
-        } else {
-            Log.e("FragDisplayRoutes", "Bundle is null");
-        }
     }
 
     private void getRoutesFromCentre(String centreID) {
+        Log.d("SingleCentre4", "onCreateView: 3");
         OkHttpClient client = new OkHttpClient();
         String getRoutes = GlobalUrl.getRoutes.replace("{cID}", centreID);
         Request request = new Request.Builder()
@@ -84,6 +85,7 @@ public class FragDisplayRoutes extends Fragment {
                     String responseData = response.body().string();
                     try {
                         JSONArray routeDetailsArray = new JSONArray(responseData);
+                        Log.d("SingleCentre4", "onCreateView:4 ");
 
                         for (int i = 0; i < routeDetailsArray.length(); i++) {
                             JSONObject routeObject = routeDetailsArray.getJSONObject(i);
@@ -101,13 +103,14 @@ public class FragDisplayRoutes extends Fragment {
 
                         requireActivity().runOnUiThread(() -> {
                             // Update RecyclerView and hide progress bar
-                            adapter = new AdapterRoutes(routesList, centreID, requireActivity());
+                            adapter = new AdapterRoutes(routesList, centreID, requireContext(), FragDisplayRoutes.this);
                             recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
                             recyclerView.setAdapter(adapter);
 
                             progressBar.setVisibility(View.GONE);
                             recyclerView.setVisibility(View.VISIBLE);
                         });
+                        Log.d("SingleCentre4", "onCreateView: 5");
                     } catch (JSONException e) {
                         Log.e("FragDisplayRoutes", "Error parsing JSON: " + e.getMessage());
                     }

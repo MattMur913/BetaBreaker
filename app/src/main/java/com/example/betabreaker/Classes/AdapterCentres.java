@@ -1,8 +1,8 @@
 package com.example.betabreaker.Classes;
 
-import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +11,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.cardview.widget.CardView;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
@@ -21,15 +20,15 @@ import com.bumptech.glide.request.RequestOptions;
 import com.example.betabreaker.Frags.FragSpecCentre;
 import com.example.betabreaker.R;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class AdapterCentres extends RecyclerView.Adapter<AdapterCentres.ViewHolder> {
     private List<ClsCentre> itemList; // List of items to display
-    private Context context;
 
-    public AdapterCentres(List<ClsCentre> itemList, Context context) {
+    public AdapterCentres(List<ClsCentre> itemList) {
         this.itemList = itemList;
-        this.context = context;
+
     }
 
     @NonNull
@@ -58,18 +57,13 @@ public class AdapterCentres extends RecyclerView.Adapter<AdapterCentres.ViewHold
         return itemList.size();
     }
 
-
-
-
     public static class ViewHolder extends RecyclerView.ViewHolder {
         TextView textView, textView1;
-        CardView cardView;
         ImageView imageView;
 
         public ViewHolder(@NonNull View itemView, List<ClsCentre> itemList) {
             super(itemView);
             // Initialize views
-            cardView =  itemView.findViewById(R.id.dsCRecCar);
             textView = itemView.findViewById(R.id.dsCAddressview);
             textView1 = itemView.findViewById(R.id.dsCNameview);
             imageView = itemView.findViewById(R.id.dsCLogoview);
@@ -80,30 +74,43 @@ public class AdapterCentres extends RecyclerView.Adapter<AdapterCentres.ViewHold
                     int position = getAdapterPosition();
                     if (position != RecyclerView.NO_POSITION) {
                         ClsCentre centre = itemList.get(position);
-                        // Get the context from itemView
+                        Log.d("SingleCentre", centre.getCentreName());
+                        Log.d("SingleCentre", centre.getIdCentre());
+                        Log.d("SingleCentre", centre.getAddress());
+                        Log.d("SingleCentre", centre.getEmail());
+                        Log.d("SingleCentre", centre.getlogo());
+                        //TODO ADD THE REST OF THE CENTRE DETAILS TO  BE DISPLAYED
+                        Log.d("SingleCentre", centre.getDescription());
                         Context context = itemView.getContext();
-                        // Start the Fragment from the Activity
-                        if (context instanceof AppCompatActivity) {
-                            FragmentManager fragmentManager = ((AppCompatActivity) context).getSupportFragmentManager();
-                            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                            FragSpecCentre fragment = new FragSpecCentre();
-                            Bundle bundle = new Bundle();
-                            bundle.putSerializable("centre", centre);
-                            fragment.setArguments(bundle);
+                        // Start the Fragment transaction
+                        FragSpecCentre fragment = new FragSpecCentre();
+                        Bundle bundle = new Bundle();
+                        bundle.putSerializable("centre", centre);
+                        fragment.setArguments(bundle);
 
-                            fragmentTransaction.replace(R.id.dsCLayout, fragment);
-                            fragmentTransaction.addToBackStack(null);
-                            fragmentTransaction.commit();
-                            // Hide the RecyclerView
-                            RecyclerView recyclerView = ((Activity) context).findViewById(R.id.dsCRec);
-                            recyclerView.setVisibility(View.GONE);
+                        FragmentManager fragmentManager = ((AppCompatActivity) context).getSupportFragmentManager();
+                        FragmentTransaction transaction = fragmentManager.beginTransaction();
+                        transaction.replace(R.id.fragmentContainerView, fragment);
+                        transaction.addToBackStack(null);
+                        transaction.commit();
 
-                        }
+                        // Hide the RecyclerView
+                        RecyclerView recyclerView = itemView.getRootView().findViewById(R.id.dsCRec);
+                        recyclerView.setVisibility(View.GONE);
                     }
                 }
             });
-
-
         }
     }
+    public void filter(String searchText) {
+        List<ClsCentre> filteredList = new ArrayList<>();
+        for (ClsCentre centre : itemList) {
+            if (centre.getCentreName().toLowerCase().contains(searchText.toLowerCase())) {
+                filteredList.add(centre);
+            }
+        }
+        itemList = filteredList;
+        notifyDataSetChanged();
+    }
+
 }
