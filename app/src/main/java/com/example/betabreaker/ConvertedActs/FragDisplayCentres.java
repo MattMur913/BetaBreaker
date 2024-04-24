@@ -8,8 +8,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -39,7 +41,7 @@ public class FragDisplayCentres extends Fragment {
     private List<ClsCentre> centreList = new ArrayList<>();
     private RecyclerView recyclerView;
     private AdapterCentres adapter;
-
+    private ConstraintLayout layoutHide;
 
     @Nullable
     @Override
@@ -49,7 +51,7 @@ public class FragDisplayCentres extends Fragment {
         // Initialize RecyclerView and adapter
         recyclerView = rootView.findViewById(R.id.dsCRec);
         adapter = new AdapterCentres(centreList);
-
+        layoutHide = rootView.findViewById(R.id.dsCLayout);
         // Set layout manager and adapter
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
         recyclerView.setAdapter(adapter);
@@ -60,17 +62,18 @@ public class FragDisplayCentres extends Fragment {
         searchEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                // No implementation needed
+                searchEditText.setHint("");
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                searchEditText.setHint("");
                 adapter.filter(s.toString());
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-                // No implementation needed
+                searchEditText.setHint("");
             }
         });
 
@@ -150,6 +153,22 @@ public class FragDisplayCentres extends Fragment {
                         e.printStackTrace();
                     }
                 }
+            }
+        });
+    }
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+
+        // Listen for back button press
+        requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                // Show the hidden layout
+
+                layoutHide.setVisibility(View.VISIBLE);
+
+                // Pop the back stack to remove the fragment
+                requireActivity().getSupportFragmentManager().popBackStack();
             }
         });
     }

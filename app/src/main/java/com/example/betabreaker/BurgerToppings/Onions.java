@@ -3,6 +3,7 @@ package com.example.betabreaker.BurgerToppings;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,6 +43,8 @@ public class Onions extends Fragment {
     private boolean isFavouriteCentreEmpty() {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(requireContext());
         String favouriteCentre = preferences.getString("favCent", "");
+        Log.d("TurtwigSolos", "isFavouriteCentreEmpty: " +favouriteCentre);
+        if (favouriteCentre.isEmpty()){favouriteCentre = preferences.getString("adminOf","");}
         return favouriteCentre.isEmpty();
     }
 

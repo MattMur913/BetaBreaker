@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
@@ -25,9 +26,11 @@ import java.util.List;
 
 public class AdapterCentres extends RecyclerView.Adapter<AdapterCentres.ViewHolder> {
     private List<ClsCentre> itemList; // List of items to display
+    private List<ClsCentre> masterList; // List of items to display
 
     public AdapterCentres(List<ClsCentre> itemList) {
         this.itemList = itemList;
+        this.masterList = itemList;
 
     }
 
@@ -83,6 +86,7 @@ public class AdapterCentres extends RecyclerView.Adapter<AdapterCentres.ViewHold
                         Log.d("SingleCentre", centre.getDescription());
                         Context context = itemView.getContext();
                         // Start the Fragment transaction
+
                         FragSpecCentre fragment = new FragSpecCentre();
                         Bundle bundle = new Bundle();
                         bundle.putSerializable("centre", centre);
@@ -90,13 +94,18 @@ public class AdapterCentres extends RecyclerView.Adapter<AdapterCentres.ViewHold
 
                         FragmentManager fragmentManager = ((AppCompatActivity) context).getSupportFragmentManager();
                         FragmentTransaction transaction = fragmentManager.beginTransaction();
-                        transaction.replace(R.id.fragmentContainerView, fragment);
+                        transaction.replace(R.id.fragment_container, fragment);
                         transaction.addToBackStack(null);
                         transaction.commit();
 
+
+
+
                         // Hide the RecyclerView
-                        RecyclerView recyclerView = itemView.getRootView().findViewById(R.id.dsCRec);
-                        recyclerView.setVisibility(View.GONE);
+                        ConstraintLayout layoutHide = itemView.getRootView().findViewById(R.id.dsCLayout);
+                        layoutHide.setVisibility(View.GONE);
+
+
                     }
                 }
             });
@@ -104,7 +113,7 @@ public class AdapterCentres extends RecyclerView.Adapter<AdapterCentres.ViewHold
     }
     public void filter(String searchText) {
         List<ClsCentre> filteredList = new ArrayList<>();
-        for (ClsCentre centre : itemList) {
+        for (ClsCentre centre : masterList) {
             if (centre.getCentreName().toLowerCase().contains(searchText.toLowerCase())) {
                 filteredList.add(centre);
             }

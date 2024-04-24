@@ -115,7 +115,7 @@ public class AdapterRoutes extends RecyclerView.Adapter<AdapterRoutes.ViewHolder
                                 fragmentTransaction.replace(R.id.fragContent, newFrag);
 
                             } else {
-                                fragmentTransaction.replace(R.id.fragmentContainerView, newFrag);
+                                fragmentTransaction.replace(R.id.fragment_container, newFrag);
                                 RecyclerView recyclerView;
                                 recyclerView = ((Activity) context).findViewById(R.id.dsRRec);
                                 recyclerView.setVisibility(View.GONE);
