@@ -8,18 +8,16 @@ import android.view.ViewGroup;
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 
-import com.example.betabreaker.databinding.FragmentCheeseBinding;
+import com.example.betabreaker.databinding.FragmentProfileBinding;
 
 
-public class Cheese extends Fragment {
-    private FragmentCheeseBinding binding;
+public class FragProfile extends Fragment {
+    private FragmentProfileBinding binding;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-
-        binding = FragmentCheeseBinding.inflate(inflater, container, false);
+        binding = FragmentProfileBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
-
         return root;
     }
 

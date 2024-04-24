@@ -13,25 +13,26 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentContainerView;
 
-import com.example.betabreaker.databinding.FragmentOnionsBinding;
+import com.example.betabreaker.databinding.FragmentFavsBinding;
 
-public class Onions extends Fragment {
+public class FragFav extends Fragment {
 
-    private FragmentOnionsBinding binding;
+    private FragmentFavsBinding binding;
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container,
                              @Nullable Bundle savedInstanceState) {
-        binding = FragmentOnionsBinding.inflate(inflater, container, false);
+        binding = FragmentFavsBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
-
         return root;
     }
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        //Checks if the user has a favourite centre or not
         FragmentContainerView fragDisplay = binding.FragOnions;
         TextView txtFav = binding.textView4;
+        //if there is no favourite centre it hides the fragDisplay and replaces it with a textview saying there is no favourite centre
         if (isFavouriteCentreEmpty()) {
            fragDisplay.setVisibility(View.GONE);
            txtFav.setVisibility(View.VISIBLE);
@@ -40,6 +41,7 @@ public class Onions extends Fragment {
     }
 
     private boolean isFavouriteCentreEmpty() {
+        //gets the shared preference
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(requireContext());
         String favouriteCentre = preferences.getString("favCent", "");
         return favouriteCentre.isEmpty();

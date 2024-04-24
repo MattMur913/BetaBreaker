@@ -23,7 +23,6 @@ import androidx.fragment.app.FragmentTransaction;
 import com.example.betabreaker.ActDisplayApp;
 import com.example.betabreaker.Classes.ClsUser;
 import com.example.betabreaker.Classes.GlobalUrl;
-import com.example.betabreaker.Classes.ResponseCallBack;
 import com.example.betabreaker.R;
 import com.example.betabreaker.databinding.FragmentWelcomeScrnBinding;
 
@@ -44,7 +43,7 @@ import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
 
-public class FragWelcomeScrn extends Fragment implements ResponseCallBack {
+public class FragWelcomeScrn extends Fragment {
 
     private FragmentWelcomeScrnBinding binding;
     //RemoveThis
@@ -215,9 +214,5 @@ public class FragWelcomeScrn extends Fragment implements ResponseCallBack {
             startActivity(intent);
             requireActivity().finish();
         }
-    }
-    @Override
-    public void onResponseReceived(String jsonResponse) {
-
     }
 }

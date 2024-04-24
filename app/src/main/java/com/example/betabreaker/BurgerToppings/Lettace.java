@@ -68,6 +68,7 @@ public class Lettace extends Fragment  implements AdapterRoutes.AdapterCallback 
         super.onViewCreated(view, savedInstanceState);
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(requireContext());
         String favouriteCentre = preferences.getString("adminOf", "");
+        Log.d("TurtwigSolos", "filter: for " + favouriteCentre);
         txtLabel = binding.textView2;
         imgLogo = binding.imageView2;
         cdView = binding.cardView;

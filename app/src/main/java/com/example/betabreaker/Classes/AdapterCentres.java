@@ -105,6 +105,7 @@ public class AdapterCentres extends RecyclerView.Adapter<AdapterCentres.ViewHold
     public void filter(String searchText) {
         List<ClsCentre> filteredList = new ArrayList<>();
         for (ClsCentre centre : itemList) {
+            Log.d("TurtwigSolos", "filter: for " + searchText);
             if (centre.getCentreName().toLowerCase().contains(searchText.toLowerCase())) {
                 filteredList.add(centre);
             }
