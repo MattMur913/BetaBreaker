@@ -22,7 +22,6 @@ import com.google.android.material.navigation.NavigationView;
 
 public class ActDisplayApp extends AppCompatActivity {
 
-    private ActivityDisplayAppBinding binding;
     private AppBarConfiguration mAppBarConfiguration;
     private ActionBarDrawerToggle toggle;
 
@@ -30,7 +29,7 @@ public class ActDisplayApp extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        binding = ActivityDisplayAppBinding.inflate(getLayoutInflater());
+        com.example.betabreaker.databinding.ActivityDisplayAppBinding binding = ActivityDisplayAppBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         setSupportActionBar(binding.appBarMain.toolbar);

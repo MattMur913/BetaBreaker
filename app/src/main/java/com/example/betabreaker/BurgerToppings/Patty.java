@@ -18,9 +18,8 @@ public class Patty extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
 
         binding = FragmentPattyBinding.inflate(inflater, container, false);
-        View root = binding.getRoot();
 
-        return root;
+        return binding.getRoot();
     }
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {

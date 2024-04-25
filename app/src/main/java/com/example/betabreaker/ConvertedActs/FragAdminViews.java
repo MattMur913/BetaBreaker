@@ -22,13 +22,12 @@ import java.util.List;
 public class FragAdminViews extends Fragment {
 
     private List<ClsCentre> centreList = new ArrayList<>();
-    private FragmentAdminViewsBinding binding;
 
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        binding = FragmentAdminViewsBinding.inflate(inflater, container, false);
+        com.example.betabreaker.databinding.FragmentAdminViewsBinding binding = FragmentAdminViewsBinding.inflate(inflater, container, false);
          FragEditCentre displayFragment = new FragEditCentre();
 
         // Add FragDisplayCentres fragment to the layout

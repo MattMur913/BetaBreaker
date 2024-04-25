@@ -30,7 +30,6 @@ public class AdapterCentres extends RecyclerView.Adapter<AdapterCentres.ViewHold
     private List<ClsCentre> itemList; // List of items to display
 
     private List<ClsCentre> masterList; // List of items to display
-    private Context context;
     private Fragment fragmentCur;
 
 
@@ -38,7 +37,6 @@ public class AdapterCentres extends RecyclerView.Adapter<AdapterCentres.ViewHold
     public AdapterCentres(List<ClsCentre> itemList, Context context, Fragment fragment) {
         this.itemList = itemList;
         this.masterList = itemList;
-        this.context = context;
         this.fragmentCur = fragment;
     }
 

@@ -29,15 +29,11 @@ import java.util.List;
 public class AdapterRoutes extends RecyclerView.Adapter<AdapterRoutes.ViewHolder> {
 
     private List<ClsRoutes> itemList;
-    private String centreID;
-    private Context context;
     private Fragment fragment;
     //private AdapterCallback callback;
 
     public AdapterRoutes(List<ClsRoutes> itemList, String centreID, Context context, Fragment fragment) {
         this.itemList = itemList;
-        this.centreID = centreID;
-        this.context = context;
         this.fragment = fragment;
     }
 

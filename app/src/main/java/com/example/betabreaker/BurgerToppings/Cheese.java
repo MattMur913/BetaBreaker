@@ -16,7 +16,6 @@ import com.example.betabreaker.databinding.FragmentCheeseBinding;
 
 public class Cheese extends Fragment {
     private FragmentCheeseBinding binding;
-    private FragDisplayCentres displayCentresFragment;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
@@ -25,7 +24,7 @@ public class Cheese extends Fragment {
         View root = binding.getRoot();
 
         // Initialize FragDisplayCentres fragment
-        displayCentresFragment = new FragDisplayCentres();
+        FragDisplayCentres displayCentresFragment = new FragDisplayCentres();
 
         // Add FragDisplayCentres fragment to the layout
         FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
