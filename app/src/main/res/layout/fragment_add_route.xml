@@ -2,7 +2,6 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/frameLayout3"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Frags.FragAddRoute">
@@ -10,6 +9,7 @@
 
     <ImageView
         android:id="@+id/spRClimb"
+        android:contentDescription="@string/route_image_add"
         android:layout_width="258dp"
         android:layout_height="197dp"
         android:layout_marginTop="44dp"
@@ -27,9 +27,11 @@
         android:layout_marginEnd="25dp"
         android:ems="10"
         android:inputType="text"
-        android:text="setter"
+        android:text="@string/setter"
+
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edDate" />
+        app:layout_constraintTop_toBottomOf="@+id/edDate"
+        android:importantForAutofill="no" />
 
     <EditText
         android:id="@+id/edDate"
@@ -39,9 +41,10 @@
         android:layout_marginEnd="25dp"
         android:ems="10"
         android:inputType="datetime|date"
-        android:text="date"
+        android:text="@string/date"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edArea" />
+        app:layout_constraintTop_toBottomOf="@+id/edArea"
+        android:importantForAutofill="no" />
 
     <EditText
         android:id="@+id/edArea"
@@ -51,9 +54,10 @@
         android:layout_marginEnd="25dp"
         android:ems="10"
         android:inputType="text"
-        android:text="area"
+        android:text="@string/area"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edColour" />
+        app:layout_constraintTop_toBottomOf="@+id/edColour"
+        android:importantForAutofill="no" />
 
     <EditText
         android:id="@+id/edColour"
@@ -63,9 +67,10 @@
         android:layout_marginEnd="25dp"
         android:ems="10"
         android:inputType="text"
-        android:text="colour"
+        android:text="@string/colour"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edGrade" />
+        app:layout_constraintTop_toBottomOf="@+id/edGrade"
+        android:importantForAutofill="no" />
 
     <EditText
         android:id="@+id/edGrade"
@@ -75,9 +80,10 @@
         android:layout_marginEnd="25dp"
         android:ems="10"
         android:inputType="text"
-        android:text="grade"
+        android:text="@string/grade"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spRClimb" />
+        app:layout_constraintTop_toBottomOf="@+id/spRClimb"
+        android:importantForAutofill="no" />
 
     <Button
         android:id="@+id/rotInsert"
@@ -86,7 +92,8 @@
         android:layout_marginStart="110dp"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="52dp"
-        android:text="Add Route"
+        android:text="@string/insert_route"
+        android:contentDescription="@string/insert_route"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/txtSetter"
         app:layout_constraintTop_toBottomOf="@+id/edSetter" />
@@ -96,7 +103,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
-        android:text="Grade"
+        android:text="@string/grade"
+        android:labelFor="@id/edGrade"
         app:layout_constraintEnd_toStartOf="@+id/edGrade"
         app:layout_constraintHorizontal_bias="0.436"
         app:layout_constraintStart_toStartOf="parent"
@@ -107,7 +115,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="55dp"
-        android:text="Colour"
+        android:text="@string/colour"
+        android:labelFor="@id/edColour"
         app:layout_constraintEnd_toStartOf="@+id/edColour"
         app:layout_constraintHorizontal_bias="0.436"
         app:layout_constraintStart_toStartOf="parent"
@@ -118,7 +127,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="55dp"
-        android:text="Area"
+        android:text="@string/area"
+        android:labelFor="@id/edArea"
         app:layout_constraintEnd_toStartOf="@+id/edArea"
         app:layout_constraintHorizontal_bias="0.449"
         app:layout_constraintStart_toStartOf="parent"
@@ -129,7 +139,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="55dp"
-        android:text="Date"
+        android:text="@string/date"
+        android:labelFor="@id/edDate"
         app:layout_constraintEnd_toStartOf="@+id/edDate"
         app:layout_constraintHorizontal_bias="0.449"
         app:layout_constraintStart_toStartOf="parent"
@@ -140,7 +151,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="55dp"
-        android:text="Setter"
+        android:text="@string/setter"
+        android:labelFor="@id/edSetter"
         app:layout_constraintEnd_toStartOf="@+id/edSetter"
         app:layout_constraintHorizontal_bias="0.449"
         app:layout_constraintStart_toStartOf="parent"

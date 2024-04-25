@@ -2,7 +2,6 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/editCentre"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Editables.FragEditCentre">
@@ -16,7 +15,8 @@
         app:layout_constraintHorizontal_bias="0.496"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@android:mipmap/sym_def_app_icon" />
+        app:srcCompat="@android:mipmap/sym_def_app_icon"
+        android:contentDescription="@string/centre_logo" />
     <Button
         android:id="@+id/addRoute"
         android:layout_width="wrap_content"
@@ -104,10 +104,11 @@
         android:layout_marginTop="28dp"
         android:layout_marginEnd="25dp"
         android:ems="10"
-        android:inputType="text"
+        android:inputType="phone"
         android:text="NUMBER"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edEmail" />
+        app:layout_constraintTop_toBottomOf="@+id/edEmail"
+        android:importantForAutofill="no" />
 
     <EditText
         android:id="@+id/edEmail"
@@ -116,10 +117,11 @@
         android:layout_marginTop="28dp"
         android:layout_marginEnd="25dp"
         android:ems="10"
-        android:inputType="text"
+        android:inputType="textEmailAddress"
         android:text="EMAIL"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edAddress" />
+        app:layout_constraintTop_toBottomOf="@+id/edAddress"
+        android:importantForAutofill="no" />
 
     <EditText
         android:id="@+id/edAddress"
@@ -131,7 +133,8 @@
         android:inputType="text"
         android:text="ADDRESS"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edWebsite" />
+        app:layout_constraintTop_toBottomOf="@+id/edWebsite"
+        android:importantForAutofill="no" />
 
     <EditText
         android:id="@+id/edWebsite"
@@ -143,7 +146,8 @@
         android:inputType="text"
         android:text="WEBSITE"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edName" />
+        app:layout_constraintTop_toBottomOf="@+id/edName"
+        android:importantForAutofill="no" />
 
     <EditText
         android:id="@+id/edName"
@@ -155,7 +159,8 @@
         android:inputType="text"
         android:text="NAME"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/spCLogoview" />
+        app:layout_constraintTop_toBottomOf="@+id/spCLogoview"
+        android:importantForAutofill="no" />
 
     <Button
         android:id="@+id/rotUpdate"

@@ -162,7 +162,7 @@ public class FragSignUp extends Fragment {
                 FragmentManager fragmentManager = ((AppCompatActivity) context).getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 FragWelcomeScrn fragment = new FragWelcomeScrn();
-                fragmentTransaction.replace(R.id.fragment_container, fragment);
+                fragmentTransaction.replace(R.id.welcome_act, fragment);
                 fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
 

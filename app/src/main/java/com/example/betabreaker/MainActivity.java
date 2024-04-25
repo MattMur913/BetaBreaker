@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity {
     private void displayWelcomeScreen() {
         FragWelcomeScrn welcomeFragment = new FragWelcomeScrn();
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.fragment_container, welcomeFragment);
+        transaction.replace(R.id.welcome_act, welcomeFragment);
         transaction.commit();
     }
 }

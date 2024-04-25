@@ -1,5 +1,6 @@
 package com.example.betabreaker.Classes;
 
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
@@ -120,6 +121,7 @@ public class AdapterCentres extends RecyclerView.Adapter<AdapterCentres.ViewHold
             });
         }
     }
+    @SuppressLint("NotifyDataSetChanged")
     public void filter(String searchText) {
         List<ClsCentre> filteredList = new ArrayList<>();
         for (ClsCentre centre : masterList) {

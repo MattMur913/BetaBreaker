@@ -138,20 +138,18 @@ public class FragDisplayCentres extends Fragment {
 
                             // Create a ClsCentre object and add it to the list
                             ClsCentre centre = new ClsCentre(id, name, address, description, email, contact, website, logoid, routes);
-                            Log.d("SingleCentre4", "onCreateView: " +centre.getCentreName());
+                            Log.d("SingleCentre4", "onCreateView: " + centre.getCentreName());
                             centreList.add(centre);
-
-                            setAdapterValues();
                         }
 
 
                         requireActivity().runOnUiThread(() -> {
 
-                                adapter = new AdapterCentres(centreList, requireContext(),FragDisplayCentres.this);
+                            adapter = new AdapterCentres(centreList, requireContext(), FragDisplayCentres.this);
 
-                                // Set layout manager and adapter
-                                recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
-                                recyclerView.setAdapter(adapter);
+                            // Set layout manager and adapter
+                            recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
+                            recyclerView.setAdapter(adapter);
 
                         });
 
@@ -162,9 +160,4 @@ public class FragDisplayCentres extends Fragment {
             }
         });
     }
-
-    private void setAdapterValues(){
-
-    }
-
 }

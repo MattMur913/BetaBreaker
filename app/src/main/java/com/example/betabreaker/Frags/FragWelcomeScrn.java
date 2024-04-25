@@ -173,7 +173,7 @@ public class FragWelcomeScrn extends Fragment implements ResponseCallBack {
                 FragSignUp fragment = new FragSignUp();
 
 
-                fragmentTransaction.replace(R.id.fragment_container, fragment);
+                fragmentTransaction.replace(R.id.welcome_act, fragment);
                 fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
 
