@@ -3,15 +3,11 @@ package com.example.betabreaker;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -22,14 +18,14 @@ import com.google.android.material.navigation.NavigationView;
 
 public class ActDisplayApp extends AppCompatActivity {
 
+    private ActivityDisplayAppBinding binding;
     private AppBarConfiguration mAppBarConfiguration;
-    private ActionBarDrawerToggle toggle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        com.example.betabreaker.databinding.ActivityDisplayAppBinding binding = ActivityDisplayAppBinding.inflate(getLayoutInflater());
+        binding = ActivityDisplayAppBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
         setSupportActionBar(binding.appBarMain.toolbar);
@@ -75,24 +71,5 @@ public class ActDisplayApp extends AppCompatActivity {
                 || super.onSupportNavigateUp();
     }
 
-    @Override
-    public void onBackPressed() {
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        String fragmentName;
-        int foundIt = 0;
-        for (Fragment fragment : fragmentManager.getFragments()) {
-            if (fragment != null) {
-                fragmentName = fragment.getClass().getSimpleName();
-                Log.d("CurrentFragment", "Fragment: " + fragmentName);
-                if (fragmentName.equals("Lettace")) {
-                    Log.d("TurtwigSolos", "onBackPressed: Pooped ");
-
-                }
-            }
-        }
-        if (foundIt == 0) {
-            super.onBackPressed();
-        }
-    }
 }
 
