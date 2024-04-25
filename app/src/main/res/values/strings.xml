@@ -1,32 +1,47 @@
 <resources>
-    <string name="app_name">Beta Breaker</string>
-    <string name="action_settings">Settings</string>
-    <!-- Strings used for fragments for navigation -->
-    <string name="first_fragment_label">First Fragment</string>
-    <string name="second_fragment_label">Second Fragment</string>
-    <string name="next">Next</string>
-    <string name="previous">Previous</string>
-    <string name="navigation_drawer_open">Open navigation drawer</string>
-    <string name="navigation_drawer_close">Close navigation drawer</string>
-    <string name="nav_header_title">Android Studio</string>
-    <string name="nav_header_subtitle">android.studio@android.com</string>
-    <string name="nav_header_desc">Navigation header</string>
-    <string name="hello_blank_fragment">Tesitng</string>
+<string name="app_name">Beta Breaker</string>
+<string name="action_settings">Settings</string>
+<!-- Strings used for fragments for navigation -->
+<string name="first_fragment_label">First Fragment</string>
+<string name="second_fragment_label">Second Fragment</string>
+<string name="next">Next</string>
+<string name="previous">Previous</string>
+<string name="navigation_drawer_open">Open navigation drawer</string>
+<string name="navigation_drawer_close">Close navigation drawer</string>
+<string name="nav_header_title">Android Studio</string>
+<string name="nav_header_subtitle">android.studio@android.com</string>
+<string name="nav_header_desc">Navigation header</string>
+<string name="hello_blank_fragment">HELLO</string>
 
-    <string name="menu_home">Home</string>
-    <string name="menu_favourite">Favourite</string>
-    <string name="menu_profile">Profile</string>
-    <string name="menu_admin">Admin</string>
-    <string name="content_main">Main fragment</string>
-    <string name="route_image">Image of the route</string>
-    <string name="route_image_add">Select Image of the route</string>
-    <string name="setter">setter</string>
-    <string name="area">area</string>
-    <string name="colour">colour</string>
-    <string name="date">date</string>
-    <string name="grade">grade</string>
-    <string name="insert_route">Add route</string>
-    <string name="centre_logo">centre logo</string>
-
-
+<string name="menu_home">HOME</string>
+<string name="menu_favourite">FAVOURITE</string>
+<string name="menu_profile">PROFILE</string>
+<string name="menu_admin">ADMIN</string>
+<string name="content_main">MAIN FRAGMENT</string>
+<string name="route_image">IMAGE OF THE ROUTE</string>
+<string name="route_image_add">SELECT OF THE ROUTE</string>
+<string name="setter">SETTER</string>
+<string name="area">AREA</string>
+<string name="colour">COLOUR</string>
+<string name="date">DATE</string>
+<string name="grade">GRADE</string>
+<string name="insert_route">ADD ROUTE</string>
+<string name="centre_logo">CENTRE LOGO</string>
+<string name="user_details">USER DETAILS</string>
+<string name="username">USERNAME</string>
+<string name="email">EMAIL</string>
+<string name="dob">DATE OF BIRTH</string>
+<string name="edit_details">EDIT DETAILS</string>
+<string name="centre_name">CENTRE NAME</string>
+<string name="website">WEBSITE</string>
+<string name="address">ADDRESS</string>
+<string name="coNumber"> CONTACT NUMBER</string>
+<string name="view_routes">VIEW ROUTES</string>
+<string name="update">UPDATE</string>
+<string name="reset">RESET</string>
+<string name="delete">DELETE</string>
+<string name="edit_user_details">EDIT USER DETAILS</string>
+<string name="password">PASSWORD</string>
+    <string name="login">LOGIN</string>
+    <string name="signup">SIGN-UP</string>
 </resources>

@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
@@ -36,7 +38,9 @@ public class ActDisplayApp extends AppCompatActivity {
 
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         int adminValue = sharedPreferences.getInt("admin", 0); // Default value 0
-
+        View headerView = navigationView.getHeaderView(0);
+        TextView userNameTextView = headerView.findViewById(R.id.userName);
+        TextView userEmailTextView = headerView.findViewById(R.id.userEmail);
         if (adminValue < 1) {
             mAppBarConfiguration = new AppBarConfiguration.Builder(
                     R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow)
@@ -55,6 +59,12 @@ public class ActDisplayApp extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
+
+        String userName = sharedPreferences.getString("username", "");
+        String userEmail = sharedPreferences.getString("email", "");
+
+        userNameTextView.setText(userName);
+        userEmailTextView.setText(userEmail);
     }
 
     @Override

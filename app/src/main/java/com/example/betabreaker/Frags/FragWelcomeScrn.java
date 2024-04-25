@@ -140,10 +140,15 @@ public class FragWelcomeScrn extends Fragment{
                                 } catch (JSONException e) {
 
                                     e.printStackTrace();
+                                    vwProgress.setVisibility(View.GONE);
+                                    btnSign.setVisibility(View.VISIBLE);
+                                    btnLog.setVisibility(View.VISIBLE);
 
                                 }
                             } else {
-                                // Handle unsuccessful response
+                                vwProgress.setVisibility(View.GONE);
+                                btnSign.setVisibility(View.VISIBLE);
+                                btnLog.setVisibility(View.VISIBLE);
                             }
                         }
                     });
