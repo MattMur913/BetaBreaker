@@ -85,28 +85,9 @@ public class ActDisplayApp extends AppCompatActivity {
             if (fragment != null) {
                 fragmentName = fragment.getClass().getSimpleName();
                 Log.d("CurrentFragment", "Fragment: " + fragmentName);
-                if (fragmentName.equals("FragSpecCentre")) {
+                if (fragmentName.equals("Lettace")) {
                     Log.d("TurtwigSolos", "onBackPressed: Pooped ");
-                    // Now, make Fragment1 visible again
-                    /*
-                    FragDisplayCentres reDisplay = (FragDisplayCentres) fragmentManager.findFragmentByTag("hidden");
-                    if (reDisplay != null) {
-                        Log.d("TurtwigSolos", "onBackPressed: Noyt null");
-                        // Fragment1 exists, make it visible
-                        View fragment1View = reDisplay.getView();
-                        if (fragment1View != null) {
-                            Log.d("TurtwigSolos", "onBackPressed: Make visible");
-                            RecyclerView recyclerView = fragment1View.findViewById(R.id.dsCRec);
-                            recyclerView.setVisibility(View.VISIBLE);
 
-                            // Show the EditText
-                            EditText searchEditText = fragment1View.findViewById(R.id.searchEditText);
-                            searchEditText.setVisibility(View.VISIBLE);
-                            foundIt = 1;
-                        }
-                    }
-
-                     */
                 }
             }
         }

@@ -18,8 +18,11 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.example.betabreaker.Classes.GlobalUrl;
+import com.example.betabreaker.R;
 import com.example.betabreaker.databinding.FragmentAddRouteBinding;
 
 import java.io.File;
@@ -40,7 +43,6 @@ public class FragAddRoute extends Fragment {
     private static final int PICK_IMAGE_REQUEST = 1;
     private ImageView imageView;
     private Uri imageURI;
-    private String centreID;
     private FragmentAddRouteBinding binding;
 
     @Override
@@ -84,11 +86,11 @@ public class FragAddRoute extends Fragment {
         uploadButton.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
-                String area = binding.edArea.getText().toString();
-                String colour = binding.edColour.getText().toString();
-                String date = binding.edDate.getText().toString();
-                String grade = binding.edGrade.getText().toString();
-                String setter = binding.edSetter.getText().toString();
+                String area =tvArea.getText().toString();
+                String colour = tvColour.getText().toString();
+                String date = tvDate.getText().toString();
+                String grade = tvGrade.getText().toString();
+                String setter = tvSetter.getText().toString();
                 Log.d("FragAddRoute", "Image URI: " + imageURI);
                 File routeFile = null;
                 try {
@@ -129,6 +131,21 @@ public class FragAddRoute extends Fragment {
                             // Request successful
                             String responseData = response.body().string();
                             Log.d("FragAddRoutes", "onResponse: " + responseData);
+
+                            requireActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    FragmentManager fragmentManager = getParentFragmentManager();
+                                    fragmentManager.popBackStack();
+                                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                                    fragmentTransaction.replace(R.id.fragContent, new FragAddRoute());
+                                    fragmentTransaction.commit();
+                                }
+
+
+                            });
+
+
                         } else {
                             Log.d("FragAddRoutes", "onResponse: Failed");
                         }

@@ -12,7 +12,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -99,8 +98,6 @@ public class AdapterRoutes extends RecyclerView.Adapter<AdapterRoutes.ViewHolder
                             if (fragment instanceof Lettace) {
                                 //This transaction
                                 Log.d("TAG", String.valueOf(fragment));
-                                ConstraintLayout dlFrag = ((Activity) context).findViewById(R.id.FragLayoutLettuce);
-                                dlFrag.setVisibility(View.GONE);
                                 fragmentTransaction.replace(R.id.FragOnions, newFrag);
                             }else if(fragment instanceof FragAdminViews) {
 

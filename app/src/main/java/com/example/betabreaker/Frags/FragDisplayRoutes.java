@@ -72,6 +72,7 @@ public class FragDisplayRoutes extends Fragment {
     private void getRoutesFromCentre(String centreID) {
         Log.d("SingleCentre4", "onCreateView: 3");
         OkHttpClient client = new OkHttpClient();
+        routesList.clear();
         String getRoutes = GlobalUrl.getRoutes.replace("{cID}", centreID);
         Request request = new Request.Builder()
                 .url(getRoutes)
