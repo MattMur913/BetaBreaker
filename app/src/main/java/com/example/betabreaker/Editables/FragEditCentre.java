@@ -26,6 +26,7 @@ import com.example.betabreaker.Classes.ClsCentre;
 import com.example.betabreaker.Classes.ClsRoutes;
 import com.example.betabreaker.Classes.ConfirmationDialog;
 import com.example.betabreaker.Classes.GlobalUrl;
+import com.example.betabreaker.Frags.FragAddRoute;
 import com.example.betabreaker.Frags.FragDisplayRoutes;
 import com.example.betabreaker.R;
 import com.example.betabreaker.databinding.FragmentEditCentreBinding;
@@ -86,14 +87,31 @@ public class FragEditCentre extends Fragment {
         txtEmail = binding.edEmail;
         txtContct = binding.edNumber;
         txtWebsite = binding.edWebsite;
-         btnReset = binding.rotReset;
-         btnUpdate = binding.rotUpdate;
+        btnReset = binding.rotReset;
+        btnUpdate = binding.rotUpdate;
 
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(requireContext());
         String centreID = preferences.getString("adminOf", "");
 
         fetchSingleCentre(centreID);
+        Button btnAddRoute = binding.addRoute;
 
+        btnAddRoute.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                FragmentManager fragmentManager = getParentFragmentManager();
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                FragAddRoute fragment = new FragAddRoute();
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("centre", centreID);
+                fragment.setArguments(bundle);
+
+                fragmentTransaction.replace(R.id.fragContent, fragment);
+                fragmentTransaction.addToBackStack(null);
+                fragmentTransaction.commit();
+
+            }
+        });
         btnRoutes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

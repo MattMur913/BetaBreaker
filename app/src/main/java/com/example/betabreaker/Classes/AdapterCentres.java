@@ -1,16 +1,19 @@
 package com.example.betabreaker.Classes;
 
+import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.RecyclerView;
@@ -26,9 +29,15 @@ import java.util.List;
 public class AdapterCentres extends RecyclerView.Adapter<AdapterCentres.ViewHolder> {
     private List<ClsCentre> itemList; // List of items to display
 
-    public AdapterCentres(List<ClsCentre> itemList) {
-        this.itemList = itemList;
+    private List<ClsCentre> masterList; // List of items to display
+    private Fragment fragmentCur;
 
+
+
+    public AdapterCentres(List<ClsCentre> itemList, Context context, Fragment fragment) {
+        this.itemList = itemList;
+        this.masterList = itemList;
+        this.fragmentCur = fragment;
     }
 
     @NonNull
@@ -37,6 +46,7 @@ public class AdapterCentres extends RecyclerView.Adapter<AdapterCentres.ViewHold
         // Inflate the item layout and create a new ViewHolder
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.reyc_layout_display_centre, parent, false);
+        Log.d("SingleCentre4", "Getting centres");
         return new ViewHolder(itemView, itemList);
     }
 
@@ -57,7 +67,7 @@ public class AdapterCentres extends RecyclerView.Adapter<AdapterCentres.ViewHold
         return itemList.size();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public class ViewHolder extends RecyclerView.ViewHolder {
         TextView textView, textView1;
         ImageView imageView;
 
@@ -83,28 +93,36 @@ public class AdapterCentres extends RecyclerView.Adapter<AdapterCentres.ViewHold
                         Log.d("SingleCentre", centre.getDescription());
                         Context context = itemView.getContext();
                         // Start the Fragment transaction
+                        FragmentManager fragmentManager = fragmentCur.requireActivity().getSupportFragmentManager();
+                        FragmentTransaction transaction = fragmentManager.beginTransaction();
+
                         FragSpecCentre fragment = new FragSpecCentre();
                         Bundle bundle = new Bundle();
                         bundle.putSerializable("centre", centre);
                         fragment.setArguments(bundle);
-
-                        FragmentManager fragmentManager = ((AppCompatActivity) context).getSupportFragmentManager();
-                        FragmentTransaction transaction = fragmentManager.beginTransaction();
-                        transaction.replace(R.id.fragmentContainerView, fragment);
-                        transaction.addToBackStack(null);
-                        transaction.commit();
+                        transaction.replace(R.id.FragCheese, fragment,"hidden1");
 
                         // Hide the RecyclerView
-                        RecyclerView recyclerView = itemView.getRootView().findViewById(R.id.dsCRec);
+                        RecyclerView recyclerView = ((Activity) context).findViewById(R.id.dsCRec);
                         recyclerView.setVisibility(View.GONE);
+
+                        EditText searchEditText = ((Activity) context).findViewById(R.id.searchEditText);
+                        searchEditText.setVisibility(View.GONE);
+
+
+
+                        transaction.addToBackStack(null);
+                        transaction.commit();
                     }
                 }
+
             });
         }
     }
+    @SuppressLint("NotifyDataSetChanged")
     public void filter(String searchText) {
         List<ClsCentre> filteredList = new ArrayList<>();
-        for (ClsCentre centre : itemList) {
+        for (ClsCentre centre : masterList) {
             if (centre.getCentreName().toLowerCase().contains(searchText.toLowerCase())) {
                 filteredList.add(centre);
             }
@@ -112,5 +130,6 @@ public class AdapterCentres extends RecyclerView.Adapter<AdapterCentres.ViewHold
         itemList = filteredList;
         notifyDataSetChanged();
     }
+
 
 }

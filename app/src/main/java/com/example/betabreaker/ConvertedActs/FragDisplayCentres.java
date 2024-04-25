@@ -3,6 +3,7 @@ package com.example.betabreaker.ConvertedActs;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -40,46 +41,48 @@ public class FragDisplayCentres extends Fragment {
     private RecyclerView recyclerView;
     private AdapterCentres adapter;
 
-
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_display_centres, container, false);
+        Log.d("SingleCentre4", "onCreateView: 0 ");
+        return inflater.inflate(R.layout.fragment_display_centres, container, false);
+    }
 
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         // Initialize RecyclerView and adapter
-        recyclerView = rootView.findViewById(R.id.dsCRec);
-        adapter = new AdapterCentres(centreList);
+        Log.d("SingleCentre4", "onCreateView: 1 ");
+        view.findViewById(R.id.dsCRec).setVisibility(View.VISIBLE);
+        recyclerView = view.findViewById(R.id.dsCRec);
 
-        // Set layout manager and adapter
-        recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
-        recyclerView.setAdapter(adapter);
+
 
         // Fetch data from Logic App
         fetchDataFromLogicApp();
-        EditText searchEditText = rootView.findViewById(R.id.searchEditText);
+        EditText searchEditText = view.findViewById(R.id.searchEditText);
+        searchEditText.setVisibility(View.VISIBLE);
+        Log.d("SingleCentre4", "onCreateView: 2 ");
         searchEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                // No implementation needed
+                searchEditText.setHint("");
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
+                searchEditText.setHint("");
                 adapter.filter(s.toString());
             }
 
             @Override
             public void afterTextChanged(Editable s) {
-                // No implementation needed
+                searchEditText.setHint("");
             }
-        });
-
-
-        return rootView;
-    }
+        });}
 
     private void fetchDataFromLogicApp() {
         // Logic App endpoint URL
+        Log.d("SingleCentre4", "onCreateView: 3 ");
         centreList.clear();
         String logicAppUrl = GlobalUrl.getCentresUrl;
 
@@ -135,15 +138,19 @@ public class FragDisplayCentres extends Fragment {
 
                             // Create a ClsCentre object and add it to the list
                             ClsCentre centre = new ClsCentre(id, name, address, description, email, contact, website, logoid, routes);
+                            Log.d("SingleCentre4", "onCreateView: " + centre.getCentreName());
                             centreList.add(centre);
                         }
 
-                        // Notify adapter of data changes on the main thread
-                        requireActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                adapter.notifyDataSetChanged();
-                            }
+
+                        requireActivity().runOnUiThread(() -> {
+
+                            adapter = new AdapterCentres(centreList, requireContext(), FragDisplayCentres.this);
+
+                            // Set layout manager and adapter
+                            recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
+                            recyclerView.setAdapter(adapter);
+
                         });
 
                     } catch (JSONException e) {
@@ -153,6 +160,4 @@ public class FragDisplayCentres extends Fragment {
             }
         });
     }
-
-
 }

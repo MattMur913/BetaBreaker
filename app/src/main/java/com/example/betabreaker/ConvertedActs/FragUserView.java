@@ -22,7 +22,6 @@ import com.example.betabreaker.databinding.FragmentUserViewBinding;
 
 public class FragUserView extends Fragment {
     private FragmentUserViewBinding binding;
-    private Button btnOut;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -34,7 +33,7 @@ public class FragUserView extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        btnOut = binding.btnLogOut;
+        Button btnOut = binding.btnLogOut;
 
         FragDisplayUser welcomeFragment = new FragDisplayUser();
         FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();

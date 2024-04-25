@@ -42,8 +42,6 @@ import okhttp3.Response;
 public class FragSignUp extends Fragment {
 
     private FragmentSignUpBinding binding;
-    private Button btnLogin;
-    private Button btnSign;
     private EditText edtUsername;
     private EditText edtPass;
     private EditText edtEmail;
@@ -60,8 +58,8 @@ public class FragSignUp extends Fragment {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        btnLogin = binding.btnLogin;
-        btnSign = binding.btnSignUp;
+        Button btnLogin = binding.btnLogin;
+        Button btnSign = binding.btnSignUp;
         edtDob = binding.edDob;
         edtUsername = binding.edName;
         edtEmail = binding.edEmail;
@@ -162,7 +160,7 @@ public class FragSignUp extends Fragment {
                 FragmentManager fragmentManager = ((AppCompatActivity) context).getSupportFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 FragWelcomeScrn fragment = new FragWelcomeScrn();
-                fragmentTransaction.replace(R.id.fragment_container, fragment);
+                fragmentTransaction.replace(R.id.welcome_act, fragment);
                 fragmentTransaction.addToBackStack(null);
                 fragmentTransaction.commit();
 

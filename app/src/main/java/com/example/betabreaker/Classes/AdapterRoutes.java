@@ -12,7 +12,6 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -30,25 +29,12 @@ import java.util.List;
 public class AdapterRoutes extends RecyclerView.Adapter<AdapterRoutes.ViewHolder> {
 
     private List<ClsRoutes> itemList;
-    private String centreID;
-    private Context context;
     private Fragment fragment;
-    private AdapterCallback callback;
+    //private AdapterCallback callback;
 
     public AdapterRoutes(List<ClsRoutes> itemList, String centreID, Context context, Fragment fragment) {
         this.itemList = itemList;
-        this.centreID = centreID;
-        this.context = context;
         this.fragment = fragment;
-    }
-
-    public interface AdapterCallback {
-        void onItemClicked(ClsRoutes route);
-    }
-
-    // Method to set the callback
-    public void setAdapterCallback(AdapterCallback callback) {
-        this.callback = callback;
     }
 
     @NonNull
@@ -104,18 +90,17 @@ public class AdapterRoutes extends RecyclerView.Adapter<AdapterRoutes.ViewHolder
                             Bundle bundle = new Bundle();
                             bundle.putSerializable("viewRoute", route);
                             newFrag.setArguments(bundle);
-
+                            //fragmentTransaction.remove( fragment);
                             if (fragment instanceof Lettace) {
                                 //This transaction
                                 Log.d("TAG", String.valueOf(fragment));
-                                ConstraintLayout dlFrag = ((Activity) context).findViewById(R.id.FragLayoutLettuce);
-                                dlFrag.setVisibility(View.GONE);
                                 fragmentTransaction.replace(R.id.FragOnions, newFrag);
                             }else if(fragment instanceof FragAdminViews) {
+
                                 fragmentTransaction.replace(R.id.fragContent, newFrag);
 
                             } else {
-                                fragmentTransaction.replace(R.id.fragmentContainerView, newFrag);
+                                fragmentTransaction.replace(R.id.FragCheese, newFrag);
                                 RecyclerView recyclerView;
                                 recyclerView = ((Activity) context).findViewById(R.id.dsRRec);
                                 recyclerView.setVisibility(View.GONE);

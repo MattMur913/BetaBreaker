@@ -2,7 +2,6 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/frameLayout6"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Frags.FragSignUp" >
@@ -88,7 +87,8 @@
         android:inputType="text"
         android:text="Name"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txtLabel" />
+        app:layout_constraintTop_toBottomOf="@+id/txtLabel"
+        android:importantForAutofill="no" />
 
     <EditText
         android:id="@+id/edPass"
@@ -99,7 +99,8 @@
         android:ems="10"
         android:inputType="textPassword"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edName" />
+        app:layout_constraintTop_toBottomOf="@+id/edName"
+        android:importantForAutofill="no" />
 
     <EditText
         android:id="@+id/edEmail"
@@ -110,7 +111,8 @@
         android:ems="10"
         android:inputType="textEmailAddress"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edPass" />
+        app:layout_constraintTop_toBottomOf="@+id/edPass"
+        android:importantForAutofill="no" />
 
     <EditText
         android:id="@+id/edDob"
@@ -121,6 +123,7 @@
         android:ems="10"
         android:inputType="date"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/edEmail" />
+        app:layout_constraintTop_toBottomOf="@+id/edEmail"
+        android:importantForAutofill="no" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
