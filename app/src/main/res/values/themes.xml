@@ -11,6 +11,10 @@
         <!-- Status bar color. -->
         <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
     </style>
+    <style name="Theme.BetaBreaker.NoActionBar">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+    </style>
 
     <style name="Theme.BetaBreaker.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
