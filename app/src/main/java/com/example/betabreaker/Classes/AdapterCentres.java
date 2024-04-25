@@ -47,6 +47,7 @@ public class AdapterCentres extends RecyclerView.Adapter<AdapterCentres.ViewHold
         // Inflate the item layout and create a new ViewHolder
         View itemView = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.reyc_layout_display_centre, parent, false);
+        Log.d("SingleCentre4", "Getting centres");
         return new ViewHolder(itemView, itemList);
     }
 

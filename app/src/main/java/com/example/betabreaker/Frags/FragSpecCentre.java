@@ -75,7 +75,7 @@ public class FragSpecCentre extends Fragment {
                         bundle.putSerializable("routes", (Serializable) routes);
                         bundle.putSerializable("centreID", centre.getIdCentre());
                         fragment.setArguments(bundle);
-                        fragmentTransaction.replace(R.id.dsCLayout, fragment);
+                        fragmentTransaction.replace(R.id.FragCheese, fragment);
                         fragmentTransaction.addToBackStack(null);
                         fragmentTransaction.commit();
                     }

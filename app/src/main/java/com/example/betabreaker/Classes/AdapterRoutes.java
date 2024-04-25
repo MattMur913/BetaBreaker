@@ -95,7 +95,7 @@ public class AdapterRoutes extends RecyclerView.Adapter<AdapterRoutes.ViewHolder
                             Bundle bundle = new Bundle();
                             bundle.putSerializable("viewRoute", route);
                             newFrag.setArguments(bundle);
-                            fragmentTransaction.remove( fragment);
+                            //fragmentTransaction.remove( fragment);
                             if (fragment instanceof Lettace) {
                                 //This transaction
                                 Log.d("TAG", String.valueOf(fragment));
@@ -107,7 +107,7 @@ public class AdapterRoutes extends RecyclerView.Adapter<AdapterRoutes.ViewHolder
                                 fragmentTransaction.replace(R.id.fragContent, newFrag);
 
                             } else {
-                                fragmentTransaction.replace(R.id.dsCLayout, newFrag);
+                                fragmentTransaction.replace(R.id.FragCheese, newFrag);
                                 RecyclerView recyclerView;
                                 recyclerView = ((Activity) context).findViewById(R.id.dsRRec);
                                 recyclerView.setVisibility(View.GONE);
