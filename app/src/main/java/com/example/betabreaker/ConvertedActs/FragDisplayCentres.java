@@ -8,10 +8,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
-import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -41,24 +39,26 @@ public class FragDisplayCentres extends Fragment {
     private List<ClsCentre> centreList = new ArrayList<>();
     private RecyclerView recyclerView;
     private AdapterCentres adapter;
-    private ConstraintLayout layoutHide;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_display_centres, container, false);
+        return inflater.inflate(R.layout.fragment_display_centres, container, false);
+    }
 
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
         // Initialize RecyclerView and adapter
-        recyclerView = rootView.findViewById(R.id.dsCRec);
-        adapter = new AdapterCentres(centreList);
-        layoutHide = rootView.findViewById(R.id.dsCLayout);
+        recyclerView = view.findViewById(R.id.dsCRec);
+        adapter = new AdapterCentres(centreList, requireContext(),FragDisplayCentres.this);
+
         // Set layout manager and adapter
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
         recyclerView.setAdapter(adapter);
 
         // Fetch data from Logic App
         fetchDataFromLogicApp();
-        EditText searchEditText = rootView.findViewById(R.id.searchEditText);
+        EditText searchEditText = view.findViewById(R.id.searchEditText);
         searchEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -75,11 +75,7 @@ public class FragDisplayCentres extends Fragment {
             public void afterTextChanged(Editable s) {
                 searchEditText.setHint("");
             }
-        });
-
-
-        return rootView;
-    }
+        });}
 
     private void fetchDataFromLogicApp() {
         // Logic App endpoint URL
@@ -156,22 +152,7 @@ public class FragDisplayCentres extends Fragment {
             }
         });
     }
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
 
-        // Listen for back button press
-        requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), new OnBackPressedCallback(true) {
-            @Override
-            public void handleOnBackPressed() {
-                // Show the hidden layout
-
-                layoutHide.setVisibility(View.VISIBLE);
-
-                // Pop the back stack to remove the fragment
-                requireActivity().getSupportFragmentManager().popBackStack();
-            }
-        });
-    }
 
 
 }

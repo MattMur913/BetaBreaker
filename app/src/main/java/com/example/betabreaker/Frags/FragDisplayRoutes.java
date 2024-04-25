@@ -53,6 +53,7 @@ public class FragDisplayRoutes extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         Log.d("SingleCentre4", "onCreateView: 1 ");
         recyclerView = view.findViewById(R.id.dsRRec);
+        Bundle bundle = getArguments();
         progressBar = view.findViewById(R.id.progressBar);
 
         // Initially show the progress bar and hide the RecyclerView
@@ -60,8 +61,11 @@ public class FragDisplayRoutes extends Fragment {
         recyclerView.setVisibility(View.GONE);
         Log.d("SingleCentre4", "onCreateView: 2");
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(requireContext());
-        String centreID = preferences.getString("adminOf", "");
-        getRoutesFromCentre(centreID);
+        //String centreID = preferences.getString("adminOf", "");
+        if (bundle != null) {
+            String centreID = (String) bundle.getSerializable("centreID");
+            getRoutesFromCentre(centreID);
+        }
 
     }
 

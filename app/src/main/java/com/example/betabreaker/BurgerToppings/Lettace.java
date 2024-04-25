@@ -15,8 +15,6 @@ import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentContainerView;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -26,7 +24,6 @@ import com.example.betabreaker.Classes.AdapterRoutes;
 import com.example.betabreaker.Classes.ClsCentre;
 import com.example.betabreaker.Classes.ClsRoutes;
 import com.example.betabreaker.Classes.GlobalUrl;
-import com.example.betabreaker.Frags.FragSpecRoute;
 import com.example.betabreaker.R;
 import com.example.betabreaker.databinding.FragmentLettaceBinding;
 
@@ -44,7 +41,7 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-public class Lettace extends Fragment  implements AdapterRoutes.AdapterCallback {
+public class Lettace extends Fragment   {
     private FragmentLettaceBinding binding;
     private ClsCentre centreFav;
     private List<ClsRoutes> routesList = new ArrayList<>();
@@ -174,18 +171,5 @@ public class Lettace extends Fragment  implements AdapterRoutes.AdapterCallback 
     public void onDestroyView() {
         super.onDestroyView();
         binding = null;
-    }
-    public void onItemClicked(ClsRoutes route) {
-        //TODO Check if this is working with a log
-        Log.d("OnItemClicked", "onItemClicked: Check it gets this far");
-        FragmentManager fragmentManager = getParentFragmentManager();
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        FragSpecRoute newFrag = new FragSpecRoute();
-        Bundle bundle = new Bundle();
-        bundle.putSerializable("viewRoute", route);
-        newFrag.setArguments(bundle);
-        fragmentTransaction.replace(R.id.dsRLayout, newFrag);
-        fragmentTransaction.addToBackStack(null);
-        fragmentTransaction.commit();
     }
 }

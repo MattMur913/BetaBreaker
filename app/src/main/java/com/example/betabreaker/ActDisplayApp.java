@@ -3,12 +3,15 @@ package com.example.betabreaker;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
 import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -72,4 +75,44 @@ public class ActDisplayApp extends AppCompatActivity {
         return NavigationUI.navigateUp(navController, mAppBarConfiguration)
                 || super.onSupportNavigateUp();
     }
+
+    @Override
+    public void onBackPressed() {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        String fragmentName;
+        int foundIt = 0;
+        for (Fragment fragment : fragmentManager.getFragments()) {
+            if (fragment != null) {
+                fragmentName = fragment.getClass().getSimpleName();
+                Log.d("CurrentFragment", "Fragment: " + fragmentName);
+                if (fragmentName.equals("FragSpecCentre")) {
+                    Log.d("TurtwigSolos", "onBackPressed: Pooped ");
+                    // Now, make Fragment1 visible again
+                    /*
+                    FragDisplayCentres reDisplay = (FragDisplayCentres) fragmentManager.findFragmentByTag("hidden");
+                    if (reDisplay != null) {
+                        Log.d("TurtwigSolos", "onBackPressed: Noyt null");
+                        // Fragment1 exists, make it visible
+                        View fragment1View = reDisplay.getView();
+                        if (fragment1View != null) {
+                            Log.d("TurtwigSolos", "onBackPressed: Make visible");
+                            RecyclerView recyclerView = fragment1View.findViewById(R.id.dsCRec);
+                            recyclerView.setVisibility(View.VISIBLE);
+
+                            // Show the EditText
+                            EditText searchEditText = fragment1View.findViewById(R.id.searchEditText);
+                            searchEditText.setVisibility(View.VISIBLE);
+                            foundIt = 1;
+                        }
+                    }
+
+                     */
+                }
+            }
+        }
+        if (foundIt == 0) {
+            super.onBackPressed();
+        }
+    }
 }
+
