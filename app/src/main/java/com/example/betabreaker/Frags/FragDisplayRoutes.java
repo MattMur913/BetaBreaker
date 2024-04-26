@@ -101,8 +101,9 @@ public class FragDisplayRoutes extends Fragment {
                             String setter = routeObject.optString("Setter", "");
                             String upvotes = routeObject.optString("Upvotes", "");
                             String imageUrl = routeObject.optString("imageUrl", "");
+                            String routeID = routeObject.optString("routeID", "");
 
-                            ClsRoutes route = new ClsRoutes(area, colour, grades, setDate, setter, upvotes, imageUrl);
+                            ClsRoutes route = new ClsRoutes(area, colour, grades, setDate, setter, upvotes, imageUrl,routeID);
                             routesList.add(route);
                         }
 

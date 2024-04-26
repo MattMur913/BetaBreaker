@@ -112,14 +112,14 @@ public class FragWelcomeScrn extends Fragment{
 
                                         JSONObject userData = userTable.getJSONObject(0);
                                         Context context = getContext();
-                                        //TODO MAke it check just like in the signup fragment
                                         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(context);
                                         SharedPreferences.Editor editor = preferences.edit();
                                         editor.putString("username", userData.getString("Username"));
                                         editor.putString("email", userData.getString("Email"));
-                                        editor.putString("DoB", userData.getString("DoB"));
+                                        editor.putString("dob", userData.getString("DoB"));
                                         editor.putInt("admin", userData.getInt("admin"));
                                         editor.putString("adminOf", userData.getString("adminOf"));
+                                        editor.putString("favCent", "");
                                         editor.apply();
 
                                         Log.d("TestingAdmin", "Not Admin ");

@@ -115,9 +115,9 @@ public class FragDisplayCentres extends Fragment {
                             String name = jsonObject.getString("centreName");
                             String contact = jsonObject.getString("contactNumber");
                             String email = jsonObject.getString("email");
-                            String address = jsonObject.getString("description");
+                            String address = jsonObject.getString("Address");
                             String website = jsonObject.getString("website");
-                            String description = jsonObject.getString("Address");
+                            String description = jsonObject.getString("description");
                             String logoid = jsonObject.getString("logoName");
                             JSONArray routeDetailsArray = jsonObject.getJSONArray("RouteDetails");
                             List<ClsRoutes> routes = new ArrayList<>();
@@ -130,9 +130,10 @@ public class FragDisplayCentres extends Fragment {
                                 String setter = routeObject.optString("Setter", "");
                                 String upvotes = routeObject.optString("Upvotes", "");
                                 String imageUrl = routeObject.optString("imageUrl", "");
+                                String routeID = routeObject.optString("routeID", "");
 
                                 // Create a ClsRoutes object and add it to the list
-                                ClsRoutes route = new ClsRoutes(area, colour, grades, setDate, setter, upvotes, imageUrl);
+                                ClsRoutes route = new ClsRoutes(area, colour, grades, setDate, setter, upvotes, imageUrl, routeID);
                                 routes.add(route);
                             }
 

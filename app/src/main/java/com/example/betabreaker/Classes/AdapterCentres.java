@@ -54,10 +54,10 @@ public class AdapterCentres extends RecyclerView.Adapter<AdapterCentres.ViewHold
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         // Bind data to views in the ViewHolder
         ClsCentre item = itemList.get(position);
-
+        Log.d("Turtwigs0l0s", "onBindViewHolder: "+item.getCentreName() + item.getAddress());
         Glide.with(holder.itemView.getContext()).load(GlobalUrl.imageUrl + item.getlogo()).apply(RequestOptions.placeholderOf(R.drawable.placeholder_image)).into(holder.imageView);
-        holder.textView.setText(item.getIdCentre());
-        holder.textView1.setText(item.getCentreName());
+        holder.txtAddress.setText(item.getCentreName());
+        holder.txtName.setText(item.getAddress());
         // Set other views accordingly
     }
 
@@ -68,14 +68,14 @@ public class AdapterCentres extends RecyclerView.Adapter<AdapterCentres.ViewHold
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView textView, textView1;
+        TextView txtAddress, txtName;
         ImageView imageView;
 
         public ViewHolder(@NonNull View itemView, List<ClsCentre> itemList) {
             super(itemView);
             // Initialize views
-            textView = itemView.findViewById(R.id.dsCAddressview);
-            textView1 = itemView.findViewById(R.id.dsCNameview);
+            txtAddress = itemView.findViewById(R.id.dsCAddressview);
+            txtName= itemView.findViewById(R.id.dsCNameview);
             imageView = itemView.findViewById(R.id.dsCLogoview);
             // Set click listener for the itemView
             itemView.setOnClickListener(new View.OnClickListener() {

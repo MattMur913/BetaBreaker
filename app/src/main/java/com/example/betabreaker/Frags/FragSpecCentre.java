@@ -41,6 +41,9 @@ public class FragSpecCentre extends Fragment {
         final Button btnRoutes = binding.vewRoutes;
         Button btnFav = binding.btnFav;
         TextView txtName = binding.spCName;
+        TextView txtWebsite = binding.spCWebsite;
+        TextView txtEmail = binding.spCEmail;
+        TextView txtCoNo = binding.spCNumber;
         TextView txtAddress = binding.spCAddress;
 
         if (bundle != null) {
@@ -48,6 +51,9 @@ public class FragSpecCentre extends Fragment {
             if (centre != null) {
                 txtAddress.setText(centre.getAddress());
                 txtName.setText(centre.getCentreName());
+                txtWebsite.setText(centre.getWebsite());
+                txtCoNo.setText(centre.getNumber());
+                txtEmail.setText(centre.getEmail());
             }
 
             btnFav.setOnClickListener(new View.OnClickListener() {

@@ -265,9 +265,9 @@ public class FragEditCentre extends Fragment {
                         String name = jsonResponse.getString("centreName");
                         String contact = jsonResponse.getString("contactNumber");
                         String email = jsonResponse.getString("email");
-                        String address = jsonResponse.getString("description");
+                        String address = jsonResponse.getString("Address");
                         String website = jsonResponse.getString("website");
-                        String description = jsonResponse.getString("Address");
+                        String description = jsonResponse.getString("description");
                         String logoid = jsonResponse.getString("logoName");
 
                         // Check if "RouteDetails" exists in the JSON
@@ -282,7 +282,8 @@ public class FragEditCentre extends Fragment {
                             String setter = routeObject.optString("Setter", "");
                             String upvotes = routeObject.optString("Upvotes", "");
                             String imageUrl = routeObject.optString("imageUrl", "");
-                            ClsRoutes route = new ClsRoutes(area, colour, grades, setDate, setter, upvotes, imageUrl);
+                            String routeID = routeObject.optString("routeID", "");
+                            ClsRoutes route = new ClsRoutes(area, colour, grades, setDate, setter, upvotes, imageUrl,routeID);
                             routesList.add(route);
                         }
 

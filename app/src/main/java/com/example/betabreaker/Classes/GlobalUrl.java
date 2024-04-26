@@ -16,5 +16,7 @@ public class GlobalUrl {
 
     public static String getRoutes ="https://prod-22.uksouth.logic.azure.com/workflows/cbc0ea19da744f5fa1054b3e35d74a12/triggers/manual/paths/invoke/{cID}?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=EeiOM6dhHFCHoh9L6iFUZNq2W13PtKYWktDSHMGCxUw";
 
+    public static String getComments = "https://prod-35.eastus.logic.azure.com/workflows/95bd3ece54074de1a0cf389ca6ffcfb7/triggers/manual/paths/invoke/{rid}?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=yQheOO5auQ_x84BM8o_zOBygHgpoH1NxMZC99ii8dcg";
+    public static String addComment = "https://prod-84.eastus.logic.azure.com:443/workflows/baa61ecbe2a842bdba1a6de2aa1b35dd/triggers/manual/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=F2lfebF5JKE_OHKQchCnrQBhL19bnbJej9MztinPTOA";
 
 }
