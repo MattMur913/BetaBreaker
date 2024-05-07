@@ -22,8 +22,8 @@ import java.util.List;
 
 public class AdapterRoutes extends RecyclerView.Adapter<AdapterRoutes.ViewHolder> {
 
-    private List<ClsRoutes> itemList;
-    private Fragment fragment;
+    private final List<ClsRoutes> itemList;
+    private final Fragment fragment;
 
     public AdapterRoutes(List<ClsRoutes> itemList, String centreID, Context context, Fragment fragment) {
         this.itemList = itemList;
@@ -39,6 +39,7 @@ public class AdapterRoutes extends RecyclerView.Adapter<AdapterRoutes.ViewHolder
     }
 
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        //sets the displayed values for each individual card view
         ClsRoutes item = itemList.get(position);
         Glide.with(holder.itemView.getContext()).load(GlobalUrl.imageUrl + item.getImage())
                 .apply(RequestOptions.placeholderOf(R.drawable.placeholder_image))
@@ -67,6 +68,7 @@ public class AdapterRoutes extends RecyclerView.Adapter<AdapterRoutes.ViewHolder
             tvArea = itemView.findViewById(R.id.dsRArea);
             ivClimb = itemView.findViewById(R.id.dsRClimbImage);
 
+            //Creates the onclick listener
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -75,6 +77,7 @@ public class AdapterRoutes extends RecyclerView.Adapter<AdapterRoutes.ViewHolder
                         ClsRoutes route = itemList.get(position);
                         Context context = itemView.getContext();
                         if (context != null && fragment != null) {
+                            //Passes necessary values along
                             Bundle bundle = new Bundle();
                             bundle.putSerializable("viewRoute", route);
                             NavHostFragment.findNavController(fragment).navigate(R.id.go_spec_route,bundle);

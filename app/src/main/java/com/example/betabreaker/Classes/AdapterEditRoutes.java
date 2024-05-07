@@ -22,11 +22,13 @@ import java.util.List;
 
 public class AdapterEditRoutes extends RecyclerView.Adapter<AdapterEditRoutes.ViewHolder> {
 
-    private List<ClsRoutes> itemList;
-    private Fragment fragment;
-    private String centreID;
+    private final List<ClsRoutes> itemList;
+    private final Fragment fragment;
+    private final String centreID;
 
-    public AdapterEditRoutes(List<ClsRoutes> itemList, String centreID, Context context, Fragment fragment) {
+
+    //Creates the adapter
+    public AdapterEditRoutes(List<ClsRoutes> itemList, String centreID, Fragment fragment) {
         this.itemList = itemList;
         this.fragment = fragment;
         this.centreID=centreID;
@@ -41,6 +43,7 @@ public class AdapterEditRoutes extends RecyclerView.Adapter<AdapterEditRoutes.Vi
     }
 
     public void onBindViewHolder(@NonNull AdapterEditRoutes.ViewHolder holder, int position) {
+        //Sets the widgets information to match the position
         ClsRoutes item = itemList.get(position);
         Glide.with(holder.itemView.getContext()).load(GlobalUrl.imageUrl + item.getImage())
                 .apply(RequestOptions.placeholderOf(R.drawable.placeholder_image))
@@ -62,13 +65,14 @@ public class AdapterEditRoutes extends RecyclerView.Adapter<AdapterEditRoutes.Vi
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-
+            //Sets each of the itemViews
             cardView = itemView.findViewById(R.id.dsRRecCar);
             tvColour = itemView.findViewById(R.id.dsRColour);
             tvGrade = itemView.findViewById(R.id.dscRGrade);
             tvArea = itemView.findViewById(R.id.dsRArea);
             ivClimb = itemView.findViewById(R.id.dsRClimbImage);
 
+            //Creates an onclick listener for the Cardview
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -77,6 +81,7 @@ public class AdapterEditRoutes extends RecyclerView.Adapter<AdapterEditRoutes.Vi
                         ClsRoutes route = itemList.get(position);
                         Context context = itemView.getContext();
                         if (context != null && fragment != null) {
+                            //Passes necessary values along
                             Bundle bundle = new Bundle();
                             bundle.putSerializable("viewRoute", route);
                             bundle.putSerializable("centreID", centreID);

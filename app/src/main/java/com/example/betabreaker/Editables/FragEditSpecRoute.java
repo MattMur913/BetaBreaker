@@ -1,17 +1,20 @@
 package com.example.betabreaker.Editables;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.util.Log;
+import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
+import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -38,6 +41,7 @@ import okhttp3.Response;
 public class FragEditSpecRoute extends Fragment {
 
     private FragmentEditSpecRouteBinding binding;
+    private ClsRoutes routes;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -56,12 +60,11 @@ public class FragEditSpecRoute extends Fragment {
         TextView tvDate;
         TextView tvGrade;
         TextView tvSetter;
-        TextView tvVotes;
         ImageView ivRoute;
         Button btnDelete = binding.rotDelete;
         Button btnUpdate= binding.rotUpdate;
         if (bundle != null) {
-            ClsRoutes routes = (ClsRoutes) bundle.getSerializable("viewRoute");
+            routes = (ClsRoutes) bundle.getSerializable("viewRoute");
 
             // Initialize views
             tvArea = binding.edArea;
@@ -115,7 +118,6 @@ public class FragEditSpecRoute extends Fragment {
                         }
 
                         // Convert JSON object to string
-                        String routeData = jsonObject.toString();
                         OkHttpClient client = new OkHttpClient();
                         RequestBody body = new MultipartBody.Builder().setType(MultipartBody.FORM)
                                 .addFormDataPart("area", area)
@@ -138,10 +140,40 @@ public class FragEditSpecRoute extends Fragment {
                             @Override
                             public void onFailure(Call call, IOException e) {
                                 e.printStackTrace();
+                                requireActivity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        NavHostFragment navHostFragment = (NavHostFragment) requireActivity().getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment_content_main);
+                                        Bundle bundle = new Bundle();
+                                        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(requireContext());
+                                        String centreID = preferences.getString("adminOf", "");
+                                        bundle.putSerializable("centreID",centreID);
+                                        bundle.putSerializable("fragger", "Admin");
+                                        NavController navController = navHostFragment.getNavController();
+                                        navController.popBackStack();
+                                        navController.navigate(R.id.go_all_routes, bundle);
+                                        Toast.makeText(getContext(), "An error occurred please try again later", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
                             }
 
                             @Override
                             public void onResponse(Call call, Response response) throws IOException {
+                                requireActivity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        NavHostFragment navHostFragment = (NavHostFragment) requireActivity().getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment_content_main);
+                                        Bundle bundle = new Bundle();
+                                        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(requireContext());
+                                        String centreID = preferences.getString("adminOf", "");
+                                        bundle.putSerializable("centreID",centreID);
+                                        bundle.putSerializable("fragger", "Admin");
+                                        NavController navController = navHostFragment.getNavController();
+                                        navController.popBackStack();
+                                        navController.navigate(R.id.go_all_routes, bundle);
+                                        Toast.makeText(getContext(), "Route details updated", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
                             }
                         });
                     }
@@ -178,14 +210,27 @@ public class FragEditSpecRoute extends Fragment {
                         client.newCall(request).enqueue(new Callback() {
                             @Override
                             public void onFailure(Call call, IOException e) {
-                                FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
-                                fragmentManager.popBackStack();
+                                Toast.makeText(getContext(), "AN ERROR HAS OCCURRED PLEASE TRY AGAIN", Toast.LENGTH_SHORT).show();
                                 e.printStackTrace();
                             }
 
                             @Override
                             public void onResponse(Call call, Response response) throws IOException {
-                                //TODO
+                                requireActivity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        NavHostFragment navHostFragment = (NavHostFragment) requireActivity().getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment_content_main);
+                                        NavController navController = navHostFragment.getNavController();
+                                        Bundle bundle = new Bundle();
+                                        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(requireContext());
+                                        String centreID = preferences.getString("adminOf", "");
+                                        bundle.putSerializable("centreID",centreID);
+                                        bundle.putSerializable("fragger", "Admin");
+                                        navController.popBackStack();
+                                        navController.navigate(R.id.go_all_routes,bundle);
+                                        Toast.makeText(getContext(), "Route has been deleted", Toast.LENGTH_SHORT).show();
+                                    }
+                                });
 
                             }
                         });

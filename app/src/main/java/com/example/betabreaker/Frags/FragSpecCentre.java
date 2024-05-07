@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,13 +19,9 @@ import androidx.navigation.fragment.NavHostFragment;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.example.betabreaker.Classes.ClsCentre;
-import com.example.betabreaker.Classes.ClsRoutes;
 import com.example.betabreaker.Classes.GlobalUrl;
 import com.example.betabreaker.R;
 import com.example.betabreaker.databinding.FragmentSpecCentreBinding;
-
-import java.io.Serializable;
-import java.util.List;
 
 public class FragSpecCentre extends Fragment {
 
@@ -53,6 +50,7 @@ public class FragSpecCentre extends Fragment {
         if (bundle != null) {
             ClsCentre centre = (ClsCentre) bundle.getSerializable("centre");
             if (centre != null) {
+                //Gets the data from the bundle and displays it appropriately
                 Glide.with(view.getContext()).load(GlobalUrl.imageUrl + centre.getlogo()).apply(RequestOptions.placeholderOf(R.drawable.placeholder_image)).into(imgView);
                 txtAddress.setText(centre.getAddress());
                 txtName.setText(centre.getCentreName());
@@ -68,7 +66,7 @@ public class FragSpecCentre extends Fragment {
                     SharedPreferences.Editor editor = preferences.edit();
                     editor.putString("favCent", centre.getIdCentre());
                     editor.apply();
-                    //TODO Add a toast here
+                    Toast.makeText(getContext(), "ADDED TO FAVOURITE CENTRE", Toast.LENGTH_SHORT).show();
                 }
             });
 
@@ -76,9 +74,10 @@ public class FragSpecCentre extends Fragment {
             btnRoutes.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    //Goes to the view all routes for the centre page
                     Bundle bundle = new Bundle();
-                    List<ClsRoutes> routes = centre.getRoutes();
-                    bundle.putSerializable("routes", (Serializable) routes);
+                    //List<ClsRoutes> routes = centre.getRoutes();
+                    //bundle.putSerializable("routes", (Serializable) routes);
                     bundle.putSerializable("centreID", centre.getIdCentre());
                     bundle.putSerializable("fragger", "");
 

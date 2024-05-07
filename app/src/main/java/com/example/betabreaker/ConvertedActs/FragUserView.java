@@ -37,12 +37,15 @@ public class FragUserView extends Fragment {
         getActivity().getSupportFragmentManager().beginTransaction()
                 .replace(R.id.dspFragUV,  new FragDisplayUser())
                 .commit();
+
+        //Log out button
         btnOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ConfirmationDialog.showConfirmationDialog(getContext(), "Are you sure you want log out?", new ConfirmationDialog.ConfirmationListener() {
                     @Override
                     public void onConfirm() {
+                        //Clears all account information and returns to login screen
                         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getContext());
                         SharedPreferences.Editor editor = preferences.edit();
                         editor.clear();

@@ -34,6 +34,7 @@ public class FragDisplayUser extends Fragment {
         final TextView lblEmail = binding.txtEmail2;
         final Button btnSign =binding.btnEdit;
 
+        //Displays the users information
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(requireContext());
         String username = preferences.getString("username","");
         String email = preferences.getString("email","");
@@ -43,6 +44,8 @@ public class FragDisplayUser extends Fragment {
         lblDob.setText(dob);
         lblEmail.setText(email);
 
+
+        //Takes to the edit user page
         btnSign.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

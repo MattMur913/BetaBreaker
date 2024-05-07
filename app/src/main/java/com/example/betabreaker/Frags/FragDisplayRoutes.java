@@ -1,8 +1,6 @@
 package com.example.betabreaker.Frags;
 
-import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -37,7 +35,7 @@ import okhttp3.Response;
 
 public class FragDisplayRoutes extends Fragment {
 
-    private List<ClsRoutes> routesList = new ArrayList<>();
+    private final List<ClsRoutes> routesList = new ArrayList<>();
     private RecyclerView recyclerView;
     private ProgressBar progressBar;
 
@@ -57,11 +55,11 @@ public class FragDisplayRoutes extends Fragment {
         // Initially show the progress bar and hide the RecyclerView
         progressBar.setVisibility(View.VISIBLE);
         recyclerView.setVisibility(View.GONE);
-        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(requireContext());
-        //String centreID = preferences.getString("adminOf", "");
         if (bundle != null) {
             String centreID = (String) bundle.getSerializable("centreID");
             String fragger = (String) bundle.getSerializable("fragger");
+
+            //gets the routes from the API
             getRoutesFromCentre(centreID,fragger);
         }
 
@@ -87,7 +85,7 @@ public class FragDisplayRoutes extends Fragment {
                     String responseData = response.body().string();
                     try {
                         JSONArray routeDetailsArray = new JSONArray(responseData);
-
+                        //cycles through the array
                         for (int i = 0; i < routeDetailsArray.length(); i++) {
                             JSONObject routeObject = routeDetailsArray.getJSONObject(i);
                             String area = routeObject.optString("Area", "");
@@ -104,8 +102,8 @@ public class FragDisplayRoutes extends Fragment {
                         }
 
                         requireActivity().runOnUiThread(() -> {
-                            // Update RecyclerView and hide progress bar
-                            if(fragger.equals("Admin")){ AdapterEditRoutes adapter = new AdapterEditRoutes(routesList, centreID, requireContext(), FragDisplayRoutes.this);
+                            //This will check if the user is admin or not
+                            if(fragger.equals("Admin")){ AdapterEditRoutes adapter = new AdapterEditRoutes(routesList, centreID, FragDisplayRoutes.this);
                                 recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
                                 recyclerView.setAdapter(adapter);}
                             else{ AdapterRoutes adapter = new AdapterRoutes(routesList, centreID, requireContext(), FragDisplayRoutes.this);

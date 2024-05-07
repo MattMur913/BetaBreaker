@@ -20,18 +20,21 @@
             android:layout_height="match_parent">
 
             <TextView
-                android:id="@+id/textView2"
+                android:id="@+id/favCentre"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="67dp"
                 android:text="TextView"
+                android:scrollbars="vertical"
+                android:gravity="top|start"
+                android:maxLines="5"
                 android:textSize="24sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/imageView2"
+                app:layout_constraintStart_toEndOf="@+id/centreLogo"
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
-                android:id="@+id/imageView2"
+                android:id="@+id/centreLogo"
                 android:layout_width="143dp"
                 android:layout_height="128dp"
                 android:layout_marginStart="32dp"
@@ -45,7 +48,7 @@
     </androidx.cardview.widget.CardView>
 
     <ProgressBar
-        android:id="@+id/progressBar1"
+        android:id="@+id/throbberFav"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"

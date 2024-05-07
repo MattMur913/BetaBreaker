@@ -21,6 +21,7 @@ public class MainActivity extends AppCompatActivity {
        displayWelcomeScreen();
     }
 
+    //Displays the appropriate page
     private void displayWelcomeScreen() {
         FragWelcomeScrn welcomeFragment = new FragWelcomeScrn();
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();

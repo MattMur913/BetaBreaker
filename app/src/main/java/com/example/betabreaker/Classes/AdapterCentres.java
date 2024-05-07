@@ -1,7 +1,6 @@
 package com.example.betabreaker.Classes;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,12 +21,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AdapterCentres extends RecyclerView.Adapter<AdapterCentres.ViewHolder> {
-    private List<ClsCentre> itemList; // List of items to display
 
-    private List<ClsCentre> masterList; // List of items to display
-    private Fragment fragmentCur;
+    private List<ClsCentre> itemList;
+    private final List<ClsCentre> masterList;
+    private final Fragment fragmentCur;
 
-    public AdapterCentres(List<ClsCentre> itemList, Context context, Fragment fragment) {
+    public AdapterCentres(List<ClsCentre> itemList, Fragment fragment) {
         this.itemList = itemList;
         this.masterList = itemList;
         this.fragmentCur = fragment;
@@ -44,27 +43,26 @@ public class AdapterCentres extends RecyclerView.Adapter<AdapterCentres.ViewHold
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-
+        //gets the position along the recycler view
         ClsCentre item = itemList.get(position);
         Glide.with(holder.itemView.getContext()).load(GlobalUrl.imageUrl + item.getlogo()).apply(RequestOptions.placeholderOf(R.drawable.placeholder_image)).into(holder.imageView);
-        holder.txtAddress.setText(item.getCentreName());
+        holder.txtName.setText(item.getCentreName());
 
     }
 
     @Override
     public int getItemCount() {
-
         return itemList.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView txtAddress, txtName;
+        TextView  txtName;
         ImageView imageView;
 
         public ViewHolder(@NonNull View itemView, List<ClsCentre> itemList) {
             super(itemView);
             // Initialize views
-            txtAddress = itemView.findViewById(R.id.dsCAddressview);
+            txtName = itemView.findViewById(R.id.dsCAddressview);
             imageView = itemView.findViewById(R.id.dsCLogoview);
             // Set click listener for the itemView
             itemView.setOnClickListener(new View.OnClickListener() {
@@ -75,7 +73,6 @@ public class AdapterCentres extends RecyclerView.Adapter<AdapterCentres.ViewHold
                         ClsCentre centre = itemList.get(position);
                         Bundle bundle = new Bundle();
                         bundle.putSerializable("centre", centre);
-
                         NavHostFragment.findNavController(fragmentCur).navigate(R.id.go_spec_centre,bundle);
                     }
                 }
@@ -83,6 +80,8 @@ public class AdapterCentres extends RecyclerView.Adapter<AdapterCentres.ViewHold
             });
         }
     }
+
+    //This adds the search function
     @SuppressLint("NotifyDataSetChanged")
     public void filter(String searchText) {
         //creates a filtered list to add the centres to

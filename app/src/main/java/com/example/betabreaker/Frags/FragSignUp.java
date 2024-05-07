@@ -25,6 +25,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 
 import okhttp3.Call;
@@ -70,7 +71,7 @@ public class FragSignUp extends Fragment {
                String Name = edtUsername.getText().toString();
                String tempPass = edtPass.getText().toString();
                String Email = edtEmail.getText().toString();
-               //need this to be a date in the format dd/mm/yyyy
+               //check this is in the format yyyy-mm-dd
                String dob = formatDob(edtDob.getText().toString());
 
                if (dob == null || dob.isEmpty()) {
@@ -80,7 +81,7 @@ public class FragSignUp extends Fragment {
                String pass = sha256(tempPass);
 
 
-               // Create a MultipartBody.Builder to construct the request body
+               // Create a request body
                MultipartBody.Builder requestBodyBuilder = new MultipartBody.Builder()
                        .setType(MultipartBody.FORM)
                        .addFormDataPart("username", Name)
@@ -97,12 +98,14 @@ public class FragSignUp extends Fragment {
                        .post(requestBody)
                        .build();
 
-               // Execute the request asynchronously
+               // Execute the request
                OkHttpClient client = new OkHttpClient();
                client.newCall(request).enqueue(new Callback() {
                    @Override
                    public void onFailure(Call call, IOException e) {
                        e.printStackTrace();
+                       Toast.makeText(getContext(), "There has been an issue running this request please try again", Toast.LENGTH_SHORT).show();
+
                    }
 
                    @Override
@@ -110,25 +113,29 @@ public class FragSignUp extends Fragment {
                        if (response.isSuccessful()) {
                            String responseBody = response.body().string();
                            if (responseBody.equals("Already Exists")) {
-                               //todo:toast
+                               Toast.makeText(getContext(), "A USER ACCOUNT WITH THOSE DETAILS ALREADY EXISTS PLEASE TRY AGAIN", Toast.LENGTH_SHORT).show();
                            } else {
                                try {
-                                   JSONObject jsonResponse = new JSONObject(responseBody);
-                                   String username = jsonResponse.getString("Username").trim(); // Extracting username from JSON
-                                   String email = jsonResponse.getString("Email").trim(); // Extracting email from JSON
-                                   String dob = jsonResponse.getString("DoB").trim(); // Extracting date of birth from JSON
 
-                                   // Add the extracted values to SharedPreferences
+                                   //Get Values from JSON
+                                   JSONObject jsonResponse = new JSONObject(responseBody);
+                                   String username = jsonResponse.getString("Username").trim(); /
+                                   String email = jsonResponse.getString("Email").trim();
+                                   String dob = jsonResponse.getString("DoB").trim();
+
+                                   // Add the values to SharedPreferences
                                    SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
                                    SharedPreferences.Editor editor = sharedPreferences.edit();
                                    editor.putString("username", username);
                                    editor.putString("email", email);
                                    editor.putString("dob", dob);
-                                   editor.putInt("admin", 0); // Assuming the admin value is always 0
+                                   //Add additional values to preferences
+                                   editor.putInt("admin", 0);
                                    editor.putString("adminOf","" );
                                    editor.putString("favCent","");
                                    editor.apply();
 
+                                   //Go to main activity
                                    Intent intent = new Intent(getActivity(), ActDisplayApp.class);
                                    startActivity(intent);
                                } catch (JSONException e) {
@@ -154,10 +161,12 @@ public class FragSignUp extends Fragment {
         });
     }
 
+
+    //Hash the password before sending it
     public static String sha256(final String base) {
         try{
             final MessageDigest digest = MessageDigest.getInstance("SHA-256");
-            final byte[] hash = digest.digest(base.getBytes("UTF-8"));
+            final byte[] hash = digest.digest(base.getBytes(StandardCharsets.UTF_8));
             final StringBuilder hexString = new StringBuilder();
             for (int i = 0; i < hash.length; i++) {
                 final String hex = Integer.toHexString(0xff & hash[i]);
@@ -182,7 +191,6 @@ public class FragSignUp extends Fragment {
         } else {
             // Show toast indicating incorrect DOB format
             Toast.makeText(getContext(), "Date of Birth should be in yyyy-mm-dd format", Toast.LENGTH_SHORT).show();
-            // Return null to indicate incorrect format
             return null;
         }
     }

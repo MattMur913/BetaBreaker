@@ -3,7 +3,6 @@ package com.example.betabreaker.ConvertedActs;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -37,7 +36,7 @@ import okhttp3.Response;
 
 public class FragDisplayCentres extends Fragment {
 
-    private List<ClsCentre> centreList = new ArrayList<>();
+    private final List<ClsCentre> centreList = new ArrayList<>();
     private RecyclerView recyclerView;
     private AdapterCentres adapter;
 
@@ -51,8 +50,6 @@ public class FragDisplayCentres extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         view.findViewById(R.id.dsCRec).setVisibility(View.VISIBLE);
         recyclerView = view.findViewById(R.id.dsCRec);
-
-
 
         // Fetch data API
         fetchDataFromLogicApp();
@@ -77,6 +74,7 @@ public class FragDisplayCentres extends Fragment {
     }
 
     private void fetchDataFromLogicApp() {
+        //Clears the list each time
         centreList.clear();
         String logicAppUrl = GlobalUrl.getCentresUrl;
 
@@ -88,21 +86,19 @@ public class FragDisplayCentres extends Fragment {
                 .url(logicAppUrl)
                 .build();
 
-        // Execute the request asynchronously
+        // Execute the request
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
                 e.printStackTrace();
             }
-
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 if (response.isSuccessful()) {
-                    // Parse the JSON response and update the RecyclerView
                     try {
                         String responseData = response.body().string();
                         JSONArray jsonArray = new JSONArray(responseData);
-
+                        //Lists through each centre
                         for (int i = 0; i < jsonArray.length(); i++) {
                             JSONObject jsonObject = jsonArray.getJSONObject(i);
                             String id = jsonObject.getString("id");
@@ -115,6 +111,7 @@ public class FragDisplayCentres extends Fragment {
                             String logoid = jsonObject.getString("logoName");
                             JSONArray routeDetailsArray = jsonObject.getJSONArray("RouteDetails");
                             List<ClsRoutes> routes = new ArrayList<>();
+                            /* TODO Check this
                             for (int j = 0; j < routeDetailsArray.length(); j++) {
                                 JSONObject routeObject = routeDetailsArray.getJSONObject(j);
                                 String area = routeObject.optString("Area", "");
@@ -131,6 +128,10 @@ public class FragDisplayCentres extends Fragment {
                                 routes.add(route);
                             }
 
+
+                             */
+
+
                             // Create a ClsCentre object and add it to the list
                             ClsCentre centre = new ClsCentre(id, name, address, description, email, contact, website, logoid, routes);
                             centreList.add(centre);
@@ -139,7 +140,7 @@ public class FragDisplayCentres extends Fragment {
 
                         requireActivity().runOnUiThread(() -> {
 
-                            adapter = new AdapterCentres(centreList, requireContext(), FragDisplayCentres.this);
+                            adapter = new AdapterCentres(centreList, FragDisplayCentres.this);
 
                             // Set layout manager and adapter
                             recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));

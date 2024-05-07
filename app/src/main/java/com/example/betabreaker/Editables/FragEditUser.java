@@ -3,7 +3,6 @@ package com.example.betabreaker.Editables;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,11 +10,12 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
+import androidx.navigation.NavController;
 import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.betabreaker.Classes.ConfirmationDialog;
@@ -27,6 +27,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
 
 import okhttp3.Call;
 import okhttp3.Callback;
@@ -66,7 +68,10 @@ public class FragEditUser extends Fragment {
         String username = preferences.getString("username","");
          email = preferences.getString("email","");
          dob = preferences.getString("dob","");
-
+        inpEmail.setHint(email);
+        inpDob.setHint(dob);
+        inpPass.setHint("Password");
+        lblUsername.setHint(preferences.getString("username",""));
         btnUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -88,7 +93,7 @@ public class FragEditUser extends Fragment {
                         }
                         if (chPass.isChecked()) {
                             // Update password value
-                            pass = inpPass.getText().toString();
+                            pass = sha256(inpPass.getText().toString());
 
                         }
                         try {
@@ -107,24 +112,45 @@ public class FragEditUser extends Fragment {
                                 .url(updUrl)
                                 .put(body)
                                 .build();
-
+                        btnUpdate.setVisibility(View.GONE);
+                        btnView.setVisibility(View.GONE);
+                        binding.editUsProg.setVisibility(View.VISIBLE);
                         // Execute the request asynchronously
                         client.newCall(request).enqueue(new Callback() {
                             @Override
                             public void onFailure(Call call, IOException e) {
                                 e.printStackTrace();
+                                btnUpdate.setVisibility(View.VISIBLE);
+                                btnView.setVisibility(View.VISIBLE);
+                                binding.editUsProg.setVisibility(View.GONE);
+                                Toast.makeText(getContext(), "There has been an issue running this request please try again", Toast.LENGTH_SHORT).show();
                             }
                             @Override
                             public void onResponse(Call call, Response response) throws IOException {
-                                FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
-                                fragmentManager.popBackStack();
+                                requireActivity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        NavHostFragment navHostFragment = (NavHostFragment) requireActivity().getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment_content_main);
+                                        NavController navController = navHostFragment.getNavController();
+                                        navController.popBackStack();
+                                        navController.navigate(R.id.action_refreshEditUser);
+                                    }
+                                });
                             }
                         });
                     }
 
                     @Override
                     public void onCancel() {
-
+                        requireActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                NavHostFragment navHostFragment = (NavHostFragment) requireActivity().getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment_content_main);
+                                NavController navController = navHostFragment.getNavController();
+                                navController.popBackStack();
+                                navController.navigate(R.id.action_refreshEditUser);
+                            }
+                        });
                     }
                 });
             }
@@ -137,7 +163,22 @@ public class FragEditUser extends Fragment {
                         .navigate(R.id.go_display_user);
             }
         });
+    }
 
-
+    public static String sha256(final String base) {
+        try{
+            final MessageDigest digest = MessageDigest.getInstance("SHA-256");
+            final byte[] hash = digest.digest(base.getBytes(StandardCharsets.UTF_8));
+            final StringBuilder hexString = new StringBuilder();
+            for (int i = 0; i < hash.length; i++) {
+                final String hex = Integer.toHexString(0xff & hash[i]);
+                if(hex.length() == 1)
+                    hexString.append('0');
+                hexString.append(hex);
+            }
+            return hexString.toString();
+        } catch(Exception ex){
+            throw new RuntimeException(ex);
+        }
     }
 }

@@ -48,7 +48,7 @@ import okhttp3.Response;
 public class FragSpecRoute extends Fragment {
 
     private FragmentSpecRouteBinding binding;
-    private List<ClsComment> commentList = new ArrayList<>();
+    private final List<ClsComment> commentList = new ArrayList<>();
     private AdapterComments adapter;
     private RecyclerView recyclerView;
     private Activity mActivity;
@@ -76,6 +76,8 @@ public class FragSpecRoute extends Fragment {
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        //Creates each editable view
         Bundle bundle = getArguments();
         TextView tvArea;
         TextView tvColour;
@@ -98,7 +100,7 @@ public class FragSpecRoute extends Fragment {
             Button btnAddComment = binding.btnComment;
             EditText edComment = binding.addComment;
 
-            // Display the data in the TextViews
+            // Display the data in the Views
             if (routes != null) {
                 tvArea.setText(routes.getArea());
                 tvColour.setText(routes.getColour());
@@ -108,55 +110,71 @@ public class FragSpecRoute extends Fragment {
                 tvDate.setText(routes.getSetDate());
                 Glide.with(view.getContext()).load(GlobalUrl.imageUrl + routes.getImage()).apply(RequestOptions.placeholderOf(R.drawable.placeholder_image))
                         .into(ivRoute);
+
+                //Gets the comments
+                recyclerView = view.findViewById(R.id.crvLayout);
+                getComments(routes.getID());
             }
 
+            //Add comment functional
             btnAddComment.setOnClickListener(new View.OnClickListener(){
                 @Override
                 public void onClick(View v) {
+                    //gets user data and all information to be passed along
                     SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(requireContext());
                     String username = preferences.getString("username","");
                     String comment = edComment.getText().toString();
+
+                    //creates request body
                     RequestBody requestBody = new MultipartBody.Builder()
                             .setType(MultipartBody.FORM)
                             .addFormDataPart("comment", comment)
                             .addFormDataPart("username", username )
                             .addFormDataPart("routeID", routes.getID())
                             .build();
+                    //creates the request
                     Request request = new Request.Builder()
                             .url(GlobalUrl.addComment)
                             .post(requestBody)
                             .build();
                     OkHttpClient client = new OkHttpClient();
 
-                    // Send the request asynchronously
+                    // Send the request
                     client.newCall(request).enqueue(new okhttp3.Callback() {
                         @Override
                         public void onResponse(Call call, Response response) throws IOException {
-                            // Handle the response here
-                            if (response.isSuccessful()) {
-                                String responseData = response.body().string();
 
+                            if (response.isSuccessful()) {
+                                requireActivity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        //calls the display comments function again
+                                        getComments(routes.getID());
+
+                                    }
+                                });
                             } else {
                                 Log.d("TestError", "onResponse: Failed");
                             }
                         }
                         @Override
                         public void onFailure(Call call, IOException e) {
-                            // Request failed
-                            // Log error or show appropriate message
                         }
                     });
                             }
             });
 
-             recyclerView = view.findViewById(R.id.crvLayout);
-            getComments(routes.getID());
+
         }
     }
 
+    //Get comments function
     private void getComments(String routeID){
-        OkHttpClient client = new OkHttpClient();
+        //ensures the comments list is empty
         commentList.clear();
+
+        //creates the request
+        OkHttpClient client = new OkHttpClient();
         String getComments = GlobalUrl.getComments.replace("{rid}",routeID);
         Request request = new Request.Builder()
                 .url(getComments)
@@ -177,9 +195,10 @@ public class FragSpecRoute extends Fragment {
                             JSONObject commentData = commentTable.getJSONObject(i);
                             String comment = commentData.getString("comment");
                             String username = commentData.getString("Username");
-                            ClsComment newComment = new ClsComment(comment, username);
+                            ClsComment newComment = new ClsComment(username, comment);
                             commentList.add(newComment);
                         }
+                        //This ensures the comments function is listed to the activity, there can be issues otherwise
                         if (mActivity != null) {
                             mActivity.runOnUiThread(new Runnable() {
                                 @Override
@@ -190,10 +209,6 @@ public class FragSpecRoute extends Fragment {
                                 }
                             });
                         }
-
-
-
-
                     } catch (JSONException e) {
                         Log.e("TestError", "Error parsing JSON: " + e.getMessage());
                     }

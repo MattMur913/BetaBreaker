@@ -8,7 +8,6 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 
-import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.navigation.NavController;
@@ -23,7 +22,6 @@ public class ActDisplayApp extends AppCompatActivity {
 
     private ActivityDisplayAppBinding binding;
     private AppBarConfiguration mAppBarConfiguration;
-    private ActionBarDrawerToggle toggle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,11 +34,16 @@ public class ActDisplayApp extends AppCompatActivity {
         DrawerLayout drawer = binding.drawerLayout;
         NavigationView navigationView = binding.navView;
 
+        //Checks if the user is admin or not
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         int adminValue = sharedPreferences.getInt("admin", 0); // Default value 0
         View headerView = navigationView.getHeaderView(0);
+
+
         TextView userNameTextView = headerView.findViewById(R.id.userName);
         TextView userEmailTextView = headerView.findViewById(R.id.userEmail);
+
+        //if user is admin or not displays the admin section
         if (adminValue < 1) {
             mAppBarConfiguration = new AppBarConfiguration.Builder(
                     R.id.FragDisplayCentres, R.id.FragFavourite, R.id.FragUserView)
@@ -51,15 +54,15 @@ public class ActDisplayApp extends AppCompatActivity {
             adminItem.setVisible(false);
         } else {
             mAppBarConfiguration = new AppBarConfiguration.Builder(
-                    R.id.FragDisplayCentres, R.id.FragFavourite, R.id.FragUserView, R.id.FragEditCentre) // Add nav_admin
+                    R.id.FragDisplayCentres, R.id.FragFavourite, R.id.FragUserView, R.id.FragEditCentre)
                     .setOpenableLayout(drawer)
                     .build();
-
         }
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         NavigationUI.setupActionBarWithNavController(this, navController, mAppBarConfiguration);
         NavigationUI.setupWithNavController(navigationView, navController);
 
+        //sets the menu bar to display user information
         String userName = sharedPreferences.getString("username", "");
         String userEmail = sharedPreferences.getString("email", "");
 

@@ -16,6 +16,7 @@ import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.constraintlayout.widget.Group;
 import androidx.fragment.app.Fragment;
 import androidx.navigation.fragment.NavHostFragment;
 
@@ -28,7 +29,6 @@ import com.example.betabreaker.Classes.GlobalUrl;
 import com.example.betabreaker.R;
 import com.example.betabreaker.databinding.FragmentEditCentreBinding;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -36,7 +36,6 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,16 +55,18 @@ public class FragEditCentre extends Fragment {
     private Uri imageURI;
     private static final int PICK_IMAGE_REQUEST = 1;
     private ClsCentre edtCentre;
-    private List<ClsRoutes> routesList = new ArrayList<>();
+    private final List<ClsRoutes> routesList = new ArrayList<>();
     private ImageView imgLogo;
     private EditText txtName;
     private EditText txtEmail;
     private EditText txtAddress;
-    private EditText txtContct;
+    private EditText txtContact;
     private EditText txtWebsite;
+    private EditText txtDesc;
     private Button btnRoutes;
     private Button btnReset;
     private Button btnUpdate;
+    private Group grpDisplay;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -78,21 +79,28 @@ public class FragEditCentre extends Fragment {
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        //creates each interaactable
         btnRoutes = binding.vewRoutes;
         txtName = binding.edName;
         txtAddress = binding.edAddress;
         txtEmail = binding.edEmail;
-        txtContct = binding.edNumber;
+        txtDesc = binding.edDesc;
+        txtContact = binding.edNumber;
         txtWebsite = binding.edWebsite;
         btnReset = binding.rotReset;
         btnUpdate = binding.rotUpdate;
 
+        grpDisplay = binding.editCentreGroup;
+        grpDisplay.setVisibility(View.INVISIBLE);
+
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(requireContext());
         String centreID = preferences.getString("adminOf", "");
 
+        //gets centre data
         fetchSingleCentre(centreID);
         Button btnAddRoute = binding.addRoute;
 
+        //adds an on click listener
         btnAddRoute.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -107,9 +115,10 @@ public class FragEditCentre extends Fragment {
             @Override
             public void onClick(View v) {
                 if (edtCentre != null) {
+                    //creates bundle and then sends it
                     Bundle bundle = new Bundle();
-                    List<ClsRoutes> routes = edtCentre.getRoutes();
-                    bundle.putSerializable("routes", (Serializable) routes);
+                    //List<ClsRoutes> routes = edtCentre.getRoutes();
+                    //bundle.putSerializable("routes", (Serializable) routes);
                     bundle.putSerializable("centreID", edtCentre.getIdCentre());
                     bundle.putSerializable("fragger", "Admin");
                     NavHostFragment.findNavController(FragEditCentre.this)
@@ -119,39 +128,46 @@ public class FragEditCentre extends Fragment {
             }
         });
 
-
+        //reset on click listener
         btnReset.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v){
+                //resets the current screen
                 Glide.with(imgLogo.getContext()).load(GlobalUrl.imageUrl + edtCentre.getlogo()).apply(RequestOptions.placeholderOf(R.drawable.placeholder_image)).into(imgLogo);
                 txtName.setText(edtCentre.getCentreName());
                 txtAddress.setText(edtCentre.getAddress());
-                txtContct.setText(edtCentre.getNumber());
+                txtContact.setText(edtCentre.getNumber());
                 txtEmail.setText(edtCentre.getEmail());
+                txtDesc.setText(edtCentre.getDescription());
                 txtWebsite.setText(edtCentre.getWebsite());
             }
         });
 
+        //Update on click listener
         btnUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ConfirmationDialog.showConfirmationDialog(getContext(), "Are you sure you want update this route?", new ConfirmationDialog.ConfirmationListener() {
+                //Confirmation box first
+                ConfirmationDialog.showConfirmationDialog(getContext(), "Are you sure you want update the centre details?", new ConfirmationDialog.ConfirmationListener() {
                     @Override
                     public void onConfirm() {
+                        //gets data to send
                         String updURL = GlobalUrl.updCentreUrl.replace("{id}", centreID);
                         // Get values from EditText fields
                         String Name = txtName.getText().toString();
                         String Address = txtAddress.getText().toString();
                         String Email = txtEmail.getText().toString();
-                        String Contact = txtContct.getText().toString();
+                        String Description = txtDesc.getText().toString();
+                        String Contact = txtContact.getText().toString();
                         String Website = txtWebsite.getText().toString();
 
-                        // Create a MultipartBody.Builder to construct the request body
+                        // Create a body of data to send
                         MultipartBody.Builder requestBodyBuilder = new MultipartBody.Builder()
                                 .setType(MultipartBody.FORM)
                                 .addFormDataPart("centreName", Name)
                                 .addFormDataPart("address", Address)
                                 .addFormDataPart("email", Email)
+                                .addFormDataPart("description", Description)
                                 .addFormDataPart("contactNumber", Contact)
                                 .addFormDataPart("website", Website);
 
@@ -165,8 +181,10 @@ public class FragEditCentre extends Fragment {
                             }
                             requestBodyBuilder.addFormDataPart("file", "logo.jpg",
                                     RequestBody.create(MediaType.parse("image/*"), logoPath));
+                            //Indetinfier for the api
                             requestBodyBuilder.addFormDataPart("newImage","0");
                         }else{
+                            //Indetinfier for the api
                             requestBodyBuilder.addFormDataPart("newImage","1");
                         }
 
@@ -189,14 +207,22 @@ public class FragEditCentre extends Fragment {
 
                             @Override
                             public void onResponse(Call call, Response response) throws IOException {
-                               //TODO
+                                requireActivity().runOnUiThread(new Runnable() {
+                                    @Override
+                                    public void run() {
+                                        //fetchs the information again to reset the form
+                                        binding.editCentreProg.setVisibility(View.VISIBLE);
+                                        grpDisplay.setVisibility(View.INVISIBLE);
+                                        fetchSingleCentre(centreID);
+                                    }
+                                });
                             }
                         });
                     }
 
                     @Override
                     public void onCancel() {
-                        // Handle cancellation action
+
                     }
                 });
             }
@@ -223,7 +249,7 @@ public class FragEditCentre extends Fragment {
                 .url(logicAppUrl)
                 .build();
 
-        // Execute the request asynchronously
+        // Execute the request
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -246,9 +272,13 @@ public class FragEditCentre extends Fragment {
                         String description = jsonResponse.getString("description");
                         String logoid = jsonResponse.getString("logoName");
 
+
+                        //TODO Check this comments
                         // Check if "RouteDetails" exists in the JSON
                         //List<ClsRoutes> routes = new ArrayList<>();
-                        JSONArray routeDetailsArray = jsonResponse.getJSONArray("RouteDetails");
+
+
+                        /*JSONArray routeDetailsArray = jsonResponse.getJSONArray("RouteDetails");
                         for (int i = 0; i < routeDetailsArray.length(); i++) {
                             JSONObject routeObject = routeDetailsArray.getJSONObject(i);
                             String area = routeObject.optString("Area", "");
@@ -261,23 +291,23 @@ public class FragEditCentre extends Fragment {
                             String routeID = routeObject.optString("routeID", "");
                             ClsRoutes route = new ClsRoutes(area, colour, grades, setDate, setter, upvotes, imageUrl,routeID);
                             routesList.add(route);
-                        }
+                        }*/
 
                         // Create a ClsCentre object and add it to the list
                         edtCentre = new ClsCentre(id, name, address, description, email, contact, website, logoid, routesList);
 
                         requireActivity().runOnUiThread(() -> {
+
+                            //Sets necessary information
                             Glide.with(imgLogo.getContext()).load(GlobalUrl.imageUrl + edtCentre.getlogo()).apply(RequestOptions.placeholderOf(R.drawable.placeholder_image)).into(imgLogo);
                             txtName.setText(edtCentre.getCentreName());
                             txtAddress.setText(edtCentre.getAddress());
-                            txtContct.setText(edtCentre.getNumber());
+                            txtContact.setText(edtCentre.getNumber());
                             txtEmail.setText(edtCentre.getEmail());
                             txtWebsite.setText(edtCentre.getWebsite());
-                            btnRoutes.setVisibility(View.VISIBLE);
-                            btnUpdate.setVisibility(View.VISIBLE);
-                            btnReset.setVisibility(View.VISIBLE);
-
-
+                            txtDesc.setText(edtCentre.getDescription());
+                            grpDisplay.setVisibility(View.VISIBLE);
+                            binding.editCentreProg.setVisibility(View.INVISIBLE);
                         });
 
                     } catch (JSONException e) {
@@ -287,6 +317,10 @@ public class FragEditCentre extends Fragment {
             }
         });
     }
+
+
+    //This was stolen from stackoverflow
+    ///It will create a temporary file and path for the selected image and then send it along
     private File createTemporaryFileFromUri(Uri uri) throws IOException {
         InputStream inputStream = getActivity().getContentResolver().openInputStream(uri);
         if (inputStream == null) {

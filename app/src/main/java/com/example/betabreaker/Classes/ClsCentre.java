@@ -64,9 +64,4 @@ public class ClsCentre  implements Serializable {
     }
 
     public void setRoutes(List<ClsRoutes> routes){this.routes = routes;}
-
-
-
-
-
 }

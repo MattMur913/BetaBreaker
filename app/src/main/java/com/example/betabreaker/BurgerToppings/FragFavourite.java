@@ -10,11 +10,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentContainerView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -44,10 +44,9 @@ import okhttp3.Response;
 public class FragFavourite extends Fragment   {
     private FragmentFavouriteBinding binding;
     private ClsCentre centreFav;
-    private List<ClsRoutes> routesList = new ArrayList<>();
+    private final List<ClsRoutes> routesList = new ArrayList<>();
     private RecyclerView recyclerView;
     private AdapterRoutes adapter;
-    private FragmentContainerView msFav;
     private ProgressBar progressBar;
     private CardView cdView;
     private TextView txtLabel;
@@ -63,33 +62,36 @@ public class FragFavourite extends Fragment   {
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+
+        //Creates instances and sets them
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(requireContext());
         cdView = binding.cardViewLettace;
         recyclerView = binding.lettaceRecy;
-        progressBar = binding.progressBar1;
+        progressBar = binding.throbberFav;
 
-        txtLabel = binding.textView2;
-        imgLogo = binding.imageView2;
+        txtLabel = binding.favCentre;
+        imgLogo = binding.centreLogo;
         txtLabel.setVisibility(View.INVISIBLE);
         imgLogo.setVisibility(View.INVISIBLE);
         cdView.setVisibility(View.INVISIBLE);
         recyclerView.setVisibility(View.INVISIBLE);
         progressBar.setVisibility(View.VISIBLE);
 
+        //Checks if a favourite centre is picked
         String favouriteCentre = preferences.getString("favCent", "");
         if (favouriteCentre.isEmpty()){
             favouriteCentre = preferences.getString("adminOf","");
             if(favouriteCentre.isEmpty()){
-                //TODO: add a toast
+                Toast.makeText(getContext(), "There is no favourite centre linked to this account\n Please choose a centre to mark as favourite", Toast.LENGTH_SHORT).show();
             }else{
-
                 fetchSingleCentre(favouriteCentre);
             }
-
         }else{ fetchSingleCentre(favouriteCentre);}
     }
 
     private void fetchSingleCentre(String centreID){
+
+        //Gets all the routes from the prefered centre
         String logicAppUrl = GlobalUrl.getSinCentreUrl.replace("{id}",centreID);
         routesList.clear();
 
@@ -118,7 +120,6 @@ public class FragFavourite extends Fragment   {
                         String description = jsonResponse.getString("description");
                         String logoid = jsonResponse.getString("logoName");
 
-                        List<ClsRoutes> routes = new ArrayList<>();
                         JSONArray routeDetailsArray = jsonResponse.getJSONArray("RouteDetails");
                         for (int i = 0; i < routeDetailsArray.length(); i++) {
                             JSONObject routeObject = routeDetailsArray.getJSONObject(i);
@@ -134,9 +135,10 @@ public class FragFavourite extends Fragment   {
                             routesList.add(route);
                         }
 
-
+                        //Creates the centre information
                         centreFav = new ClsCentre(id, name, address, description, email, contact, website, logoid, routesList);
 
+                        //Runs the adapter creation and then the displaying of everything
                         requireActivity().runOnUiThread(() -> {
                             txtLabel.setText(centreFav.getCentreName());
                             Glide.with(imgLogo.getContext()).load(GlobalUrl.imageUrl + centreFav.getlogo()).apply(RequestOptions.placeholderOf(R.drawable.placeholder_image)).into(imgLogo);

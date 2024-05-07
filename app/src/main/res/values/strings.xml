@@ -50,4 +50,9 @@
     <string name="edit_user">EDIT DETAILS</string>
     <string name="add_route">ADD ROUTE DETAILS</string>
     <string name="centre_details">CENTRE DETAILS</string>
+    <string name="comment">COMMENT</string>
+    <string name="user">USER</string>
+    <string name="desc">DESCRIPTION</string>
+    <string name="log_out">LOG OUT</string>
+    <string name="add_comment">ADD COMMENT</string>
 </resources>

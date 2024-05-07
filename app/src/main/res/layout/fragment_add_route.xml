@@ -27,7 +27,7 @@
         android:layout_marginEnd="25dp"
         android:ems="10"
         android:inputType="text"
-        android:text="@string/setter"
+        android:hint="@string/setter"
 
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/edDate"
@@ -41,7 +41,7 @@
         android:layout_marginEnd="25dp"
         android:ems="10"
         android:inputType="datetime|date"
-        android:text="@string/date"
+        android:hint="@string/date"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/edArea"
         android:importantForAutofill="no" />
@@ -54,7 +54,7 @@
         android:layout_marginEnd="25dp"
         android:ems="10"
         android:inputType="text"
-        android:text="@string/area"
+        android:hint="@string/area"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/edColour"
         android:importantForAutofill="no" />
@@ -67,7 +67,7 @@
         android:layout_marginEnd="25dp"
         android:ems="10"
         android:inputType="text"
-        android:text="@string/colour"
+        android:hint="@string/colour"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/edGrade"
         android:importantForAutofill="no" />
@@ -80,7 +80,7 @@
         android:layout_marginEnd="25dp"
         android:ems="10"
         android:inputType="text"
-        android:text="@string/grade"
+        android:hint="@string/grade"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/spRClimb"
         android:importantForAutofill="no" />
@@ -157,5 +157,17 @@
         app:layout_constraintHorizontal_bias="0.449"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/txtDate" />
+
+    <ProgressBar
+        android:id="@+id/addRoutProg"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:visibility="gone"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/edSetter" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

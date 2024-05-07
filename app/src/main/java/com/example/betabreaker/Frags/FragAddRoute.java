@@ -18,6 +18,8 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.navigation.NavController;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.betabreaker.Classes.GlobalUrl;
 import com.example.betabreaker.R;
@@ -55,13 +57,11 @@ public class FragAddRoute extends Fragment {
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
 
-        Bundle bundle = getArguments();
         TextView tvArea;
         TextView tvColour;
         TextView tvDate;
         TextView tvGrade;
         TextView tvSetter;
-        TextView tvVotes;
         ImageView ivRoute;
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(requireContext());
         String centreID = preferences.getString("adminOf", "");
@@ -89,7 +89,7 @@ public class FragAddRoute extends Fragment {
                 String date = tvDate.getText().toString();
                 String grade = tvGrade.getText().toString();
                 String setter = tvSetter.getText().toString();
-                File routeFile = null;
+                File routeFile;
                 try {
                     routeFile = createTemporaryFileFromUri(imageURI);
                 } catch (IOException e) {
@@ -118,30 +118,22 @@ public class FragAddRoute extends Fragment {
                         .build();
                 // Create OkHttpClient instance
                 OkHttpClient client = new OkHttpClient();
-
+                binding.addRoutProg.setVisibility(View.VISIBLE);
+                uploadButton.setVisibility(View.GONE);
                 // Send the request asynchronously
                 client.newCall(request).enqueue(new okhttp3.Callback() {
                     @Override
                     public void onResponse(Call call, Response response) throws IOException {
-                        // Handle the response here
                         if (response.isSuccessful()) {
-                            // Request successful
-                            String responseData = response.body().string();
                             requireActivity().runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                     tvArea.setText("");
-                                     tvColour.setText("");
-                                     tvDate.setText("");
-                                     tvGrade.setText("");
-                                     tvSetter.setText("");
-
-                                     ivRoute.setImageResource(R.drawable.placeholder_image);
+                                    NavHostFragment navHostFragment = (NavHostFragment) requireActivity().getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment_content_main);
+                                    NavController navController = navHostFragment.getNavController();
+                                    navController.popBackStack();
+                                    navController.navigate(R.id.action_refreshAddRoute);
                                 }
-
-
                             });
-
 
                         } else {
                             Log.d("TestError", "onResponse: Failed");
@@ -150,8 +142,17 @@ public class FragAddRoute extends Fragment {
 
                     @Override
                     public void onFailure(Call call, IOException e) {
-                        // Request failed
-                        // Log error or show appropriate message
+                        requireActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                NavHostFragment navHostFragment = (NavHostFragment) requireActivity().getSupportFragmentManager().findFragmentById(R.id.nav_host_fragment_content_main);
+                                NavController navController = navHostFragment.getNavController();
+                                navController.popBackStack();
+                                navController.navigate(R.id.action_refreshAddRoute);
+                                Toast.makeText(getContext(), "AN ERROR HAS OCCURRED PLEASE TRY AGAIN", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                        Toast.makeText(getContext(), "AN ERROR HAS OCCURRED PLEASE TRY AGAIN", Toast.LENGTH_SHORT).show();
                     }
                 });
 

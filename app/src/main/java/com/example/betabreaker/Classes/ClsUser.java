@@ -1,7 +1,7 @@
 package com.example.betabreaker.Classes;
 
 public class ClsUser {
-    private String username;
+    private final String username;
     private String password;
     private String DoB;
     private String FavouriteShoes;
@@ -15,7 +15,6 @@ public class ClsUser {
         this.DoB = DoB;
         this.FavouriteShoes = favouriteShoes;
         this.email = email;
-
         this.admin = admin;
         this.adminOf = adminOf;
     }

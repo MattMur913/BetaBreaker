@@ -18,7 +18,7 @@
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -75,7 +75,7 @@
                 android:id="@+id/spRDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="84dp"
+                android:layout_marginStart="76dp"
                 android:layout_marginTop="8dp"
                 android:text="TextView"
                 android:textSize="20sp"
@@ -109,9 +109,8 @@
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/crvLayout"
-                android:layout_width="410dp"
-                android:layout_height="265dp"
-                android:layout_marginTop="16dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
@@ -123,7 +122,7 @@
                 android:layout_height="56dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
-                android:text="ADD COMMENT"
+                android:text="@string/add_comment"
                 android:textSize="20sp"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/spRVotes" />
@@ -135,8 +134,11 @@
                 android:layout_marginStart="28dp"
                 android:layout_marginTop="8dp"
                 android:ems="10"
-                android:inputType="text"
-                android:text="COMMENT"
+                android:scrollbars="vertical"
+                android:inputType="textMultiLine"
+                android:gravity="top|start"
+                android:maxLines="5"
+                android:text="@string/comment"
                 app:layout_constraintStart_toEndOf="@+id/textView"
                 app:layout_constraintTop_toBottomOf="@+id/spRVotes" />
 
@@ -146,7 +148,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="12dp"
-                android:text="ADD COMMENT"
+                android:text="@string/add_comment"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/addComment" />
         </androidx.constraintlayout.widget.ConstraintLayout>

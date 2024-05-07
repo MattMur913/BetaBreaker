@@ -13,8 +13,7 @@ import com.example.betabreaker.R;
 import java.util.List;
 
 public class AdapterComments  extends RecyclerView.Adapter<AdapterComments.ViewHolder>{
-
-    private List<ClsComment> itemList;
+    private final List<ClsComment> itemList;
     public AdapterComments(List<ClsComment> itemList) {
         this.itemList = itemList;
     }
@@ -30,13 +29,10 @@ public class AdapterComments  extends RecyclerView.Adapter<AdapterComments.ViewH
 
     @Override
     public void onBindViewHolder(@NonNull AdapterComments.ViewHolder holder, int position) {
-        // Bind data to views in the ViewHolder
+        //Sets the different widgets to be filled
         ClsComment item = itemList.get(position);
-
-
         holder.txtUsername.setText(item.getUsername());
         holder.txtComment.setText(item.getCommentCont());
-
     }
 
     @Override
