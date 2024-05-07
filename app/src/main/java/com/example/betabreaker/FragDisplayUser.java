@@ -1,6 +1,5 @@
 package com.example.betabreaker;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -12,12 +11,9 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
+import androidx.navigation.fragment.NavHostFragment;
 
-import com.example.betabreaker.Editables.FragEditUser;
 import com.example.betabreaker.databinding.FragmentDisplayUserBinding;
 
 public class FragDisplayUser extends Fragment {
@@ -41,7 +37,7 @@ public class FragDisplayUser extends Fragment {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(requireContext());
         String username = preferences.getString("username","");
         String email = preferences.getString("email","");
-        String dob = preferences.getString("DoB","");
+        String dob = preferences.getString("dob","");
 
         lblUsername.setText(username);
         lblDob.setText(dob);
@@ -50,15 +46,9 @@ public class FragDisplayUser extends Fragment {
         btnSign.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Context context = getContext();
-                FragmentManager fragmentManager = ((AppCompatActivity) context).getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                FragEditUser fragment = new FragEditUser();
 
-
-                fragmentTransaction.replace(R.id.dspFragUV, fragment);
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
+                NavHostFragment.findNavController(FragDisplayUser.this)
+                        .navigate(R.id.go_edit_user);
             }
         });
 

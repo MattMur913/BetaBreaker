@@ -1,7 +1,6 @@
 package com.example.betabreaker;
 
 import android.os.Bundle;
-import android.util.Log;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.FragmentTransaction;
@@ -19,9 +18,6 @@ public class MainActivity extends AppCompatActivity {
 
         binding = ActivityMainBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
-
-        // Display FraWelcomeScrn fragment immediately
-        Log.d("SingleCentre7", "MainAct");
        displayWelcomeScreen();
     }
 

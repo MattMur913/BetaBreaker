@@ -7,16 +7,19 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
+import androidx.navigation.fragment.NavHostFragment;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.betabreaker.Classes.ClsCentre;
 import com.example.betabreaker.Classes.ClsRoutes;
+import com.example.betabreaker.Classes.GlobalUrl;
 import com.example.betabreaker.R;
 import com.example.betabreaker.databinding.FragmentSpecCentreBinding;
 
@@ -39,6 +42,7 @@ public class FragSpecCentre extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         Bundle bundle = getArguments();
         final Button btnRoutes = binding.vewRoutes;
+        ImageView imgView = binding.spCLogoview;
         Button btnFav = binding.btnFav;
         TextView txtName = binding.spCName;
         TextView txtWebsite = binding.spCWebsite;
@@ -49,6 +53,7 @@ public class FragSpecCentre extends Fragment {
         if (bundle != null) {
             ClsCentre centre = (ClsCentre) bundle.getSerializable("centre");
             if (centre != null) {
+                Glide.with(view.getContext()).load(GlobalUrl.imageUrl + centre.getlogo()).apply(RequestOptions.placeholderOf(R.drawable.placeholder_image)).into(imgView);
                 txtAddress.setText(centre.getAddress());
                 txtName.setText(centre.getCentreName());
                 txtWebsite.setText(centre.getWebsite());
@@ -71,20 +76,15 @@ public class FragSpecCentre extends Fragment {
             btnRoutes.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
-                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                    FragDisplayRoutes fragment = new FragDisplayRoutes();
                     Bundle bundle = new Bundle();
-                    if (centre != null) {
-                        List<ClsRoutes> routes = centre.getRoutes();
-                        fragmentTransaction.remove(FragSpecCentre.this);
-                        bundle.putSerializable("routes", (Serializable) routes);
-                        bundle.putSerializable("centreID", centre.getIdCentre());
-                        fragment.setArguments(bundle);
-                        fragmentTransaction.replace(R.id.FragCheese, fragment);
-                        fragmentTransaction.addToBackStack(null);
-                        fragmentTransaction.commit();
-                    }
+                    List<ClsRoutes> routes = centre.getRoutes();
+                    bundle.putSerializable("routes", (Serializable) routes);
+                    bundle.putSerializable("centreID", centre.getIdCentre());
+                    bundle.putSerializable("fragger", "");
+
+                    NavHostFragment.findNavController(FragSpecCentre.this)
+                            .navigate(R.id.go_spec_centre_to_display_route, bundle);
+
                 }
             });
         }

@@ -1,6 +1,5 @@
 package com.example.betabreaker.Editables;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -15,14 +14,12 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.betabreaker.Classes.ConfirmationDialog;
 import com.example.betabreaker.Classes.GlobalUrl;
-import com.example.betabreaker.FragDisplayUser;
 import com.example.betabreaker.R;
 import com.example.betabreaker.databinding.FragmentEditUserBinding;
 
@@ -68,7 +65,7 @@ public class FragEditUser extends Fragment {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(requireContext());
         String username = preferences.getString("username","");
          email = preferences.getString("email","");
-         dob = preferences.getString("DoB","");
+         dob = preferences.getString("dob","");
 
         btnUpdate.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -115,12 +112,10 @@ public class FragEditUser extends Fragment {
                         client.newCall(request).enqueue(new Callback() {
                             @Override
                             public void onFailure(Call call, IOException e) {
-                                Log.d("SingleCentre", "Not updated");
                                 e.printStackTrace();
                             }
                             @Override
                             public void onResponse(Call call, Response response) throws IOException {
-                                Log.d("SingleCentre", "Updated");
                                 FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
                                 fragmentManager.popBackStack();
                             }
@@ -138,15 +133,8 @@ public class FragEditUser extends Fragment {
         btnView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Context context = getContext();
-                FragmentManager fragmentManager = ((AppCompatActivity) context).getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                FragDisplayUser fragment = new FragDisplayUser();
-
-
-                fragmentTransaction.replace(R.id.dspFragUV, fragment);
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
+                NavHostFragment.findNavController(FragEditUser.this)
+                        .navigate(R.id.go_display_user);
             }
         });
 

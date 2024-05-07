@@ -4,28 +4,147 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/mobile_navigation"
-    app:startDestination="@+id/nav_home">
+    app:startDestination="@+id/FragDisplayCentres">
 
     <fragment
-        android:id="@+id/nav_home"
-        android:name="com.example.betabreaker.BurgerToppings.Cheese"
-        android:label="@string/menu_home"
-        tools:layout="@layout/fragment_cheese" />
-
-    <fragment
-        android:id="@+id/nav_gallery"
-        android:name="com.example.betabreaker.BurgerToppings.Onions"
+        android:id="@+id/FragFavourite"
+        android:name="com.example.betabreaker.BurgerToppings.FragFavourite"
         android:label="@string/menu_favourite"
-        tools:layout="@layout/fragment_onions" />
+        tools:layout="@layout/fragment_favourite">
+        <action
+            android:id="@+id/action_fav_to_spec_route"
+            app:destination="@id/FragSpecRoute"/>
+        <action
+            android:id="@+id/go_spec_route"
+            app:destination="@id/FragSpecRoute"/>
+
+    </fragment>
 
     <fragment
-        android:id="@+id/nav_slideshow"
-        android:name="com.example.betabreaker.BurgerToppings.Patty"
-        android:label="@string/menu_profile"
-        tools:layout="@layout/fragment_patty" />
+        android:id="@+id/FragDisplayCentres"
+        android:name="com.example.betabreaker.ConvertedActs.FragDisplayCentres"
+        android:label="@string/displaycentres"
+        tools:layout="@layout/fragment_display_centres">
+        <action
+            android:id="@+id/go_spec_centre"
+            app:destination="@id/FragSpecCentre"/>
+    </fragment>
+        
     <fragment
-        android:id="@+id/nav_admin"
-        android:name="com.example.betabreaker.ConvertedActs.FragAdminViews"
-        android:label="@string/menu_admin"
-        tools:layout="@layout/fragment_admin_views" />
+        android:id="@+id/FragUserView"
+        android:name="com.example.betabreaker.ConvertedActs.FragUserView"
+        android:label="@string/user_details"
+        tools:layout="@layout/fragment_user_view"
+        >
+        <action
+            android:id="@+id/go_edit_user"
+            app:destination="@id/FragEditUser"/>
+
+</fragment>
+    <fragment
+        android:id="@+id/FragEditCentre"
+        android:name="com.example.betabreaker.Editables.FragEditCentre"
+        android:label="@string/edit_centre"
+        tools:layout="@layout/fragment_edit_centre"
+        >
+        <action
+            android:id="@+id/go_add_route"
+            app:destination="@id/FragAddRoute"/>
+        <action
+            android:id="@+id/go_all_routes"
+            app:destination="@id/FragDisplayRoute"/>
+
+</fragment>
+    <fragment
+        android:id="@+id/FragEditRoute"
+        android:name="com.example.betabreaker.Editables.FragEditSpecRoute"
+        android:label="@string/edit_route"
+        tools:layout="@layout/fragment_edit_spec_route"
+        >
+
+</fragment>
+    <fragment
+        android:id="@+id/FragEditUser"
+        android:name="com.example.betabreaker.Editables.FragEditUser"
+        android:label="@string/edit_user"
+        tools:layout="@layout/fragment_edit_user"
+        >
+        <action
+            android:id="@+id/go_display_user"
+            app:destination="@id/FragDisplayUser"/>
+
+</fragment>
+    <fragment
+        android:id="@+id/FragAddRoute"
+        android:name="com.example.betabreaker.Frags.FragAddRoute"
+        android:label="@string/add_route"
+        tools:layout="@layout/fragment_add_route"
+        >
+
+</fragment>
+    <fragment
+        android:id="@+id/FragDisplayRoute"
+        android:name="com.example.betabreaker.Frags.FragDisplayRoutes"
+        android:label="@string/view_routes"
+        tools:layout="@layout/fragment_display_routes"
+        >
+        <action
+            android:id="@+id/go_spec_route"
+            app:destination="@id/FragSpecRoute"/>
+        <action
+            android:id="@+id/go_edit_route"
+            app:destination="@id/FragEditRoute"/>
+
+</fragment>
+    <fragment
+        android:id="@+id/FragSignUp"
+        android:name="com.example.betabreaker.Frags.FragSignUp"
+        android:label="@string/signup"
+        tools:layout="@layout/fragment_sign_up"
+        >
+        <action
+            android:id="@+id/signup_to_login"
+            app:destination="@id/FragWelcomeScrn"/>
+
+</fragment>
+    <fragment
+        android:id="@+id/FragSpecCentre"
+        android:name="com.example.betabreaker.Frags.FragSpecCentre"
+        android:label="@string/centre_details"
+        tools:layout="@layout/fragment_spec_centre"
+        >
+        <action
+            android:id="@+id/go_spec_centre_to_display_route"
+            app:destination="@id/FragDisplayRoute"/>
+</fragment>
+    <fragment
+        android:id="@+id/FragSpecRoute"
+        android:name="com.example.betabreaker.Frags.FragSpecRoute"
+        android:label="@string/view_routes"
+        tools:layout="@layout/fragment_spec_route"
+        >
+
+</fragment>
+    <fragment
+        android:id="@+id/FragWelcomeScrn"
+        android:name="com.example.betabreaker.Frags.FragWelcomeScrn"
+        android:label=""
+        tools:layout="@layout/fragment_welcome_scrn"
+        >
+        <action
+            app:destination="@id/FragSignUp"
+            android:id="@+id/login_to_signup"/>
+
+</fragment>
+    <fragment
+        android:id="@+id/FragDisplayUser"
+        android:name="com.example.betabreaker.FragDisplayUser"
+        android:label="@string/menu_profile"
+        tools:layout="@layout/fragment_display_user"
+        >
+        <action
+            android:id="@+id/go_edit_user"
+            app:destination="@id/FragEditUser"/>
+
+</fragment>
 </navigation>

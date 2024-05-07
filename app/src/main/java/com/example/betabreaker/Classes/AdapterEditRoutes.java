@@ -20,25 +20,27 @@ import com.example.betabreaker.R;
 
 import java.util.List;
 
-public class AdapterRoutes extends RecyclerView.Adapter<AdapterRoutes.ViewHolder> {
+public class AdapterEditRoutes extends RecyclerView.Adapter<AdapterEditRoutes.ViewHolder> {
 
     private List<ClsRoutes> itemList;
     private Fragment fragment;
+    private String centreID;
 
-    public AdapterRoutes(List<ClsRoutes> itemList, String centreID, Context context, Fragment fragment) {
+    public AdapterEditRoutes(List<ClsRoutes> itemList, String centreID, Context context, Fragment fragment) {
         this.itemList = itemList;
         this.fragment = fragment;
+        this.centreID=centreID;
     }
 
     @NonNull
     @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+    public AdapterEditRoutes.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemview = LayoutInflater.from(parent.getContext())
                 .inflate(R.layout.reyc_layout_display_routes, parent, false);
-        return new ViewHolder(itemview);
+        return new AdapterEditRoutes.ViewHolder(itemview);
     }
 
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull AdapterEditRoutes.ViewHolder holder, int position) {
         ClsRoutes item = itemList.get(position);
         Glide.with(holder.itemView.getContext()).load(GlobalUrl.imageUrl + item.getImage())
                 .apply(RequestOptions.placeholderOf(R.drawable.placeholder_image))
@@ -77,7 +79,9 @@ public class AdapterRoutes extends RecyclerView.Adapter<AdapterRoutes.ViewHolder
                         if (context != null && fragment != null) {
                             Bundle bundle = new Bundle();
                             bundle.putSerializable("viewRoute", route);
-                            NavHostFragment.findNavController(fragment).navigate(R.id.go_spec_route,bundle);
+                            bundle.putSerializable("centreID", centreID);
+                            NavHostFragment.findNavController(fragment).navigate(R.id.go_edit_route,bundle);
+
                         }
                     }
                 }
@@ -85,3 +89,4 @@ public class AdapterRoutes extends RecyclerView.Adapter<AdapterRoutes.ViewHolder
         }
     }
 }
+

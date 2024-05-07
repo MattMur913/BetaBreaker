@@ -1,5 +1,7 @@
 package com.example.betabreaker.Frags;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -49,6 +51,19 @@ public class FragSpecRoute extends Fragment {
     private List<ClsComment> commentList = new ArrayList<>();
     private AdapterComments adapter;
     private RecyclerView recyclerView;
+    private Activity mActivity;
+    @Override
+    public void onAttach(@NonNull Context context) {
+        super.onAttach(context);
+        mActivity = getActivity();
+    }
+
+    @Override
+    public void onDetach() {
+        super.onDetach();
+        mActivity = null;
+    }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -120,9 +135,9 @@ public class FragSpecRoute extends Fragment {
                             // Handle the response here
                             if (response.isSuccessful()) {
                                 String responseData = response.body().string();
-                                Log.d("FragAddRoutes", "onResponse: " + responseData);
+
                             } else {
-                                Log.d("FragAddRoutes", "onResponse: Failed");
+                                Log.d("TestError", "onResponse: Failed");
                             }
                         }
                         @Override
@@ -149,36 +164,41 @@ public class FragSpecRoute extends Fragment {
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
-                Log.e("FragDisplayComments", "Failed to fetch routes: " + e.getMessage());
+                Log.e("TestError", "Failed to fetch routes: " + e.getMessage());
             }
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 if (response.isSuccessful()) {
                     try {
                         JSONObject jsonObject = new JSONObject(response.body().string());
-                        JSONObject resultSets = jsonObject.getJSONObject("ResultSets");
-                        JSONArray commentTable = resultSets.getJSONArray("Table1");
+
+                        JSONArray commentTable = jsonObject.getJSONArray("Table1");
                         for (int i = 0; i < commentTable.length(); i++) {
                             JSONObject commentData = commentTable.getJSONObject(i);
                             String comment = commentData.getString("comment");
-                            String Username = commentData.getString("Username");
-                            ClsComment newComment = new ClsComment(comment, Username);
+                            String username = commentData.getString("Username");
+                            ClsComment newComment = new ClsComment(comment, username);
                             commentList.add(newComment);
                         }
+                        if (mActivity != null) {
+                            mActivity.runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    adapter = new AdapterComments(commentList);
+                                    recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
+                                    recyclerView.setAdapter(adapter);
+                                }
+                            });
+                        }
 
-                        requireActivity().runOnUiThread(() -> {
-                            // Update RecyclerView and hide progress bar
-                            adapter = new AdapterComments();
-                            recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
-                            recyclerView.setAdapter(adapter);
 
-                        });
-                        Log.d("SingleCentre4", "onCreateView: 5");
+
+
                     } catch (JSONException e) {
-                        Log.e("FragDisplayRoutes", "Error parsing JSON: " + e.getMessage());
+                        Log.e("TestError", "Error parsing JSON: " + e.getMessage());
                     }
                 } else {
-                    Log.e("FragDisplayRoutes", "Failed to fetch routes: " + response.code() + " " + response.message());
+                    Log.e("TestError", "Failed to fetch routes: " + response.code() + " " + response.message());
                 }
             }
         });

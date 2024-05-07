@@ -18,8 +18,6 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 
 import com.example.betabreaker.Classes.GlobalUrl;
 import com.example.betabreaker.R;
@@ -91,7 +89,6 @@ public class FragAddRoute extends Fragment {
                 String date = tvDate.getText().toString();
                 String grade = tvGrade.getText().toString();
                 String setter = tvSetter.getText().toString();
-                Log.d("FragAddRoute", "Image URI: " + imageURI);
                 File routeFile = null;
                 try {
                     routeFile = createTemporaryFileFromUri(imageURI);
@@ -130,16 +127,16 @@ public class FragAddRoute extends Fragment {
                         if (response.isSuccessful()) {
                             // Request successful
                             String responseData = response.body().string();
-                            Log.d("FragAddRoutes", "onResponse: " + responseData);
-
                             requireActivity().runOnUiThread(new Runnable() {
                                 @Override
                                 public void run() {
-                                    FragmentManager fragmentManager = getParentFragmentManager();
-                                    fragmentManager.popBackStack();
-                                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                                    fragmentTransaction.replace(R.id.fragContent, new FragAddRoute());
-                                    fragmentTransaction.commit();
+                                     tvArea.setText("");
+                                     tvColour.setText("");
+                                     tvDate.setText("");
+                                     tvGrade.setText("");
+                                     tvSetter.setText("");
+
+                                     ivRoute.setImageResource(R.drawable.placeholder_image);
                                 }
 
 
@@ -147,7 +144,7 @@ public class FragAddRoute extends Fragment {
 
 
                         } else {
-                            Log.d("FragAddRoutes", "onResponse: Failed");
+                            Log.d("TestError", "onResponse: Failed");
                         }
                     }
 
@@ -201,7 +198,6 @@ public class FragAddRoute extends Fragment {
             Uri imageUri = data.getData();
             // Display the selected image
             imageURI = imageUri;
-            Log.d("FragAddRoute", "Image URI: " + imageURI);
             imageView.setImageURI(imageUri);
         }
     }

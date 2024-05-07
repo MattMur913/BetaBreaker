@@ -15,8 +15,6 @@ public class ClsCentre  implements Serializable {
     private String logoid;
     private List<ClsRoutes> routes;
 
-
-
     public ClsCentre(String idCentre, String centreName, String address, String description, String email, String contactNumber, String website, String logoid, List<ClsRoutes> routes) {
         this.idCentre = idCentre;
         this.CentreName = centreName;

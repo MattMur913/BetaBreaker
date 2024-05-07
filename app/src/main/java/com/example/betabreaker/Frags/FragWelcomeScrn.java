@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,10 +14,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.betabreaker.ActDisplayApp;
 import com.example.betabreaker.Classes.ClsUser;
@@ -58,7 +55,6 @@ public class FragWelcomeScrn extends Fragment{
 
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        Log.d("SingleCentre", "WelcomeScrn");
         final EditText inpUsername = binding.inpUsername;
         final EditText inpPassword = binding.inpPassword;
         final TextView lblUsername = binding.txtUsername;
@@ -122,7 +118,7 @@ public class FragWelcomeScrn extends Fragment{
                                         editor.putString("favCent", "");
                                         editor.apply();
 
-                                        Log.d("TestingAdmin", "Not Admin ");
+
                                         Intent intent = new Intent(requireActivity(), ActDisplayApp.class);
                                         startActivity(intent);
                                         requireActivity().finish();
@@ -170,17 +166,8 @@ public class FragWelcomeScrn extends Fragment{
                 vwProgress.setVisibility(View.VISIBLE);
                 btnSign.setVisibility(View.GONE);
                 btnLog.setVisibility(View.GONE);
-
-                Context context = getContext();
-                FragmentManager fragmentManager = ((AppCompatActivity) context).getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                FragSignUp fragment = new FragSignUp();
-
-
-                fragmentTransaction.replace(R.id.welcome_act, fragment);
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
-
+                NavHostFragment.findNavController(FragWelcomeScrn.this)
+                        .navigate(R.id.login_to_signup);
             }
         });
     }
@@ -209,12 +196,10 @@ public class FragWelcomeScrn extends Fragment{
     }
 
     public void checkLogged(){
-        Log.d("SingleCentre", "Check");
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(requireContext());
         String username = preferences.getString("username", "");
 
         if(!username.equals("") && username != null){
-            Log.d("FlowChecks", "User is logged in: "+ username);
             Intent intent = new Intent(requireActivity(), ActDisplayApp.class);
             startActivity(intent);
             requireActivity().finish();

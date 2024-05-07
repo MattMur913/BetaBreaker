@@ -28,7 +28,7 @@ import java.io.IOException;
 
 import okhttp3.Call;
 import okhttp3.Callback;
-import okhttp3.MediaType;
+import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -92,8 +92,8 @@ public class FragEditSpecRoute extends Fragment {
                         ClsRoutes routes = (ClsRoutes) bundle.getSerializable("viewRoute");
                         String centreID = (String) bundle.getSerializable("centreID");
 
-                        String updURL = GlobalUrl.updRoutesUrl.replace("{cID}", centreID);
-                        updURL = updURL.replace("{rID}",routes.getImage() );
+                        String updURL = GlobalUrl.updRoutesUrl.replace("{cid}", centreID);
+                        updURL = updURL.replace("{rid}",routes.getID() );
                         // Get values from EditText fields
                         String area = binding.edArea.getText().toString();
                         String colour = binding.edColour.getText().toString();
@@ -109,6 +109,7 @@ public class FragEditSpecRoute extends Fragment {
                             jsonObject.put("Grades", grade);
                             jsonObject.put("SetDate", date);
                             jsonObject.put("Setter", setter);
+                            jsonObject.put("imageUrl", routes.getImage());
                         } catch (JSONException e) {
                             e.printStackTrace();
                         }
@@ -116,31 +117,31 @@ public class FragEditSpecRoute extends Fragment {
                         // Convert JSON object to string
                         String routeData = jsonObject.toString();
                         OkHttpClient client = new OkHttpClient();
-                        RequestBody body = RequestBody.create(MediaType.parse("application/json"), routeData);
+                        RequestBody body = new MultipartBody.Builder().setType(MultipartBody.FORM)
+                                .addFormDataPart("area", area)
+                                .addFormDataPart("colour", colour)
+                                .addFormDataPart("date", date)
+                                .addFormDataPart("grade", grade)
+                                .addFormDataPart("setter", setter)
+                                .addFormDataPart("imageUrl", routes.getImage())
+                                .build();
 
 
                         // Create a request
                         Request request = new Request.Builder()
                                 .url(updURL)
-                                .put(body)
+                                .post(body)
                                 .build();
 
                         // Execute the request asynchronously
                         client.newCall(request).enqueue(new Callback() {
                             @Override
                             public void onFailure(Call call, IOException e) {
-                                Log.d("SingleCentre", "Not updated");
-
                                 e.printStackTrace();
                             }
 
                             @Override
                             public void onResponse(Call call, Response response) throws IOException {
-                                Log.d("SingleCentre", "Updated");
-                                FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
-                                fragmentManager.popBackStack();
-
-
                             }
                         });
                     }
@@ -164,7 +165,7 @@ public class FragEditSpecRoute extends Fragment {
                         String centreID = (String) bundle.getSerializable("centreID");
 
                         String deleteUrl = GlobalUrl.delRouteUrl.replace("{cID}", centreID);
-                        deleteUrl = deleteUrl.replace("{rID}",routes.getImage() );
+                        deleteUrl = deleteUrl.replace("{rID}",routes.getID() );
                         OkHttpClient client = new OkHttpClient();
 
                         // Create a request
@@ -177,7 +178,6 @@ public class FragEditSpecRoute extends Fragment {
                         client.newCall(request).enqueue(new Callback() {
                             @Override
                             public void onFailure(Call call, IOException e) {
-                                Log.d("SingleCentre", "Not Deleted");
                                 FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
                                 fragmentManager.popBackStack();
                                 e.printStackTrace();
@@ -185,9 +185,7 @@ public class FragEditSpecRoute extends Fragment {
 
                             @Override
                             public void onResponse(Call call, Response response) throws IOException {
-                                Log.d("SingleCentre", "Deleted");
-                                FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
-                                fragmentManager.popBackStack();
+                                //TODO
 
                             }
                         });

@@ -44,4 +44,10 @@
 <string name="password">PASSWORD</string>
     <string name="login">LOGIN</string>
     <string name="signup">SIGN-UP</string>
+    <string name="displaycentres">ALL CENTRES</string>
+    <string name="edit_centre">EDIT CENTRE</string>
+    <string name="edit_route">EDIT ROUTE</string>
+    <string name="edit_user">EDIT DETAILS</string>
+    <string name="add_route">ADD ROUTE DETAILS</string>
+    <string name="centre_details">CENTRE DETAILS</string>
 </resources>

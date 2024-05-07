@@ -1,6 +1,5 @@
 package com.example.betabreaker.Frags;
 
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -14,10 +13,8 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.example.betabreaker.ActDisplayApp;
 import com.example.betabreaker.Classes.GlobalUrl;
@@ -105,7 +102,6 @@ public class FragSignUp extends Fragment {
                client.newCall(request).enqueue(new Callback() {
                    @Override
                    public void onFailure(Call call, IOException e) {
-                       Log.d("SingleCentre", "Not updated");
                        e.printStackTrace();
                    }
 
@@ -114,17 +110,13 @@ public class FragSignUp extends Fragment {
                        if (response.isSuccessful()) {
                            String responseBody = response.body().string();
                            if (responseBody.equals("Already Exists")) {
-                               Log.d("SingleCentre", "User already exists");
+                               //todo:toast
                            } else {
                                try {
                                    JSONObject jsonResponse = new JSONObject(responseBody);
                                    String username = jsonResponse.getString("Username").trim(); // Extracting username from JSON
                                    String email = jsonResponse.getString("Email").trim(); // Extracting email from JSON
                                    String dob = jsonResponse.getString("DoB").trim(); // Extracting date of birth from JSON
-
-                                   Log.d("SingleCentre", "Username: " + username); // Log the username
-                                   Log.d("SingleCentre", "Email: " + email); // Log the email
-                                   Log.d("SingleCentre", "Date of Birth: " + dob); // Log the date of birth
 
                                    // Add the extracted values to SharedPreferences
                                    SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
@@ -141,11 +133,10 @@ public class FragSignUp extends Fragment {
                                    startActivity(intent);
                                } catch (JSONException e) {
                                    e.printStackTrace();
-                                   Log.d("SingleCentre", "Failed to parse JSON response");
                                }
                            }
                        } else {
-                           Log.d("SingleCentre", "Response unsuccessful");
+                           Log.d("TestError", "Response unsuccessful");
                        }
                    }
 
@@ -156,14 +147,9 @@ public class FragSignUp extends Fragment {
         btnLogin.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Context context = getContext();
-                FragmentManager fragmentManager = ((AppCompatActivity) context).getSupportFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                FragWelcomeScrn fragment = new FragWelcomeScrn();
-                fragmentTransaction.replace(R.id.welcome_act, fragment);
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
 
+                NavHostFragment.findNavController(FragSignUp.this)
+                        .navigate(R.id.signup_to_login);
             }
         });
     }

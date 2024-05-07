@@ -25,7 +25,7 @@ import com.example.betabreaker.Classes.ClsCentre;
 import com.example.betabreaker.Classes.ClsRoutes;
 import com.example.betabreaker.Classes.GlobalUrl;
 import com.example.betabreaker.R;
-import com.example.betabreaker.databinding.FragmentLettaceBinding;
+import com.example.betabreaker.databinding.FragmentFavouriteBinding;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -41,8 +41,8 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 
-public class Lettace extends Fragment   {
-    private FragmentLettaceBinding binding;
+public class FragFavourite extends Fragment   {
+    private FragmentFavouriteBinding binding;
     private ClsCentre centreFav;
     private List<ClsRoutes> routesList = new ArrayList<>();
     private RecyclerView recyclerView;
@@ -56,7 +56,7 @@ public class Lettace extends Fragment   {
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
 
-            binding = FragmentLettaceBinding.inflate(inflater, container, false);
+            binding = FragmentFavouriteBinding.inflate(inflater, container, false);
             return binding.getRoot();
     }
 
@@ -64,38 +64,39 @@ public class Lettace extends Fragment   {
     public void onViewCreated(@NonNull View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(requireContext());
-        String favouriteCentre = preferences.getString("favCent", "");
-        if (favouriteCentre.isEmpty()){favouriteCentre = preferences.getString("adminOf","");}
-        txtLabel = binding.textView2;
-        imgLogo = binding.imageView2;
-        cdView = binding.cardView;
-
+        cdView = binding.cardViewLettace;
         recyclerView = binding.lettaceRecy;
         progressBar = binding.progressBar1;
 
-        txtLabel.setVisibility(View.INVISIBLE); // Hide textView2
-        imgLogo.setVisibility(View.INVISIBLE); // Hide imageView2
+        txtLabel = binding.textView2;
+        imgLogo = binding.imageView2;
+        txtLabel.setVisibility(View.INVISIBLE);
+        imgLogo.setVisibility(View.INVISIBLE);
+        cdView.setVisibility(View.INVISIBLE);
+        recyclerView.setVisibility(View.INVISIBLE);
+        progressBar.setVisibility(View.VISIBLE);
 
-        recyclerView.setVisibility(View.INVISIBLE); // Hide lettaceRecy RecyclerView
-        cdView.setVisibility(View.INVISIBLE); // Hide cardView
-        progressBar.setVisibility(View.VISIBLE); // Show progressBar1
+        String favouriteCentre = preferences.getString("favCent", "");
+        if (favouriteCentre.isEmpty()){
+            favouriteCentre = preferences.getString("adminOf","");
+            if(favouriteCentre.isEmpty()){
+                //TODO: add a toast
+            }else{
 
-        fetchSingleCentre(favouriteCentre);
+                fetchSingleCentre(favouriteCentre);
+            }
+
+        }else{ fetchSingleCentre(favouriteCentre);}
     }
 
     private void fetchSingleCentre(String centreID){
         String logicAppUrl = GlobalUrl.getSinCentreUrl.replace("{id}",centreID);
-        Log.d("SingleCentre2", logicAppUrl);
+        routesList.clear();
 
-        // Create an instance of OkHttpClient
         OkHttpClient client = new OkHttpClient();
-
-        // Create a request
         Request request = new Request.Builder()
                 .url(logicAppUrl)
                 .build();
-
-        // Execute the request asynchronously
         client.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -105,7 +106,6 @@ public class Lettace extends Fragment   {
             @Override
             public void onResponse(Call call, Response response) throws IOException {
                 if (response.isSuccessful()) {
-                    // Parse the JSON response and update the RecyclerView
                     try {
                         String responseData = response.body().string();
                         JSONObject jsonResponse = new JSONObject(responseData);
@@ -118,7 +118,6 @@ public class Lettace extends Fragment   {
                         String description = jsonResponse.getString("description");
                         String logoid = jsonResponse.getString("logoName");
 
-                        // Check if "RouteDetails" exists in the JSON
                         List<ClsRoutes> routes = new ArrayList<>();
                         JSONArray routeDetailsArray = jsonResponse.getJSONArray("RouteDetails");
                         for (int i = 0; i < routeDetailsArray.length(); i++) {
@@ -135,33 +134,29 @@ public class Lettace extends Fragment   {
                             routesList.add(route);
                         }
 
-                        // Create a ClsCentre object and add it to the list
+
                         centreFav = new ClsCentre(id, name, address, description, email, contact, website, logoid, routesList);
-                        Log.d("SingleCentre2", String.valueOf(centreFav.getCentreName()));
 
                         requireActivity().runOnUiThread(() -> {
-                            // Update UI components with centreFav data
                             txtLabel.setText(centreFav.getCentreName());
-                            Log.d("Testing", GlobalUrl.imageUrl+centreFav.getlogo());
                             Glide.with(imgLogo.getContext()).load(GlobalUrl.imageUrl + centreFav.getlogo()).apply(RequestOptions.placeholderOf(R.drawable.placeholder_image)).into(imgLogo);
 
-                            // Update RecyclerView and hide progress bar
-                            adapter = new AdapterRoutes(routesList, centreFav.getIdCentre(), requireContext(),  Lettace.this);
+                            adapter = new AdapterRoutes(routesList, centreFav.getIdCentre(), requireContext(),  FragFavourite.this);
                             recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
                             recyclerView.setAdapter(adapter);
 
-                            txtLabel.setVisibility(View.VISIBLE); // Show textView2
-                            imgLogo.setVisibility(View.VISIBLE); // Show imageView2
+                            txtLabel.setVisibility(View.VISIBLE);
+                            imgLogo.setVisibility(View.VISIBLE);
 
-                            recyclerView.setVisibility(View.VISIBLE); // Show lettaceRecy RecyclerView
-                            cdView.setVisibility(View.VISIBLE); // Show cardView
-                            progressBar.setVisibility(View.GONE); // Hide progressBar1
+                            recyclerView.setVisibility(View.VISIBLE);
+                            cdView.setVisibility(View.VISIBLE);
+                            progressBar.setVisibility(View.GONE);
 
 
                         });
 
                     } catch (JSONException e) {
-                        Log.d("SingleCentre", "JSONException: " + e.getMessage());
+                        Log.d("TestError", "JSONException: " + e.getMessage());
                     }
                 }
             }

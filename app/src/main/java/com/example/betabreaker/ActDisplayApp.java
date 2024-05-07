@@ -43,15 +43,15 @@ public class ActDisplayApp extends AppCompatActivity {
         TextView userEmailTextView = headerView.findViewById(R.id.userEmail);
         if (adminValue < 1) {
             mAppBarConfiguration = new AppBarConfiguration.Builder(
-                    R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow)
+                    R.id.FragDisplayCentres, R.id.FragFavourite, R.id.FragUserView)
                     .setOpenableLayout(drawer)
                     .build();
             Menu menu = navigationView.getMenu();
-            MenuItem adminItem = menu.findItem(R.id.nav_admin);
+            MenuItem adminItem = menu.findItem(R.id.FragEditCentre);
             adminItem.setVisible(false);
         } else {
             mAppBarConfiguration = new AppBarConfiguration.Builder(
-                    R.id.nav_home, R.id.nav_gallery, R.id.nav_slideshow, R.id.nav_admin) // Add nav_admin
+                    R.id.FragDisplayCentres, R.id.FragFavourite, R.id.FragUserView, R.id.FragEditCentre) // Add nav_admin
                     .setOpenableLayout(drawer)
                     .build();
 

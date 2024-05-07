@@ -6,7 +6,6 @@ public class ClsUser {
     private String DoB;
     private String FavouriteShoes;
     private String email;
-
     private int admin;
     private String adminOf;
 

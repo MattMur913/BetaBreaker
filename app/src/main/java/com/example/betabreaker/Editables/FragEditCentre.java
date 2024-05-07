@@ -17,8 +17,7 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
+import androidx.navigation.fragment.NavHostFragment;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -26,8 +25,6 @@ import com.example.betabreaker.Classes.ClsCentre;
 import com.example.betabreaker.Classes.ClsRoutes;
 import com.example.betabreaker.Classes.ConfirmationDialog;
 import com.example.betabreaker.Classes.GlobalUrl;
-import com.example.betabreaker.Frags.FragAddRoute;
-import com.example.betabreaker.Frags.FragDisplayRoutes;
 import com.example.betabreaker.R;
 import com.example.betabreaker.databinding.FragmentEditCentreBinding;
 
@@ -99,41 +96,25 @@ public class FragEditCentre extends Fragment {
         btnAddRoute.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FragmentManager fragmentManager = getParentFragmentManager();
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                FragAddRoute fragment = new FragAddRoute();
                 Bundle bundle = new Bundle();
                 bundle.putSerializable("centre", centreID);
-                fragment.setArguments(bundle);
 
-                fragmentTransaction.replace(R.id.fragContent, fragment);
-                fragmentTransaction.addToBackStack(null);
-                fragmentTransaction.commit();
-
+                NavHostFragment.findNavController(FragEditCentre.this)
+                        .navigate(R.id.go_add_route,bundle);
             }
         });
         btnRoutes.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (edtCentre != null) {
-                    Log.d("CHECKING EDITCENTRE", "onClick: CHECKER");
-
-                    FragmentManager fragmentManager = getParentFragmentManager();
-                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                    FragDisplayRoutes fragment = new FragDisplayRoutes();
                     Bundle bundle = new Bundle();
                     List<ClsRoutes> routes = edtCentre.getRoutes();
-
-                    fragmentTransaction.remove(FragEditCentre.this);
                     bundle.putSerializable("routes", (Serializable) routes);
                     bundle.putSerializable("centreID", edtCentre.getIdCentre());
-                    fragment.setArguments(bundle);
-                    fragmentTransaction.replace(R.id.fragContent, fragment);
-                    fragmentTransaction.addToBackStack(null);
-                    fragmentTransaction.commit();
-                } else {
-                    // Handle the case when edtCentre is null or not initialized yet
-                    Log.e("FragEditCentre", "edtCentre is null or not initialized yet");
+                    bundle.putSerializable("fragger", "Admin");
+                    NavHostFragment.findNavController(FragEditCentre.this)
+                            .navigate(R.id.go_all_routes,bundle);
+
                 }
             }
         });
@@ -203,15 +184,12 @@ public class FragEditCentre extends Fragment {
                         client.newCall(request).enqueue(new Callback() {
                             @Override
                             public void onFailure(Call call, IOException e) {
-                                Log.d("SingleCentre", "Not updated");
                                 e.printStackTrace();
                             }
 
                             @Override
                             public void onResponse(Call call, Response response) throws IOException {
-                                Log.d("SingleCentre", "Updated");
-                                FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
-                                fragmentManager.popBackStack();
+                               //TODO
                             }
                         });
                     }
@@ -235,9 +213,7 @@ public class FragEditCentre extends Fragment {
 
 
     private void fetchSingleCentre(String centreID){
-        Log.d("SingleCentre", "Getting centre");
         String logicAppUrl = GlobalUrl.getSinCentreUrl.replace("{id}",centreID);
-        Log.d("SingleCentre2", logicAppUrl);
 
         // Create an instance of OkHttpClient
         OkHttpClient client = new OkHttpClient();
@@ -289,11 +265,8 @@ public class FragEditCentre extends Fragment {
 
                         // Create a ClsCentre object and add it to the list
                         edtCentre = new ClsCentre(id, name, address, description, email, contact, website, logoid, routesList);
-                        Log.d("SingleCentre2", String.valueOf(edtCentre.getRoutes()));
 
                         requireActivity().runOnUiThread(() -> {
-                            // Update UI components with centreFav data
-                            Log.d("Testing", GlobalUrl.imageUrl+edtCentre.getlogo());
                             Glide.with(imgLogo.getContext()).load(GlobalUrl.imageUrl + edtCentre.getlogo()).apply(RequestOptions.placeholderOf(R.drawable.placeholder_image)).into(imgLogo);
                             txtName.setText(edtCentre.getCentreName());
                             txtAddress.setText(edtCentre.getAddress());
@@ -308,7 +281,7 @@ public class FragEditCentre extends Fragment {
                         });
 
                     } catch (JSONException e) {
-                        Log.d("SingleCentre", "JSONException: " + e.getMessage());
+                        Log.d("TestError", "JSONException: " + e.getMessage());
                     }
                 }
             }

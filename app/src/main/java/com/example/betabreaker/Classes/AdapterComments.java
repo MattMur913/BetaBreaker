@@ -15,6 +15,9 @@ import java.util.List;
 public class AdapterComments  extends RecyclerView.Adapter<AdapterComments.ViewHolder>{
 
     private List<ClsComment> itemList;
+    public AdapterComments(List<ClsComment> itemList) {
+        this.itemList = itemList;
+    }
 
     @NonNull
     @Override

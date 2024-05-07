@@ -11,7 +11,6 @@ import android.widget.Button;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 
 import com.example.betabreaker.Classes.ConfirmationDialog;
 import com.example.betabreaker.FragDisplayUser;
@@ -35,10 +34,9 @@ public class FragUserView extends Fragment {
 
         Button btnOut = binding.btnLogOut;
 
-        FragDisplayUser welcomeFragment = new FragDisplayUser();
-        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.dspFragUV, welcomeFragment);
-        transaction.commit();
+        getActivity().getSupportFragmentManager().beginTransaction()
+                .replace(R.id.dspFragUV,  new FragDisplayUser())
+                .commit();
         btnOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

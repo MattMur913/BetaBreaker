@@ -6,20 +6,20 @@
 
     <group android:checkableBehavior="single">
         <item
-            android:id="@+id/nav_home"
-            android:icon="@drawable/ic_menu_camera"
+            android:id="@+id/FragDisplayCentres"
+            android:icon="@android:drawable/ic_menu_mapmode"
             android:title="@string/menu_home" />
         <item
-            android:id="@+id/nav_gallery"
-            android:icon="@drawable/ic_menu_gallery"
+            android:id="@+id/FragFavourite"
+            android:icon="@android:drawable/btn_star_big_on"
             android:title="@string/menu_favourite" />
         <item
-            android:id="@+id/nav_slideshow"
-            android:icon="@drawable/ic_menu_slideshow"
+            android:id="@+id/FragUserView"
+            android:icon="@android:drawable/ic_menu_edit"
             android:title="@string/menu_profile" />
         <item
-            android:id="@+id/nav_admin"
-            android:icon="@drawable/ic_launcher_background"
+            android:id="@+id/FragEditCentre"
+            android:icon="@android:drawable/ic_menu_add"
             android:title="@string/menu_admin"/>
     </group>
 </menu>

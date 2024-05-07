@@ -10,23 +10,24 @@
 
     <ImageView
         android:id="@+id/spCLogoview"
-        android:layout_width="258dp"
-        android:layout_height="197dp"
+        android:layout_width="293dp"
+        android:layout_height="220dp"
         android:layout_marginTop="44dp"
+        android:contentDescription="@string/centre_logo"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.509"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@android:mipmap/sym_def_app_icon"
-        android:contentDescription="@string/centre_logo" />
+        app:srcCompat="@android:mipmap/sym_def_app_icon" />
 
     <TextView
         android:id="@+id/spCName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:text="YEs"
         android:paddingHorizontal="20dp"
+        android:text="YEs"
+        android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.22"
         app:layout_constraintStart_toStartOf="parent"
@@ -39,6 +40,7 @@
         android:layout_marginTop="40dp"
         android:paddingHorizontal="20dp"
         android:text="TextView"
+        android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.22"
         app:layout_constraintStart_toStartOf="parent"
@@ -51,6 +53,7 @@
         android:layout_marginTop="40dp"
         android:paddingHorizontal="20dp"
         android:text="TextView"
+        android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.22"
         app:layout_constraintStart_toStartOf="parent"
@@ -63,6 +66,7 @@
         android:layout_marginTop="40dp"
         android:paddingHorizontal="20dp"
         android:text="TextView"
+        android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.22"
         app:layout_constraintStart_toStartOf="parent"
@@ -75,6 +79,7 @@
         android:layout_marginTop="40dp"
         android:paddingHorizontal="20dp"
         android:text="TextView"
+        android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.22"
         app:layout_constraintStart_toStartOf="parent"
@@ -84,9 +89,9 @@
         android:id="@+id/vewRoutes"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="92dp"
+        android:layout_marginStart="52dp"
         android:layout_marginTop="44dp"
-        android:text="Button"
+        android:text="@string/view_routes"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/spCNumber" />
 
